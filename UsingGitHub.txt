@@ -1,0 +1,28 @@
+===================================================================================
+GitHub Review
+===================================================================================
+>> If you are in your GIT BASH git folder
+
+git init			- Initializes dir as git
+git checkout -b branchName	- Create new branch(-b) and switch to it (checkout)
+git status			- says if/what changes have been made to dir
+git add fileName.ext 		- Adds fileName.ext to your branch
+git add .			- Adds entire contents of dir to branch
+git commit -m 'message'		- Updates git branch locally
+git push origin branchName	-
+git merge branchName		- merge branchName w/ current branch
+				- master as branchName updates branch w/ new master
+				- IN master, use branchName to update local master
+git remote add origin [url]	- Tell where git dir should be located online
+git push origin master		- push master from local to online
+
+--- Creating New Directory in GitHub: ----
+1. Create/go to folder and initialize
+	cd /folder
+	git init
+2. github.com [+] top right corner > New Repository
+	- README unchecked, generally
+3. Copy URL created in git and connect:
+	git remote add origin [url]
+4. 'push' commited master branch
+	git push origin master
