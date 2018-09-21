@@ -1,0 +1,426 @@
+=== JavaScript ====================================================================
+JavaScript != Java ------------------- [this is 1 line @ min width of notepad ---->
+++++++++++++++++++++++++
++ + Table of Contents + +
+A. JavaScript DataTypes
+	+ Floating Point Values
+B. Declaring Variables
+	+ Naming Convention
+C. More on Objects
+	+ What is an Object?
+	+ How do I use them?
+	+ Arrays
+	+ Important Default Objects ** <<-- Great reference sheet
+D. More on Functions
+E. Logical Operations
+	+ Logical Operators
+	+ Truthey - Falsey
+F. Control Structures
+	+ If Statements
+		+ Else 
+		+ Else If
+	+ Switch Statements
+G. Loops
+	+ For Loops
+	+ While Loops
+		+ Do While
++++++++++++++++++++++++++++++
+Basic use:
+
+      location.function(arguments);
+
+The first section is the location or the element in which you are interacting.
+You follow that with a dot and name a function that can be used on the object with which you are interacting.
+Example:
+      console.log('');
+This will print out a statement in the console. Console are accessible in your web browser by pressing ctrl + Shift + I, or right clicking and choosing "Inspect Element."
+-----------------------------------------
+----- A. JavaScript Datatypes------------
+-----------------------------------------
+A primitive is data that has only a value - it has no methods or functions associated with it. The letter 's' as a string is primitive because it doesn't do anything other than be the letter s. 
+objects are the only nonprimitive data types (see below for more information)
+
+1. Strings - to create a string, you simply put your words in quotations, either 'single' or "double" will work. Strings accept alphanumeric symbols and all other basic keystrokes and characters. However, if you want to use the same type of quotation mark in your string as you used to contain it, you must use \' or \".
+         let myString = 'hello!!'
+2. Numbers - Numbers can be represented in various ways such as by decimal, integer, scientific notation, binary, and more. Most comonly, just use the number for example: 
+         let myNum = 5;
+    ** Important Numbers:
+       - NaN : Not a Number - this will result if you do mathematical operations (other than addition) with strings. Nan is a typeof number.
+       - Infinity : Infinity is a number that can result from careless math. It acts as Infinity would mathematically. Note that sometimes a value will be called "infinity" if it is larger than the max number that JS can handle, it will be considered infinity.
+3. Boolean - true or false. In order to create a boolean, write true or false without and quotes.
+          let myBool = true;
+4. Undefined - data tyle which represents an undefined state. Write unquoted undefined to give this data type to a variable. If you create a variable and do not give it a value, it will be by default undefined. For example, if you just use:
+          let myVar;
+5. Null - this means there is no value. JS will never assign the value of null to a variable by default; it will use undefined instead.
+          let myNull = null;
+6. Symbol - Symbols represent a static (nonchanging) values that can be utilized. Each symbol is a unique, and can be used as an identifier. 
+          let mySymbol = Symbol();
+7. Objects - NON-PRIMITIVE DATA TYPE! Objects are data containers which can hold many values including different types of data and functions. They contain key:value pairs.
+
+          let myObject = {
+                          aPrimitive: 7,
+                          myArray: [a , b , '5', q],
+                          myAction: function() {console.log('this is a function')},
+                         };
+[[More on objects later]]
+7b. Function - NOT DATA TYPE - Functions are types of OBJECTS, not data, but are a very important JavaScript Type. You use functions in place of a repetitive action.
+          myFunctionName = function(parameter) {
+                           console.log('This is the function and ' + parameter)
+                           }
+[[More on functions later]]
+
+____________________________
++ + Floating Point Values + +
+  - JavaScript uses floating point values.. Basically, if you have a huge decimal or an irrational number, JS will use an algorithm to store the number and pull out a value that "close".
+  - LONG decimals and MASSIVE numbers can't be accurately stored.
+  - IF you are in a situation with floating point numbers, you should not compare them with equalities (==). Instead use a range, since the level of accuracy may vary.
+  - Realistically, the loss of precision won't mess up an outcome, however this is a quirk that is work noting.
+
+-----------------------------------------
+------ B. Declaring Variables------------
+-----------------------------------------
+There are 4 ways to declare variables:
+
+     myVar;            // DO NOT use this method. 
+     var myVar;        // Generall DO NOT use this method
+     let myVar;        // USE THIS for variables that change
+     const myVar;      // USE THIS for constant variables
+
+In the same line as declaring the variable, you can give it a value:
+     let myVar = 3;
+
+-- No var, let, or const declaration will create the variable, but it isn't proper.
+   Basically, it'll lead to a nightmare if you mess up a variable name.
+   There's no good reason to declare variables this way.
+-- The 'var' variable will create the variable at the top of your scope.
+   Wherever a 'var' variable is declared, that will be used as the value globally.      This can turn into a huge mess; just don't do it.
+   YES MANY CODES ONLINE IN JS HAVE VAR, but it is
+   OUTDATED!!! Moder JS doesn't use var so freely!
+-- let and const create the variable there. Using 'strict mode',
+   you can tell if you tried to redefine the variable, but misspelled it.
+   The variable is available only in the scope in which it is defined.
+_________________________
++ + Naming Convention + +
+--Use camelCase : fist word starts lowercase, following start uppercase letter.
+--It MUST start with a letter
+--No spaces. 
+--Acceptable characters are numbers, letters, and underscores.
+
+-----------------------------------
+---C. More on Objects--------------
+-----------------------------------
+_________________________
++ + What is an object? + +
+  Explanation 1.)For example, let say you have an object that is a car. Your car has the color tan. It was made in 2002. It has the function of taking you places, turning on winsheild wipers, and FM radio. 
+  Your friend's car perhaps has a blue color, was made in 2017, and has all the functions your car does, but it also has a rearview camera.
+Both of these different CARS can be described as objects, although the values are different and some functions may have been added or altered.
+  Explanation 2.) Relating to javascript, the 'document' object varies with each different webpage or .html document you visit on your browser. All 'document' objects have commands such as .getElementById() or .style, but they each hold their own data in the form of HTML (or css and js scripts.)
+  Explanation 3.) objects are big packages of functions and variables. You only need to know the keyword to use things inside of them. If you make your own object, you have to install or create all the functions and variables inside yourself.
+_________________________
++ + How do I use them? + +
+You probably have already been using them. console and document are examples of objects. 
+You type the object's name, a period, then which key you want to access and arguments if needed.
+For Example:_____________________
+       let myObject = {
+                      aPrimitive: 7,
+                      myArray: ['a' , false , '5', null],
+                      myAction: function() {console.log('this is a function')},
+                      myLine: function(theLine) {console.log('this is ' + theLine)}
+                      };
+            _________________________________
+To access the primitive value, use:
+            myObject.aPrimitive;
+To access an index in the array, use:
+            myObject.myArray[2];
+To use the function that has no parameters declared:
+            myObject.myAction();
+To use a function that has a parameter (for this one, use a string):
+            myObject.myLine('the string input into the function called myLine')
+
+_________________________
++ + Arrays + +
+
+Arrays are a type of object that is used to store multiple values in a single variable.
+To declare an array, name it and put its values in square brackets separated by commas:
+       let myArray = [1, 'b', 5e7, Symbol(), Infinity, 'the end'];
+
+Arrays can accept different datatypes 
+INDEX - an index is the location in an array in which a particular value is found.
+The first index of an array is zero.
+To return a value in an array, you call for the array and use the index.
+         myArray[0];
+     will return 1
+         myArray[5];
+     will return 'the end'
+- Be aware that you should not try to call for an array index that doesn't exist.
+   myArray[6] when there are only 6 items in the array wont cause JS to crash, 
+  BUT it can cause other programming languages to crash.
+
+Commands related to arrays:
+myArray.push('value');   // adds 'value' to the end of the array
+myArray.shift();         // Removes 1st (myArray[0]) item and returns its value
+myArray.pop;             // Removes final item and returns its value
+myArray.unShift('val');  // adds 'val' to the front of the array
+myArray.length           // Returns the length or array (total # of items)
+
+_________________________________
++ + Important Default Objects + +
+
+This is a list of objects we have used and the functionsor values they have
+
+console
+        .log('message')		prints 'message' to console
+	.alert('alert')		prints 'alert' in red to console
+
+document
+	.getElementById('id')			Returns element w/ ID
+	.getElementsByClassName('class') 	Returns array
+	.getElementsByTagName('tag')		Returns array
+	.createElement('tag')			Creates element in JS
+    document.createElement("tag")
+    element.appendChild(newChild)
+	
+HTML Elements [More info on JS and HTML later]
+	.innerHTML
+
+	.classList	 	 Changes the element's ID (wont work on arrays)
+		  .add('className')
+		  .remove('className')
+		  .toggle('aClass')    Add or remove class 'aClass' 
+				       depending on if it has that class or not
+	.addEventListener("click",function)
+	.appendChild(newElement)	Add newElement to existing
+	.style.theStyle('val')		styles theStyle (CSS property where 
+					instead of - for prop name use camelCase)
+	.setAttribute('prop','val')	Sets HTML attribute with prop="val"
+Math
+	.pow(base,exponent) 	   [base] to the power of [exponent]
+	.abs(num)		   absolute value of num
+	.sqrt(num)		   square root of num
+	.PI			   Constant Pi
+	
+
+window
+	.alert('alert')		Gives window popup saying 'alert'
+
+
+------------------------------------
+------D. More on Functions----------
+------------------------------------
+To create a function, there are a few different methods.
+
+const myFunction = function(parameter1,parameter2) {
+            //The code goes here 
+            };
+
+function myFunction(parameter1,parameter2){
+            //The code goes here 
+            };
+Functions have a few key components:
+1. Function name (self explainitory). in this example, it will be costForGas
+2. Parameters - [OPTIONAL] these are the variable names you use as placeholders when creating the function. For example, if you want to know how much a number of apples costs, you would need the GALLONS OF GAS and the COST PER GALLON to do the calculation. These two bits of information are your equation's parameters, and you simply could not do the math without them, even though you know how. Your function can have any number of parameters, even none at all is allowed.
+          If you make a function that DOES have parameters, you will always need to input the parameters to run the function. However, functions do not need parameters.
+Declaring a function without parameters:
+3. The function - What you actually are doing.
+4. Arguments - [AS NEEDED] when you call a function, you pass in your arguments where the parameters were declared, and in the same order (if the function uses parameters).
+       let theResult = myFunction(argument1,argument2);
+
+    _Example______________________________
+const costOfGas = function(galsOfGas,gasPrice){
+                         let totalCost = galsOfGas * gasPrice;
+                         return totalCost;
+                         };
+// This function gives you the cost for a number of apples at the given cost after tax.
+// Lets say you need 12 gallons of gas and it costs $2.87/gallon today
+// There are a few ways you can run this function.
+// You can put in the actual numbers
+
+let price = costOfGas(12,2.87)
+console.log('The cost of gas today is ' + price);
+
+// You can also use variables as the arguments.
+let gasNeeded = 12;
+let costPerGallonToday = 2.87;
+let priceToday = costOfGas(gasNeeded,costPerGallonToday);
+console.log('The cost of gas today is ' + priceToday);
+     _______________________________________
+
+----------------------------------
+------E. Logical Operations ------
+----------------------------------
+
+Logical operators are used to evaluate and compare BOOLEAN values.
+Logical operations run when the boolean (true/false) value they get is true.
+
+_________________________
++ + Logical Operators + +
+
+  >    Greater than (exclusive)
+  >=   Greater than or equal to (inclusive)
+  <    Less that (exclisive)
+  <=   Less than or equal to (inclusive)
+  ==    Equals operator - Compares literal value, disregards datatype
+           == is usually used! It will say that ('1' == 1) is true.
+  ===   Equals operator that requires the same data type.
+            (1 == '1') will return false since '1' is considered a string
+  !     Negation Operator ("Not")
+            Can also be used on boolean variables. !false returns true.
+  !=    "not Equal to"
+  !==   "Not equal to" including datatype
+  &&    AND operator; returns TRUE is boolean expressions on BOTH sides are TRUE
+  ||    OR inclusive (AND/OR)
+  ^     OR Exclusive (ONE OR OTHER ONLY)
+
+- Logical operations are solved from left to right.
+  You don't HAVE TO use parenthesis in many cases, 
+  but it is good to so that someone reading yoru script will know what you meant.
+
+- Logical expressions return boolean values. Expressions and boolean variables are in many ways interchangable.
+	let a = true;
+	let b = false;
+	let myBoolean = true;
+
+	(a == b) returns false
+	(true == false) returns false.
+
+
+Example Problem 1: 
+	how would you write out in code this statement:
+	the condition is true if C is true and D is false
+Answer 1:
+ >             >                 >                       >                (C && !D)	
+Example Problem 2: 
+	how would you write out in code this statement:
+	the condition is true if C and/or D is false			
+Answer 2:
+>               >                       >                   >            (!C || !D)
+
+________________________
++ + Truthey - Falsey + +
+
+Javascript ONLY concept.
+- Strings/any data type ban be evaluated for "truthiness" (as true/false)
+- Any data type can be used as conditions for logical statements.
+FALSEY THINGS:
+	undefined, null, empty string '', 0, NaN, false
+
+For example:____________
+	if ('b') {
+		console.log('b is a string that isn't empty')
+		console.log('Thus, this will always run!')
+	};
+
+	if ('') {
+		console.log(' Empty string!! this will never run!')
+	};
+	_________________
+
+
+
+-----------------------------------
+------ F. Control Structures ------
+-----------------------------------
+Control structures are lines of code that run under certain conditions defined by boolean logical operations.
+
+Important keyword:
+
+break;		Break will remove you from the control structure all together.
+		Once the code processes a break, it will just skip down to the bottom of you statement.
+
+_________________________
++ + If Statements + + 
+
+ - IF statements run IF and only IF the logical expression given is true.
+
+	if (expression) {
+		// run code
+		};
+
++ + Else Statements
+You can also run a code to catch something ELSE if the expression is false:
+
+	if (expression) {
+		// run code if expression is true
+		} else {
+		// Run if expression is false
+		};
+
+BE AWARE of where you place your semicolon!
+You can have semicolons inside the {} brackets as part of your code, but you CANNOT have a ; between } and else! 
+  if (false){and you put a semicolon after this =>};else{nothing will happen};
+
+
++ + Else If Statements 
+
+ - Also called else-if statements.
+ - Else if statements run the expression and runs the first block of code after a true expression.
+- You write "else if (expression) { else if code block}" after your if {code block} and, like the else statements, no semicolon until the very last of your statements.
+- You can run an "else {expression}"
+
+   Example:__________
+	let a = 10;
+	if (a < 2) {
+		console.log("a is less than 2");
+	} else if (a < 5) {
+		console.log("a is less than 5");
+	} else if (a < 10) {
+		console.log("a is less than 10");
+	} else {
+		console.log("a 10 or greater.");
+	};
+	________________
+
+This will output to the console "a is less than 5" because that is the first statement to come up true. YES, a is also less than 10, BUT the code exits out of the statement and never even checks for that.
+
+_________________________
++ + Switch Statements + +
+
+- Switch statements are used to run a section of code depending on a specific value for an input.
+- case VALUE:  identifies which code to run in the case the said value is the same as the input.
+- You CANNOT USE boolean expressions for cases.
+  Example _____________
+	const myVal = 10;
+	const otherVal = 9;
+
+	switch(myVal) { 
+	    case 8:
+	        console.log("myVal is 8")
+        	break;
+   	 case 9:
+        	console.log("It was 9")
+       		break;
+    	case 10:
+        	console.log("It was 10")
+        	break;
+    	default:
+        	console.log('It wasnt 8-10.');
+        	break; //technically you dont need this break
+	}
+	____________________
+
+You can also combine solutions
+   Example: ____________
+	 switch(myVal) {
+	    case 3:
+	    case 4:
+	    case 5:
+	        console.log('it was between 3 and 5')
+	    break;
+	    default:
+	        console.log('it wasnt between 3 and 5')
+	 } 
+
+------------------------------
+----------- Loops ------------
+------------------------------
+
+Loops will run recursively while a condition is true. 
+They stop when it is false.
+
+Keywords for loops:
+
+break; 		Ends a loop
+_______________
++ + For Loop + +
+for(initial condition; boolean expression; increment) {
+}

@@ -1,0 +1,283 @@
+==========================
+QC -- Week 1 --  9/18/2018
+---------Topics-----------
+  + CMD [command prompt]
+  + HTML/CSS
+  + HTTP
+==========================
+   Linux/Unix Commands
+AKA command prompt cmd.exe
+==========================
+= To open, run cmd.exe for windows
+= Know the following commands and how to use them:
+
+ Command   Example         Description
+ -------   ----------        -------------------------
+  ls           -             + Lists visible files in directory
+  lsa          -             + Lists ALL files in directory, including hidden
+ touch     touch Name.ext    + Creates new file (Name) with extension (ext)
+  cd          cd ./Folder    + Change directory to Folder within current dir.
+  cd          cd ../         + Change UP to directory containing current dir
+             C: OR D:        + Go to drive named IE C drive is C:, ect
+ mkdir     mkdir FolderName  + Make Directory within current dir
+  pwd           -            + Print Working Directory - full path to current dir
+  echo        echo Hello     + Command line prints "hello"
+  rm        rm file.txt      + Delete file in current directory
+  rm        rm /Folder       + Remove directory (if empty)
+ --R     rm --R /Folder      + --R or -recursive will remove directory & all files
+  cp        cp file.txt      + Copy file or folder
+  cp     cp File.txt New.txt + Copies File with New as name of copy
+  mv     mv File.txt /Folder + Move File to Folder
+  mv    mv File.txt Name.txt + Rename File or directory to NewName.
+ cat    cat [1] [2] > [3]    + Concatenate (combine) where [1] is file1.txt
+                               and so on where [3] is NewFileName.txt
+
+==========================
+         HTML
+==========================
+HTML stands for HyperText Markup Language 
+     & is used to structure and put content on a page.
+------- Vocabulary -------
+Tag - keyword used as syntax to organize and label types of content on a page
+      Tags are contained within right angle brackets < and >
+      Beginning tags include the keyword and may include other properties.
+      End tags are created with the tag name in angle brackets preceede with /
+      <tag property="value"> content </tag>
+Self-closing Tags - Do NOT need closing tags. 
+       Examples: <img> <input> <br> <hr>
+       TRIVIA - you used to be told to use <br /> to signify the end of
+                  self-closing tags before 2009 when they threw out XHTML guidelines
+Element - A beginning tag, matching end tag, and the content between.
+Attribute - a property/value pair given to an HTML element.
+     <tag attribute> Content </tag>
+      Attribute syntax is property="value"
+Property - keyword describing characteristic an element may have
+Value - the assignment given to a property
+Server - centralized computer which manages website or application 
+       by sending information to client and processing requests
+----- HTML Elements ------
++ Heading-Related tags
+  <heading> </heading> 
+  Syntax tag to describe which part of the document is the heading
+  <h1> <h2> ... <h6>
+  h1 is a main heading
+  Proceeding h#s are subheadings
+  By default, h1 has the largest sized font, and the font size decreses
+
++ List-Related Elements
+  <ul>  Unordered List (Not numbered/Bulleted list)
+  <ol>  Ordered List (Numbered List)
+  <li>  List Item
+
++ Basic HTML Requirements
+<!DOCTYPE html5>          
+<html>
+   <head> .. </head>
+   <body> .. </body>
+</html>
+
++DOCTYPE tells the browser it is getting an HTML page.
+         This is not required always - a browser will "guess" usually that 
+          a file is html correctly - but is proper to use it.
+<HTML>   element contains all other HTML elements
+<head>   Contains page metadata such as the tile of the page, CSS scripts to link,          and somtimes a description to give search engines. 
+         This isn't required to have information in it.
+         <title>Page Title</title> is USUALLY the bare minimum, but isn't required.
+<body>   Contains the visible content of the page in the view window.
+
++ <div> and <span> 
+ <div> is a block element that may have arbitraty content.
+       In HTML5, usually <div>s are replaced with more descriptive Semantic elements
+  <span> is an inline-block element by default
+
+-- BLOCK elements by default take up 100% the width 
+         of their parent containing element.
+-- INLINE-block elements stay in line with the text around it, 
+       by default taking up only as much space as the content inside
+
+
++ Semantic Elements
+   Semantic elements are blocks to label the content and for styling purposes.
+	Examples:
+	<header> , <main> , <footer>
+	<section> , <article> , <summary>
+	<nav>
+
++ Table-related Elements
+  Tables are formatted, generally, as follows:
+<table>
+   <tr>
+     <td> </td>
+     <td> </td>
+   </tr>
+   <tr>
+     <td> </td>
+     <td> </td>
+   </tr>
+</table>
+
+	<table> is the element declaring there will be a table.
+	<tr> signifies a table row
+	<td> signifies cell - table DATA - within the row from left to right.
+	<th> is a table head cell which formats a cell
+
+TRIVIA : Other table elements (probably youll never need):
+<thead> <tbody> <tfooter>  Sematic elements to organize a table.
+<caption> Place between the final </tr> and </table> to give it a caption
+          By default 
+
+==========================
+         CSS
+==========================
+CSS = Cascading Style Sheet used to stylize HTML elements.
++ Current/Newest version : CSS4
+    We have been using CSS3 (it is most popular now)
+
+----- Vocabulary ---------
+Selector - The element within the HTML you are selecting to stylize
+         3 types of selectors:
+	  1. Tags
+	  2. Class
+	  3. ID
+Class - identify a group of elements on a page -- can be used mutiple times
+	Elements can have multiple classes.
+	In CSS you select by class with .ClassName
+ID  - Identifies a specific element - each ID should only be used once.
+	In CSS you select ids with #IdName
+** You tell an element which class and or ID it has (if any) in the HTML.
++ How to insert CSS?
+ 1. Inline CSS - as a property to the HTML
+    <tag style="attribute:value;
+ 2. Internal - usally placed in the <head>, but work anywhere.
+    - CSS Contained by <style> .. </style> tags
+ 3. External stylesheets
+    Must use HTML tag link to include external stylesheet:
+<link href="./css.css" ref="stylesheet" type="text/css">
+
+  Note above is default order of priority for CSS styling.
+  You may also use !important to put a specific style to the top 
+     of the priority list. For example:
+	p {
+    	   color: red !important;
+	}
+
++ Colors
+Main ways to identify colors:
+  1. name  -- IE red, black
+  2. Hexadecimal -- #RRGGBB
+      RR GG and BB are red, green, or blue values 
+      from 000000-ffffff (0-9 then a-f for each digit)
+      00-ff corresponds to an RGB value of 0 to 255.
+  3. RBG -- rgb(100, 100, 100)
+      Numbers are R G B values of 0 to 255.
+  4. RGBA -- rgba(100,100,100, .5)
+      First 3 are the same as RGB, but the third value is ALPHA
+      Alpha is an modified from 0 to 1 corresponding to a percent of opacity
+
++ The Box Model
+ The box model describes layers of space around the content which can be stylized.
+ _ _ _ _ _ _ _ _ __ _ _ __ _ _ _ _ 
+|_________________________ Margin|
+|| ________________ Border|      |
+||| _______ Padding|      |      |
+||||Content|       |      |      |
+||||_______|       |      |      |
+|||________________|      |      |
+||________________________|      |
+|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |
+
+Margin is the outer layer, it is the space between one element and the next.
+    Margins are vertically collapsable, meaning two blocks with margins, 
+    one  directly above the other, 
+    will have the distance of the largest margin of the two between borders.
+Borders is the layer between the margin and content,
+    usually the area what has a border, if specified.
+Padding is the space between the content and the border.
+
++ Box-sizing
+Typically, the width and height of a block are defined by the content.
+   Padding, border, and margin are added on top of that.
+The property box-sizing can specify if you want a height/width property
+to be a "content-box" or a "border-box"
+
++ Selectors
+  HINT: the type of element closest to the braces 
+        is usually the one that will be stylized.
+
+[space] "descentant of the element to stylize"
+         .class p {};    will stylize all P that are in blocks with class .class
+                      even if they are further nested in other blocks inside 
+		      a main block with class .class
+
+
+  >     "direct parent of the element to stylize"
+         nav > a {};    is "nav, the parent of the element to stylize, a"
+                   so this will stylize all a that are direct children of nav
+
+  ,     "and"
+         div,span,header{};    will stylize div, span, and header.
+
+tag.class{}    will stylize tags with the class 'class'
+tag#ID{}       will stylize tags with the ID 'ID'
+ 
++ Forms
+Basic Outline of forms:
+<form>         
+      <label for="input1">Input One </label>
+      <input name="input1" type="number" />
+      <label for="input2">Input Two </label>
+      <input name="input2" type="Text" />
+      <input type="submit" value="Go!">
+</form>
+
+	Form tag organizes groups and inputs. 
+  It tells the browser that the contained inputs and submit button 
+  are all related and should be set to the server at the same time.
+
+  Forms are blocks and can have attributes such as width, height, and background.
+  Elements that are typically in forms include:
+<button> <label> <input> <fieldset>
+
++ Variables
+
+To use variables, right create them with the .root selector. 
+Variable names start with "--"
+.root{
+	--text-color:blue;
+	--div-bg:yellow;
+}
+
+To use them later, use var(--name)
+
+div{
+	color: var(--text-color);
+	background-color:var(--div-bg);
+}
+
+==========================
+         HTTP
+==========================
+
++ HTTP = HyperText Transfer Protocol.
+ HTTP is used to send informating from the user to the server.
+ It funcitons as a request-response protocol in a client-server computer model.
+
++ GET and POST
+They are the two main HTTP methods.
+GET is the default. 
+  It put the input data into the URL and can be bookmarked and visited again later.
+  It is not good to use for sensitive data.
+POST sends the information to the server without making it directly public.
+  Set method="post" for most sensitive things
+  HOWEVER, it is not perfectly secure either.
+
+
+
+
+
+
+
+
+
+
+  
