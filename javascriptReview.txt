@@ -1,101 +1,6 @@
-JavaScript & Programming
- 
-Scope 
-Scope determines the accessibility of functions and variables. The two levels are called local scope and global scope.
--- Local scope is specific to the set of curly braces {} it is created in.  Variables defined with in functions, loops, or otherwise placed {} braces are available only in that set of braces and {} within them.
--- Global variables are variables accesible throughout the program. 
--- 'let' and 'const' create block-scope variables, available locally from creation down.
--- 'var' creates a variable that is available anywhere in the scope it is created. 
--- creating a variable without let, const, or var will be global.
-
-Imagine there is water fountain and     | let waterFountain = function(){
-you can get water from it.              |   let water = 'some water';   };
-                                        |
-While you are at the fountain, you can  |  waterFountain();
-use the water for anything, but when you|  console.log(water) //Returns an error!!
-leave, the water is no longer accesible.|
-                                        |
-If you want to take water from the      |  let waterBottle;    
-fountain you need to bring a water      |  function waterFountain() {
-bottle. In order to bring a water       |  let water = "some water"; 
-bottle, you need to already HAVE one.   |  waterBottle = water; }
-The fountain cant PROVIDE water bottles |  
-or CREATE them, but it can FILL one     |  waterBottle();
-that exists.                            |  console.log("You have " + waterBottle)
-
- 
-What are loops?
- 
-What is a while loop? Provide an example.
- 
-What is a do-while loop? Provide an example.
- 
-How are while and do-while loops different?
- 
-What is a for loop? What three pieces of information do we provide when creating a for loop? Provide an example for loop.
- 
-What is an infinite loop? How might we create an infinite loop? What are the consequences of creating an infinite loop? Give an example of an infinite loop.
- 
-What are the document and window objects?
- 
-What are callback functions?
- 
-What are the setTimeout and setInterval functions used to do?
- 
-What are the different ways we can find HTML elements using JavaScript?
- 
-How could we add or remove a class from an element using JavaScript?
- 
-How could we change the text inside an element using JavaScript?
- 
-How could we change the src of an image using JavaScript?
-^^ setAttribute or just imgLocation.src
- 
-What is JSON?
- 
-What is an external API?
- 
-What is fetch?
- 
-What is a promise?
- 
-What is/are async / await?
- 
- 
-GIT
- 
-What is Git? What are the advantages of using Git?
-What is a repository?
-What is a branch?
-What is a commit?
-What is a remote?
- 
-What is the process of committing new code?
- 
-What is the process of pushing code to a remote repository?
- 
-What is the process of pulling code from a remote repository?
- 
-What is the process of initializing a new repository?
- 
-What is the process of cloning an existing repository?
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-=== JavaScript ====================================================================
-Java != JavaScript ------------------------[resize window for notepad ideal-width]->
-++++++++++++++++++++++++
+=== JavaScript ============================================================Clay=====
+--Java != JavaScript ----------------------[resize window for notepad ideal-width]->
+==================================
 + + Table of Contents + +
 A. JavaScript DataTypes
 	+ Floating Point Values
@@ -120,7 +25,6 @@ G. Loops
 	+ While Loops
 		+ Do While
 H. Scope
-I. APIs
 +++++++++++++++++++++++++++++
 Basic use:
 
@@ -344,20 +248,21 @@ const myFunction = function(parameter1,parameter2) {
 function myFunction(parameter1,parameter2){
             //The code goes here 
             };
-Functions have a few key components:
+
+let functionName = (parameter1, parameter2) => {
+	//the code Here (This is called an arrow function.)
+	};
+
+
+Functions have a three key components:
 1. Function name (self explainitory). in this example, it will be costForGas
 2. Parameters - [OPTIONAL] these are the variable names you use as placeholders
    when creating the function.
-     For example, if you want to know how much a number of apples costs, you would need 
-     the GALLONS OF GAS and the COST PER GALLON to do the calculation. These two bits of 
-     information are your equation's parameters, and you simply could not do the math 
-     without them, even though you know how calculating price works. Your function can have
-     any number of parameters, even none at all is allowed.
-       > > If you make a function that DOES have parameters, you will always need to input 
-           the parameters to run the function. However, functions do not need parameters.
+   ++ Parameters Example:
+	 If you want to know how much it will cost for a number of gallons of gas, you would need the GALLONS OF GAS and the COST PER GALLON to do the calculation. These two bits of information are your equation's parameters, and you simply could not do the math without them, even though you know how calculating price works. Your function can have any number of parameters, even none at all is allowed.
+       > > If you make a function that DOES have parameters, you will always need to input the parameters to run the function. However, functions do not need parameters.
 3. The function - What you actually are doing.
-4. Arguments - [AS NEEDED] when you call a function, you pass in your arguments where the
-   parameters were declared, and in the same order (if the function uses parameters).
+4. Arguments - [AS NEEDED] when you call a function, you pass in your arguments where the parameters were declared, and in the same order (if the function uses parameters).
        let theResult = myFunction(argument1,argument2);
 
     _Example______________________________
@@ -377,8 +282,37 @@ console.log('The cost of gas today is ' + price);
 let gasNeeded = 12;
 let costPerGallonToday = 2.87;
 let priceToday = costOfGas(gasNeeded,costPerGallonToday);
-console.log('The cost of gas today is ' + priceToday);
+console.log('The cost of gas today is $' + priceToday);
      _______________________________________
+
+Callback functions are functions that can be passed as an argument to another function.
+setTimeout and setInterval is an example of a function that uses callback functions as a parameter.
+
+setTimeout(function,number in milliseconds)
+setInterval(function,number in milliseconds)
+
+When using a callback function, use the name of the function without parameters by default.
+SPECIFICALLY FOR TIMED FUNCTIONS:
+You'll want to create a variable that contains setTimeout or setInterval functions. This way, you'll be able to cancel them.
+
+ Example ________________________
+	let myFunction = function() {
+		console.log("Some code executed.");
+		}
+	let myOtherFunction = function() {
+		console.log("This will keep happening every few seconds");
+		console.log("until you clearInterval on intervalExample");
+		}
+
+	let timeoutExample = setTimeout(myFunction,2000);	
+	let intervalExample = setInterval(myOtherFunction,5000);
+
+	//clearInterval(intervalExample);
+	___________________
+
+A different notation for using callback functions is as follows:
+
+setTimeout(() => console.log("this is my function");, 1000)
 
 ----------------------------------
 ------E. Logical Operations ------
@@ -551,16 +485,17 @@ You can also combine solutions
 	    default:
 	        console.log('it wasnt between 3 and 5')
 	 } 
-__________________________
-+ + Try Catch + +
 
-Try operations will attempt to run the code contained. If an error
+
 ------------------------------
 --------- G. Loops -----------
 ------------------------------
 Loops are a time of control structure.
 They that run recursively while a condition is true. 
 They stop when it is false.
+
+Infinite loops are created when the condition can never be made false.
+
 
 Keywords for loops:
 
@@ -611,30 +546,6 @@ bottle, you need to already HAVE one.   |  waterBottle = water; }
 The fountain cant PROVIDE water bottles |  
 or CREATE them, but it can FILL one     |  waterBottle();
 that exists.                            |  console.log("You have " + waterBottle)
-
-----------------------------------
---------- H. API -----------------
-----------------------------------
-
-Fetch API command < Sends request to an API for information
-
-PROMISES
->> General syntax (literally):
-     fetch(apiURL).then(do this when response is returned).catch(do this if no response)
-
->> Code to fetch infomation in practice:
-	fetch(apiURL)
-	   .then(  (data) => {
-		
-           })
-	   .catch( (error) => {
-		//error handling function
- 	    })
-
-
-ASYNCRONOUS
-
-let get
 
 
 

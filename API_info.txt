@@ -1,0 +1,60 @@
+==========================================                        -Clay Andrews
+------------ APIs ------------------------------------------------------------>
+==========================================
++ + What Is it? + +
+API stands for Application Programming Interface. An API is a set of functions, protocols, procedures, and tools for building software. They are essentially databases that an external program can access for information and functions.
+
+JSON stands for JavaScript Object Notation. It is structured text used to transfer data between web applications and web servers. 
+
+When using APIs in JavaScript, we must request from the HTTP to get the json data extracted from the response recieved from the API server. This two-step process is outlined below. 
+ 
+In order to get data from an API, use the global fetch function. Fetch is a command in JavaScript for interfacing with the HTTP (Hypertext Transfer Protocol). Fetch asyncronously requests and handles resources from external locations.
+ 
++ + How does it work? + +
+Fetch works due to an object called a promise. The promise object is a placeholder for an asyncronous request - which can hold a value immediately, later, or never. Asyncronous requests place certain blocks of the code (callback functions, specifically) away until the request (the first callback function) is completed. This allows the script to continue running without completely freezing up. 
+Promises aren't specifically objects for fetch, and do have other uses:
+Imagine or, if you will, let thisBox be a new Promise, and ( performing this function will return something to fill thisBox) .then, When they get back to us, ( do this).
+Example, base code from
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+_____________________
+var promise1 = new Promise(function(resolve, reject) {
+  setTimeout(function() {resolve('foo');}, 2000); 
+  });
+
+promise1.then(function(value) { 
+  console.log(value + " Tada! This ran now that the request was resolved.");
+  // expected output: "foo"
+});
+
+console.log(promise1 + " last line of code here, but ran before promise1 completed!");
+___________________
+This can also be used for API requests. Note that when the response comes in, it is NOT in the form of json right away.
+You have to extract the JSON body content using the response.json(); command.
+Example from
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+_______________________
+fetch('http://example.com/movies.json')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(JSON.stringify(myJson));
+  });
+_______________________
+
++ + Is there a cleaner-looking way? + +
+Modern JavaScript decided that the promises method looked complex, so they came up with the async / await method.
+Await tells the code to wait for the response of an asyncronous request.
+This simplifies the "promise" system, but actually does the exact same thing. 
+
+const request = async function() {        //Says this function will be async
+	const response = await fetch(apiUrl); //GET request to the API
+	const json = await response.json(); //get response in form of an object
+	console.log(json) //you can now use the json response.
+	}
+
+
+
+
+
+

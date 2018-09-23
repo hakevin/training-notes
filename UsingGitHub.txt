@@ -1,6 +1,6 @@
-===================================================================================
-GitHub Review
-===================================================================================
+====================================================================Clay============
+---GitHub Review  --------[if this is all 1 line, you have the ideal notepad width]>
+====================================================================================
 >> If you are in your GIT BASH git folder
 
 git init			- Initializes dir as git
@@ -18,7 +18,7 @@ git push origin master		- push master from local to online
 git pull			- Pulls master file from online to local when
 				  you're in your master branch
 
---- Creating New Directory in GitHub: ----
+--- Creating New Repository in GitHub: ----
 1. Create/go to folder and initialize
 	cd /folder
 	git init
@@ -27,4 +27,30 @@ git pull			- Pulls master file from online to local when
 3. Copy URL created in git and connect:
 	git remote add origin [url]
 4. 'push' commited master branch
-	git push origin master
+	git push origin masteB
+
+
+--- Vocab ---
+Repository: Online Folder
+Branch: Working Copy
+Commit: Local Save
+Remote: Not Here
+
+--- How-to ---
+To committing new code:
+1. add it to local .git
+2. commit it and leave a -m "message"
+
+Pushing code to a remote repository:
+1. commit it
+2. push it
+ 
+Pulling code from a remote repository:
+1. Connect repo
+2. Pull code
+ 
+Cloning an existing repository:
+1. Connect
+2. Clone
+OR, alternatively:
+1. Clone
