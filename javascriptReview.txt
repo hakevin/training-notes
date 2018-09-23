@@ -1,5 +1,100 @@
+JavaScript & Programming
+ 
+Scope 
+Scope determines the accessibility of functions and variables. The two levels are called local scope and global scope.
+-- Local scope is specific to the set of curly braces {} it is created in.  Variables defined with in functions, loops, or otherwise placed {} braces are available only in that set of braces and {} within them.
+-- Global variables are variables accesible throughout the program. 
+-- 'let' and 'const' create block-scope variables, available locally from creation down.
+-- 'var' creates a variable that is available anywhere in the scope it is created. 
+-- creating a variable without let, const, or var will be global.
+
+Imagine there is water fountain and     | let waterFountain = function(){
+you can get water from it.              |   let water = 'some water';   };
+                                        |
+While you are at the fountain, you can  |  waterFountain();
+use the water for anything, but when you|  console.log(water) //Returns an error!!
+leave, the water is no longer accesible.|
+                                        |
+If you want to take water from the      |  let waterBottle;    
+fountain you need to bring a water      |  function waterFountain() {
+bottle. In order to bring a water       |  let water = "some water"; 
+bottle, you need to already HAVE one.   |  waterBottle = water; }
+The fountain cant PROVIDE water bottles |  
+or CREATE them, but it can FILL one     |  waterBottle();
+that exists.                            |  console.log("You have " + waterBottle)
+
+ 
+What are loops?
+ 
+What is a while loop? Provide an example.
+ 
+What is a do-while loop? Provide an example.
+ 
+How are while and do-while loops different?
+ 
+What is a for loop? What three pieces of information do we provide when creating a for loop? Provide an example for loop.
+ 
+What is an infinite loop? How might we create an infinite loop? What are the consequences of creating an infinite loop? Give an example of an infinite loop.
+ 
+What are the document and window objects?
+ 
+What are callback functions?
+ 
+What are the setTimeout and setInterval functions used to do?
+ 
+What are the different ways we can find HTML elements using JavaScript?
+ 
+How could we add or remove a class from an element using JavaScript?
+ 
+How could we change the text inside an element using JavaScript?
+ 
+How could we change the src of an image using JavaScript?
+^^ setAttribute or just imgLocation.src
+ 
+What is JSON?
+ 
+What is an external API?
+ 
+What is fetch?
+ 
+What is a promise?
+ 
+What is/are async / await?
+ 
+ 
+GIT
+ 
+What is Git? What are the advantages of using Git?
+What is a repository?
+What is a branch?
+What is a commit?
+What is a remote?
+ 
+What is the process of committing new code?
+ 
+What is the process of pushing code to a remote repository?
+ 
+What is the process of pulling code from a remote repository?
+ 
+What is the process of initializing a new repository?
+ 
+What is the process of cloning an existing repository?
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
 === JavaScript ====================================================================
-JavaScript != Java ------------------- [this is 1 line @ min width of notepad ---->
+Java != JavaScript ------------------------[resize window for notepad ideal-width]->
 ++++++++++++++++++++++++
 + + Table of Contents + +
 A. JavaScript DataTypes
@@ -24,38 +119,62 @@ G. Loops
 	+ For Loops
 	+ While Loops
 		+ Do While
+H. Scope
+I. APIs
 +++++++++++++++++++++++++++++
 Basic use:
 
       location.function(arguments);
 
 The first section is the location or the element in which you are interacting.
-You follow that with a dot and name a function that can be used on the object with which you are interacting.
-Example:
-      console.log('');
-This will print out a statement in the console. Console are accessible in your web browser by pressing ctrl + Shift + I, or right clicking and choosing "Inspect Element."
+  You follow that with a dot and name a function that can be used on that object.
+  Example:
+         console.log('');
+   
+   This will print out a statement in the console. 
+Console are accessible in your web browser by pressing ctrl + Shift + I,
+or right clicking and choosing "Inspect Element."
+
+Javascript files can be put into HTML by using the <script> tag.
+     	<script>
+		//javascript here
+	</script>
+If you want to link to an external javascript document, set the source attribute to the location:
+    <style src="javaFile.js"></script>
+
+Generally, its best to put your javascript at the bottom of the HTML document.
 -----------------------------------------
 ----- A. JavaScript Datatypes------------
 -----------------------------------------
-A primitive is data that has only a value - it has no methods or functions associated with it. The letter 's' as a string is primitive because it doesn't do anything other than be the letter s. 
+A primitive is data that has only a value - it has no methods or functions
+associated with it. The letter 's' as a string is primitive because it 
+doesn't do anything other than be the letter s. 
 objects are the only nonprimitive data types (see below for more information)
 
-1. Strings - to create a string, you simply put your words in quotations, either 'single' or "double" will work. Strings accept alphanumeric symbols and all other basic keystrokes and characters. However, if you want to use the same type of quotation mark in your string as you used to contain it, you must use \' or \".
+1. Strings - to create a string, you simply put your words in quotations, either 'single' or "double" will work.
+   Strings accept alphanumeric symbols and all other basic keystrokes and characters. However, if you want to use the same type of quotation mark in your string as you used to contain it, you must use \' or \".
          let myString = 'hello!!'
 2. Numbers - Numbers can be represented in various ways such as by decimal, integer, scientific notation, binary, and more. Most comonly, just use the number for example: 
          let myNum = 5;
     ** Important Numbers:
-       - NaN : Not a Number - this will result if you do mathematical operations (other than addition) with strings. Nan is a typeof number.
-       - Infinity : Infinity is a number that can result from careless math. It acts as Infinity would mathematically. Note that sometimes a value will be called "infinity" if it is larger than the max number that JS can handle, it will be considered infinity.
+       - NaN : Not a Number - this will result if you do mathematical operations (other than addition) with strings.
+               Nan is a typeof number.
+       - Infinity : Infinity is a number that can result from careless math. 
+               It acts as Infinity would mathematically. 
+               Note a value will be called "infinity" if it is larger than the max
+               number that JS can handle
 3. Boolean - true or false. In order to create a boolean, write true or false without and quotes.
           let myBool = true;
-4. Undefined - data tyle which represents an undefined state. Write unquoted undefined to give this data type to a variable. If you create a variable and do not give it a value, it will be by default undefined. For example, if you just use:
+4. Undefined - data tyle which represents an undefined state. Write unquoted undefined to give this data type to a variable. If you create a variable and do not give it a value, it will be by default undefined. 
+     For example, if you just use:
           let myVar;
-5. Null - this means there is no value. JS will never assign the value of null to a variable by default; it will use undefined instead.
+5. Null - this means there is no value. JS will never assign the value of null to a variable by default- it will use undefined instead.
           let myNull = null;
-6. Symbol - Symbols represent a static (nonchanging) values that can be utilized. Each symbol is a unique, and can be used as an identifier. 
+6. Symbol - Symbols represent a static (nonchanging) values that can be utilized. 
+     Each symbol is a unique, and can be used as an identifier. 
           let mySymbol = Symbol();
-7. Objects - NON-PRIMITIVE DATA TYPE! Objects are data containers which can hold many values including different types of data and functions. They contain key:value pairs.
+7. Objects - NON-PRIMITIVE DATA TYPE! Objects are data containers which can hold many values including different types of data and functions. 
+   They contain key:value pairs.
 
           let myObject = {
                           aPrimitive: 7,
@@ -71,7 +190,8 @@ objects are the only nonprimitive data types (see below for more information)
 
 ____________________________
 + + Floating Point Values + +
-  - JavaScript uses floating point values.. Basically, if you have a huge decimal or an irrational number, JS will use an algorithm to store the number and pull out a value that "close".
+  - JavaScript uses floating point values.. Basically, if you have a huge decimal or an irrational number, 
+      JS will use an algorithm to store the number and pull out a value that "close".
   - LONG decimals and MASSIVE numbers can't be accurately stored.
   - IF you are in a situation with floating point numbers, you should not compare them with equalities (==). Instead use a range, since the level of accuracy may vary.
   - Realistically, the loss of precision won't mess up an outcome, however this is a quirk that is work noting.
@@ -93,9 +213,9 @@ In the same line as declaring the variable, you can give it a value:
    Basically, it'll lead to a nightmare if you mess up a variable name.
    There's no good reason to declare variables this way.
 -- The 'var' variable will create the variable at the top of your scope.
-   Wherever a 'var' variable is declared, that will be used as the value globally.      This can turn into a huge mess; just don't do it.
-   YES MANY CODES ONLINE IN JS HAVE VAR, but it is
-   OUTDATED!!! Moder JS doesn't use var so freely!
+   Wherever a 'var' variable is declared, that will be used as the value globally.
+      This can turn into a huge mess; just don't do it.
+   YES MANY CODES ONLINE IN JS HAVE VAR, but it is outdated; Modern JS doesn't use var so freely!
 -- let and const create the variable there. Using 'strict mode',
    you can tell if you tried to redefine the variable, but misspelled it.
    The variable is available only in the scope in which it is defined.
@@ -111,10 +231,18 @@ _________________________
 -----------------------------------
 _________________________
 + + What is an object? + +
-  Explanation 1.)For example, let say you have an object that is a car. Your car has the color tan. It was made in 2002. It has the function of taking you places, turning on winsheild wipers, and FM radio. 
-  Your friend's car perhaps has a blue color, was made in 2017, and has all the functions your car does, but it also has a rearview camera.
+
+  Explanation 1.)For example, let say you have an object that is a car. 
+                 Your car has the color tan. It was made in 2002. 
+                    It has the function of taking you places, turning on windsheild
+ 		    wipers, and FM radio. 
+                 Your friend's car perhaps has a blue color, was made in 2017, 
+                    and has all the functions your car does, but it also has a
+		    rearview camera.
 Both of these different CARS can be described as objects, although the values are different and some functions may have been added or altered.
+
   Explanation 2.) Relating to javascript, the 'document' object varies with each different webpage or .html document you visit on your browser. All 'document' objects have commands such as .getElementById() or .style, but they each hold their own data in the form of HTML (or css and js scripts.)
+
   Explanation 3.) objects are big packages of functions and variables. You only need to know the keyword to use things inside of them. If you make your own object, you have to install or create all the functions and variables inside yourself.
 _________________________
 + + How do I use them? + +
@@ -218,11 +346,18 @@ function myFunction(parameter1,parameter2){
             };
 Functions have a few key components:
 1. Function name (self explainitory). in this example, it will be costForGas
-2. Parameters - [OPTIONAL] these are the variable names you use as placeholders when creating the function. For example, if you want to know how much a number of apples costs, you would need the GALLONS OF GAS and the COST PER GALLON to do the calculation. These two bits of information are your equation's parameters, and you simply could not do the math without them, even though you know how. Your function can have any number of parameters, even none at all is allowed.
-          If you make a function that DOES have parameters, you will always need to input the parameters to run the function. However, functions do not need parameters.
-Declaring a function without parameters:
+2. Parameters - [OPTIONAL] these are the variable names you use as placeholders
+   when creating the function.
+     For example, if you want to know how much a number of apples costs, you would need 
+     the GALLONS OF GAS and the COST PER GALLON to do the calculation. These two bits of 
+     information are your equation's parameters, and you simply could not do the math 
+     without them, even though you know how calculating price works. Your function can have
+     any number of parameters, even none at all is allowed.
+       > > If you make a function that DOES have parameters, you will always need to input 
+           the parameters to run the function. However, functions do not need parameters.
 3. The function - What you actually are doing.
-4. Arguments - [AS NEEDED] when you call a function, you pass in your arguments where the parameters were declared, and in the same order (if the function uses parameters).
+4. Arguments - [AS NEEDED] when you call a function, you pass in your arguments where the
+   parameters were declared, and in the same order (if the function uses parameters).
        let theResult = myFunction(argument1,argument2);
 
     _Example______________________________
@@ -275,7 +410,8 @@ _________________________
   You don't HAVE TO use parenthesis in many cases, 
   but it is good to so that someone reading yoru script will know what you meant.
 
-- Logical expressions return boolean values. Expressions and boolean variables are in many ways interchangable.
+- Logical expressions return boolean values. Expressions and boolean variables are in many
+  ways interchangable.
 	let a = true;
 	let b = false;
 	let myBoolean = true;
@@ -320,12 +456,13 @@ For example:____________
 -----------------------------------
 ------ F. Control Structures ------
 -----------------------------------
-Control structures are lines of code that run under certain conditions defined by boolean logical operations.
+Control structures manage the flow of code, choosing to operate under particular condition. If statements, switch statements, and loops are all control structures .
 
 Important keyword:
 
 break;		Break will remove you from the control structure all together.
-		Once the code processes a break, it will just skip down to the bottom of you statement.
+		Once the code processes a break, it will just skip down to the bottom 
+                of you statement.
 
 _________________________
 + + If Statements + + 
@@ -346,15 +483,18 @@ You can also run a code to catch something ELSE if the expression is false:
 		};
 
 BE AWARE of where you place your semicolon!
-You can have semicolons inside the {} brackets as part of your code, but you CANNOT have a ; between } and else! 
+You can have semicolons inside the {} brackets as part of your code, but 
+you CANNOT have a ; between } and else! 
   if (false){and you put a semicolon after this =>};else{nothing will happen};
 
 
 + + Else If Statements 
 
  - Also called else-if statements.
- - Else if statements run the expression and runs the first block of code after a true expression.
-- You write "else if (expression) { else if code block}" after your if {code block} and, like the else statements, no semicolon until the very last of your statements.
+ - Else if statements run the expression and runs the first block of code after a true
+   expression.
+- You write "else if (expression) { else if code block}" after your if {code block} and, 
+   like the else statements, no semicolon until the very last of your statements.
 - You can run an "else {expression}"
 
    Example:__________
@@ -370,7 +510,9 @@ You can have semicolons inside the {} brackets as part of your code, but you CAN
 	};
 	________________
 
-This will output to the console "a is less than 5" because that is the first statement to come up true. YES, a is also less than 10, BUT the code exits out of the statement and never even checks for that.
+This will output to the console "a is less than 5" because that is the first statement 
+to come up true. YES, a is also less than 10, BUT the code exits out of the statement 
+and never even checks for that.
 
 _________________________
 + + Switch Statements + +
@@ -409,18 +551,106 @@ You can also combine solutions
 	    default:
 	        console.log('it wasnt between 3 and 5')
 	 } 
+__________________________
++ + Try Catch + +
 
+Try operations will attempt to run the code contained. If an error
 ------------------------------
------------ Loops ------------
+--------- G. Loops -----------
 ------------------------------
-
-Loops will run recursively while a condition is true. 
+Loops are a time of control structure.
+They that run recursively while a condition is true. 
 They stop when it is false.
 
 Keywords for loops:
 
+continue;	Jump to the next iteration of the loop immediately
 break; 		Ends a loop
 _______________
 + + For Loop + +
 for(initial condition; boolean expression; increment) {
 }
+
+
++ + While Loops + +
+runs and repeats only while condition is true
+
+while (condition) {
+}
+
++ + Do While + +
+Runs once then checks if it needs to repeat itself
+
+do {
+//thing
+} while (condition)
+
+
+---------------------------------
+-------- H. Scope ---------------
+---------------------------------
+
+Scope determines the accessibility of functions and variables. The two levels are called local scope and global scope.
+-- Local scope is specific to the set of curly braces {} it is created in.  Variables defined with in functions, loops, or otherwise placed {} braces are available only in that set of braces and {} within them.
+-- Global variables are variables accesible throughout the program. 
+-- 'let' and 'const' create block-scope variables, available locally from creation down.
+-- 'var' creates a variable that is available anywhere in the scope it is created. 
+-- creating a variable without let, const, or var will be global.
+
+Imagine there is water fountain and     | let waterFountain = function(){
+you can get water from it.              |   let water = 'some water';   };
+                                        |
+While you are at the fountain, you can  |  waterFountain();
+use the water for anything, but when you|  console.log(water) //Returns an error!!
+leave, the water is no longer accesible.|
+                                        |
+If you want to take water from the      |  let waterBottle;    
+fountain you need to bring a water      |  function waterFountain() {
+bottle. In order to bring a water       |  let water = "some water"; 
+bottle, you need to already HAVE one.   |  waterBottle = water; }
+The fountain cant PROVIDE water bottles |  
+or CREATE them, but it can FILL one     |  waterBottle();
+that exists.                            |  console.log("You have " + waterBottle)
+
+----------------------------------
+--------- H. API -----------------
+----------------------------------
+
+Fetch API command < Sends request to an API for information
+
+PROMISES
+>> General syntax (literally):
+     fetch(apiURL).then(do this when response is returned).catch(do this if no response)
+
+>> Code to fetch infomation in practice:
+	fetch(apiURL)
+	   .then(  (data) => {
+		
+           })
+	   .catch( (error) => {
+		//error handling function
+ 	    })
+
+
+ASYNCRONOUS
+
+let get
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
