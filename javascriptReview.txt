@@ -44,7 +44,7 @@ Javascript files can be put into HTML by using the <script> tag.
 		//javascript here
 	</script>
 If you want to link to an external javascript document, set the source attribute to the location:
-    <style src="javaFile.js"></script>
+    <script src="javaFile.js"></script>
 
 Generally, its best to put your javascript at the bottom of the HTML document.
 -----------------------------------------
@@ -94,8 +94,7 @@ objects are the only nonprimitive data types (see below for more information)
 
 ____________________________
 + + Floating Point Values + +
-  - JavaScript uses floating point values.. Basically, if you have a huge decimal or an irrational number, 
-      JS will use an algorithm to store the number and pull out a value that "close".
+  - JavaScript uses floating point values.. Basically, if you have a huge decimal or an irrational number, JS will use an algorithm to store the number and pull out a value that "close".
   - LONG decimals and MASSIVE numbers can't be accurately stored.
   - IF you are in a situation with floating point numbers, you should not compare them with equalities (==). Instead use a range, since the level of accuracy may vary.
   - Realistically, the loss of precision won't mess up an outcome, however this is a quirk that is work noting.
@@ -106,7 +105,7 @@ ____________________________
 There are 4 ways to declare variables:
 
      myVar;            // DO NOT use this method. 
-     var myVar;        // Generall DO NOT use this method
+     var myVar;        // Generally DO NOT use this method
      let myVar;        // USE THIS for variables that change
      const myVar;      // USE THIS for constant variables
 
@@ -118,7 +117,7 @@ In the same line as declaring the variable, you can give it a value:
    There's no good reason to declare variables this way.
 -- The 'var' variable will create the variable at the top of your scope.
    Wherever a 'var' variable is declared, that will be used as the value globally.
-      This can turn into a huge mess; just don't do it.
+    This can turn into a huge mess; just don't do it.
    YES MANY CODES ONLINE IN JS HAVE VAR, but it is outdated; Modern JS doesn't use var so freely!
 -- let and const create the variable there. Using 'strict mode',
    you can tell if you tried to redefine the variable, but misspelled it.
@@ -135,6 +134,8 @@ _________________________
 -----------------------------------
 _________________________
 + + What is an object? + +
+
+Objects are data containers which can hold many values including different types of data and functions. Sections of the object are set up in key/value pairs.
 
   Explanation 1.)For example, let say you have an object that is a car. 
                  Your car has the color tan. It was made in 2002. 
@@ -198,7 +199,8 @@ myArray.length           // Returns the length or array (total # of items)
 _________________________________
 + + Important Default Objects + +
 
-This is a list of objects we have used and the functionsor values they have
+This is a list of objects we have used and the functionsor values they have.
+DOM, or the Document Object Model.
 
 console
         .log('message')		prints 'message' to console
@@ -312,7 +314,7 @@ You'll want to create a variable that contains setTimeout or setInterval functio
 
 A different notation for using callback functions is as follows:
 
-setTimeout(() => console.log("this is my function");, 1000)
+setTimeout(() => console.log("this is my function"), 1000)
 
 ----------------------------------
 ------E. Logical Operations ------
@@ -372,7 +374,7 @@ Javascript ONLY concept.
 - Strings/any data type ban be evaluated for "truthiness" (as true/false)
 - Any data type can be used as conditions for logical statements.
 FALSEY THINGS:
-	undefined, null, empty string '', 0, NaN, false
+	undefined, null, empty string '', 0, NaN, Infinity, false
 
 For example:____________
 	if ('b') {
@@ -384,7 +386,6 @@ For example:____________
 		console.log(' Empty string!! this will never run!')
 	};
 	_________________
-
 
 
 -----------------------------------
