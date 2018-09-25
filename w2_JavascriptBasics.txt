@@ -58,7 +58,7 @@ objects are the only nonprimitive data types (see below for more information)
 1. Strings - to create a string, you simply put your words in quotations, either 'single' or "double" will work.
    Strings accept alphanumeric symbols and all other basic keystrokes and characters. However, if you want to use the same type of quotation mark in your string as you used to contain it, you must use \' or \".
          let myString = 'hello!!'
-2. Numbers - Numbers can be represented in various ways such as by decimal, integer, scientific notation, binary, and more. Most comonly, just use the number for example: 
+2. Numbers - Numbers can be represented in various ways such as by decimal, integer, scientific notation, binary, and floating point decimals. All of these different numberic representations are still simply the Number data type. 
          let myNum = 5;
     ** Important Numbers:
        - NaN : Not a Number - this will result if you do mathematical operations (other than addition) with strings.
@@ -349,7 +349,25 @@ _________________________
 	Step 1: Arithmatic 
 	Step 2: Comparisons (<, <=, >, >=, ==, !=)
 	Step 3: Compare Expressions (&&, ||, ^)
--Parenthetrue if C and/or D is false			
+
+- Logical expressions return boolean values. Expressions and boolean variables are in many
+  ways interchangable.
+	let a = true;
+	let b = false;
+	let myBoolean = true;
+
+	(a == b) returns false
+	(true == false) returns false.
+
+
+Example Problem 1: 
+	how would you write out in code this statement:
+	the condition is true if C is true and D is false
+Answer 1:
+ >             >                 >                       >                (C && !D)	
+Example Problem 2: 
+	how would you write out in code this statement:
+	the condition is true if C and/or D is false			
 Answer 2:
 >               >                       >                   >            (!C || !D)
 
@@ -516,8 +534,10 @@ Scope determines the accessibility of functions and variables. The two levels ar
 -- Local scope is specific to the set of curly braces {} it is created in.  Variables defined with in functions, loops, or otherwise placed {} braces are available only in that set of braces and {} within them.
 -- Global variables are variables accesible throughout the program. 
 -- 'let' and 'const' create block-scope variables, available locally from creation down.
--- 'var' creates a variable that is available anywhere in the scope it is created. 
--- creating a variable without let, const, or var will be global.
+-- 'var' creates a global variable definition, but the value is NOT global.
+	=> if you declare "var thisVariable = 7", then the declaration of thisVariable will exist outside of the function, but the assignment - the number 7 - won't automatically stick with it. The value of 7 for thisVariable will only be true in that function. 
+	=> This is called hoisting - when the variable declaration lifts to the top of it's scope.
+-- If you use "thisVariable = 7" -- defining it without a keyword let, var, or const -- it'll be global in definition and value.
 
 Imagine there is water fountain and     | let waterFountain = function(){
 you can get water from it.              |   let water = 'some water';   };
@@ -533,20 +553,6 @@ bottle, you need to already HAVE one.   |  waterBottle = water; }
 The fountain cant PROVIDE water bottles |  
 or CREATE them, but it can FILL one     |  waterBottle();
 that exists.                            |  console.log("You have " + waterBottle)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

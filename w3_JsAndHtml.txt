@@ -1,0 +1,37 @@
+Editing HTML and CSS in JavaScript:
+
+
+== To add a new element with an input box: == 
+We can break down the code into the following steps:
+Step 0: in HTML, have an inpux box and a button, each with IDs.
+	I will assume your
+1. Capture a click 
+2. Get a value from an input field
+3. Create an element 
+4. Add Element to an area on the page. 
+
+1. Capture click - either addEventListener for the button element or use HTML attribute onclick="myFunction()".
+  -- Define a way for the button to connect to the function. 
+
+2. Grab the value from the input.
+	let inputBox = document.getElementById("id-of-input");
+	const inputValue = inputBox.value;
+
+3. Create a new element in JavaScript:
+
+let newElement = document.createElement('tag name here');
+
+
+//Insert text into an element
+
+let myString = "I'm a string";
+newElement.innerText = myString;
+
+//Insert new element into old one.
+// Make sure you have a constant that points to the container that is on the page where you would like your new element to go.
+
+const listE = document.getElementById("id-of-element");  
+
+//then add the element
+
+listE.appendChild(newElement);
