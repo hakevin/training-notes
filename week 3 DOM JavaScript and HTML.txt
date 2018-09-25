@@ -1,7 +1,23 @@
 Editing HTML and CSS in JavaScript:
+=====================================================================================
+== Nice list ==
+document
+	.getElementById('id')			Returns element w/ ID
+	.getElementsByClassName('class') 	Returns array
+	.getElementsByTagName('tag')		Returns array
 
+	.createElement('tag')			Creates tag Element 
 
-== To add a new element with an input box: == 
+[element].
+	.appendChild(newChild)			Adds newChild element to the 
+						bottom of content area of [element]
+	.classList				Looks at the class attribute.
+		.add("class-name")
+		.remove("class-name")
+		.toggle("class-name")		Removes or adds class "class name"
+	
+
+========= To add a new element with an input box: ====== 
 We can break down the code into the following steps:
 Step 0: in HTML, have an inpux box and a button, each with IDs.
 	I will assume your
