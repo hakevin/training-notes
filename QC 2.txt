@@ -1,0 +1,62 @@
+===========================
+  --- QC Week 2, 9-25 ---
+===========================
+
+-- What is JavaScript? 
+	JavaScript is a scripting language that can add interactivity to HTML and CSS.
+-- What is DOM? 
+	DOM stands for Document-Object Model. The DOM is how JavaScript interfaces with HTML and CSS on the page.
+-- Datatypes?
+	Strings, Numbers, Boolean, Symbol, Null, Undefined, and Object. Function is not a datatype, but is an important java type.
+-- What is NaN?
+	Not a Number is a typeof Number. This can result, for example, from using mathmatical operations other than a + with at least one non-number data type. 
+-- Truthey/ Falsey : JavaScript concept in which all data types can be evaluated for "truthiness". Items which will yield false are: 0, null, undefined , empty string, false, NaN.
+-- What is a string? 
+	I string is an array of characters.
+-- What is string concatenation? 
+	Joining together chracters end to end. This is done by using the + sign, which means append in this context. Concatenating a number to a string will convert the number into a string.
+
+-- What is undefined? Undefined is the default when a variable is declared ubt has no assigned value.
+
+-- What is scope:
+	Scope says which variables are accessible at different levels.
+	There are three types of scopes: block-level: such as in control-flow blocks and functions. Local: Variable sthat have been declared by the time a line of code runs. and global: variables that are available everywhere.
+
+-- How can one alter elements in array?
+theArray.push('') 	< Adds '' to the endx of the aray
+theArray.shift()  	< removes first item (myArray[0]) and returns it
+theArray.unshift('')  	< Puts '' in the 0th array index and move sthe others back 1
+
+--How to get length of array?
+
+-- What is control-flow? statements that control the lines of code that run and how.
+
+-- What are if statements and how do you use them. 
+
+-- Switch statements? Specify case and skips down to the area the code is specified. Once it hits a case, it continues until either the end of the switch block or a break. If you add default, it will run this in the instance that the case is not defined.
+
+-- What is a loop?
+
+-- For loop?
+
+-- While loop?
+
+-- Callback function - used as argument in another function.
+
+-- Find HTML Elements in JS? 
+
+-- What is JSON? What is the syntax for it? JavaScript Object Notation. 
+
+-- What is git? GitHub?
+
+-- what is fetch?
+
+-- What is an API?
+
+-- What is a commit?
+
+-- How do you get code from a repository to a computer?
+
+-- what is a branch?
+
+-- what is the Math object?

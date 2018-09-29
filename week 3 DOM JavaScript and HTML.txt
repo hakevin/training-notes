@@ -51,3 +51,35 @@ const listE = document.getElementById("id-of-element");
 //then add the element
 
 listE.appendChild(newElement);
+
+
+================================
+
+
+
+// We now want to remove a specific element when you click it.
+function removeElement = function(){
+	//this = current element;
+	listE.removeChild(this);
+}
+
+___________________
+// You can make a loop to add event listeners for mutiple elements.
+
+let setup = function() {
+	submitE.addEventListener('click', addElement); // From earlier part of example.
+	// Set up listener on initial li elements if you have em on a page.
+	const children = listE.children;
+	for(let i=0; i< children.length; i++){
+		children[i].addEventListener('click',removeElement);
+	}
+}
+
+// when you create an elament, add eventlistener for ("click",removeElement())
+
+
+
+
+
+
+

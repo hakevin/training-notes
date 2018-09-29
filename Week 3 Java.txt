@@ -1,0 +1,360 @@
+WORK IN PROGRESS
+CURRNTLY THIS IS JUST CLASS NOTES
+
+=======================================
+Java
+=======================================
+- Java is an object-oriented programming language (OOP)
+- Java, unlike javascipt, does not run straight from the browser.
+- Java compiles down to bytecode, which is a computer language understood by the Java Runtime Environment(jrv).
+- "Write once, run anywhere" ==> Delevopers can work on their own programs in Java since the runtime environment handels the varying operating systems on its own.
+- Java codes begin executing at a main method.
+- All java apps are composed of class files, which describe objects.
+- Java script is strictly typed
+	- Data type MUSt be specified when creating variables
+	- Variable datatype cannot be changed thereafter.
+
+>> >> Vocabulary:
+Java
+bytecode
+Servers
+Object-Oriented Programming Language
+
+===============
+Starting a Java Project
+
+Inside your Java Project, create a package. 
+Packages hold classes, similar to how a folder holds files. 
+
+Inside that package, create a new "class" file.
+
+This file should start looking like this:
+    ____________________________
+	package yourPackageName;
+
+	public class yourFile {
+
+	}
+    ___________________________
+
+- The "public class yourFile" contains your application code. It MUST be named the same as your file.
+- Executable Java files won't run without a main method inside their public class.
+A main method is formatted in the following way:
+    ____________________
+	public static void main(String[] args){ 
+		// Application that runs here
+	}
+    ____________________
+The keywords in here mean the following:
+> public - this will be accessible to any function that properly calls it.
+> static - 
+> void - function without a return value; it is the application so it shouldn't.
+> String[] args - Delcares the parameter "args" as an array[] of Strings.
+> main - Defines it at the MAIN method - the only method that will be read directly when this application is compiled.
+
+========================
+------ Datatypes -------
+========================
+
++ + 8 Primitive Types in 4 Main Categoties: + +
+A. Integer Primitive Type	-	Range of Values:
+	1. byte (8-bit integer)		-128 ~ 127 
+	2. short (16-bit)		-32768 ~ 32767 [-2^7, 2^7)
+	3. int (32-bit)			-2^31 ~ 2^31-1	[-2^31, 2^31)
+	4. long (64-bit)		-2^63 ~ 2^63-1	[-2^63, 2^63)
+B. Floading Point Primitive
+	5. float (32-bit precision)
+	6. double (64-bit precision) << Numbers in javascript are 'double'
+C. Boolean
+	7. boolean - true/false (1 bit)
+D. Character Type
+	8. char (16-bit unsigned int represented as character)
+
+>>>> Conversions / Vocabulary **********************************************************************************************************************************************************
+bit - a unit of data with 2 results. 0 or 1.
+byte - 8 bits.
+
+-- Floating Point numbers do NOT literally represent the data with a number.
+
+-- Integer Division - int data can't represent fractions or decimals -- it will just truncate (essentially Math.floor) the result.
+
+==> Declaration and aggisnment must be specific.
+	- Assignment must be the literal
+	- Certain types require certian literals. 	
+     ==	Example ==	       == Default Value == 
+   byte myData 	 = 100 			0
+   short myData  = 1000			0
+   int myData 	 = 10000		0
+   long myData	 = 55555555L		0L
+
+   float myData  = 104.1f		0.0f
+   double myData = 99.5			0.0d
+
+   boolean myData = true		false
+   char myData = 'clay'			u\0000 (null)
+
+==> Primitives only hold data and are not associated with an object.
+	- Everything beside data primitives are represented with objects.
+	- Primities are a "lower level" than objects in Java
+		*** Primitives start with lowerCaseLetters
+		*** Objects start with UpperCaseLetters
+-- since chars are REPRESENTATIONS of numbers, myChar++ will give you the next character in the numeric set.
+-- Math operations can be used directly on primities in the same was as JavaScript.
+	- Math operators: +, -, *, /, %
+	- Logical checkers: ||, &&, ==, ^, |, &
+	- Control structures - the same except you initialize with int:
+		for(int i = 0; i < 5; i++) {}
+
+==> Casting - the process of explicitly converting one type to another.
+	- to Cast, include the type in parenthesis before the value to cast. 
+
+== Arrays ==
+- Use arrays in Java generally only when you know how many items it will have.
+- Arrays MUST e consistent in size, and calling for an index that it not within the array will crash java.
+- [] signifies this will be an array.
+	char[] arrayName = new char[10];
+	char[] alsoArray = {1, 2, 3};
+
+==> Strings are objects, and NOT datatypes.
+	ArrayList list;     // gives more flexibility to arrays.
+	To use ArrayList, you must include the package name
+
+
+
+
+
+
+== Classes==
+Classes structure and describe things. They are blueprints fpor objects.
+Objects are instances of classes.
+If class is animal, then class will descries the characteristic of an animal.
+An object (or instance of the class) would be an animal.
+
+In java, Everything but the primitives in a class or an object of a class.
+
+Classes define two things about the object:
+1. State	(Variables)
+2. Behavior	(Functions/Methods)
+
+>> Declare field:
+___
+String name;
+int legsCount
+___
+>> Declaring a method requires specific data:
+1. AN access modifier: [public, protected, (default), private]
+	Note: Default may also be called package-private
+2. A return type of void if no return.
+3. Method name
+4. Method parameters (type name)
+
+*****************vv** Important detail for professionalism ** vv****************
+A object will refrence itself with the keyword "this". When you use it in the class, it will fill itself in.
+
+in Animal.java  << A file without a MAIN because it isn't executable. 
+___
+public void move() {
+	System.out.println("The " + this.name + " Animal Moves around")
+}
+__
+
+in LAUNCHER.java, within the *same package*:
+___
+public class Launcher
+	public static void main(String[] args){
+	// Instantiation of an object
+	Animal myAnimal = new Animal();
+	myAnimal.name = "wallaby";
+	myAnimal.legCount = 2;
+}
+___
+
+
+A class will refrence itself with the keyword "this"
+
+
+
+======================================
+9/26
+======================================
+
+Encapsulation:
+Enforced by access Modifiers and getter/setter patterns and accessor/mutate.
+	Access Modifiers:
+	- public  - Accessible Anywhere) > Restroom @ a public park
+	- protected - Accessible within package or subclass (Employee-only bathroom)
+	- (Default) - Only accessible within same package (Restraunt's bathroom)
+	- private - Only Accessible within the class (Home restroom)
+
+getters/setters
+Private fields. Simply methods (basiclaly functions) for changing and getting values are public.
+EXAMPLE IF YOU DID IT MANUALLY:
+
+public String getTexture(){
+	return texture;
+}
+public void setTexture(String texture) {
+	this.texture = texture;
+}
+
+public Waffle(String texture, boolean glutenFree, float cruchiness) {
+	super();
+	this.texture
+}
+
+>>>>>>>>>>>SHORTCUT ??????? >>>>>>>>>>>>>>>>>>>>>>>> alt shift s >>>>>>>>>>>>>>>>>>>>>>>>
+
+//Default constructor - constructor that every class is provided fi and only if it has no other class.
+-- Classes get default if and only if they have a default.
+
+-- Default constructor DOESN"T TAKE ANY arguments.
+
+== Inheritance =============================================================================================
+	- INHERITANCE is a pillar of object-oriented programming.
+	- It is the idea and behavior of reutilizing class definitions by extending them to provide more detailed implementations.
+
+For instance we could create a more generic class called computer and extend computer to create more specifid implementations such as 'DesktopComputer' and "LaptopComputer"
+
+-When inheriting a class, the inheriting class can utilize all of the inherited classes fields and methods, althoug the access modifies must still be respected.
+
+
+<<<<<<<<<<<<<<<example?
+
+
+ Exerything in java must be inherited from another class.
+********* IMPORTANT DEFAULT OBJECTS*****
+=>> toString class is used to decribe how a class should be presented when output as a string.
+	-inherited method. Even if not defined, it is present because it is inherited to the Object class, in which every class is explicitly.
+	- There is a list of default methods that all objects by default absolutely will inherit.
+
+KEYWORD >> "extends"
+	- This itentified which class your new class will inherit.
+	- 'extends' essentially translates to "type of", to allow for more specific classes.
+	- if your LaptopComputer class wants to inherit the computer class, use:
+	public class LaptopComputer 
+
+
+KEYWORD >> "instanceof"
+	- reurns true if object is of that class. 
+	- Works for specific and broader categories.
+
+		Chihuaha ________      Chihuahua instanceof Dog == True
+             instance of         |             &&
+     		|                |     Chihuahau instanceof Animal == True
+                V                V
+              Dog instance of Animal
+
+	- Or variable / field can hold anything that is considered of that type, however, we only have access to information defined on the type the field or variable is defined with, not the actual content of the field/variable.
+
+
+
+
+@Override
+Override - redifined the behavior of a method -- You can change the functionality for your specific objects.
+
+
+
+====== Encapsulation ===============================================================
+Encapsulation is the hiding of data. The process of a class encapsulating its own state, and only exposing ways of changing state through ots own methods.
+Driven through: Private fields and getters/setter pattern.
+
+
+
+>> Java arrays:
+int[] array = {1, 2, 3}
+^^^^^^^^^^^^^^^^^^^^^^^ If you make it yoruself, use curly braces.
+
+
+
+
+
+===========================
+==================== ALL PILLARS ======================================
+==========================
+1. Inheritance - As the ability to extend the behavior of a class to a subclass, building upon existing code and providing more exacting definition. Driven through : Extending classes.
+
+2. Encapsulation -  Encapsulation is the hiding of data. The process of a class encapsulating its own state, and only exposing ways of changing state through ots own methods. Driven through: Private fields and getters/setter pattern.
+
+3. Polymorphism - 'Many forms'. In OOP, it means using the same terms (methods) with differing implementations. The first form of this is overriding. The second form is overloading - this means having multiple definitionsfor the same functions, but with different parameters.  Overloading is also possible on constructors.
+
+4. Abstraction - "What, not how" << Think about WHAT something does, not HOW. Abstract classes and interfaces give us access to forms of abstraction. An abstract class is a class that cannot be instantiated*, and can have abstract methods. These are methods with a definiton, but no implementation.
+	- Sets behavior in a higher level....
+	- You must implement bahavior of methods if they haven't been set yet.
+	- implies heirarchy
+
+==================
+Abstraction example
+=================
+
+
+=============
+Example of public,private,protected, and default
+
+
+
+===================
+Static
+===================
+Class - a blueprint for an object - the outlines that describes something.
+Object - An instance of a class, a specific set of data in the form of variables and methods.
+
+- Fields and methods are generally accosiated with OBJECTS.
+- STATIC, however, is associated with CLASS.
+	- Static is generally used for utility.
+- Objects all will point to the same "static" value in a class - they are shared.
+	- the 'this' keyword has no context in static methods.
+
+3 Important uses and results
+
+1. - For fields and variables, Final is essentialy a constant.
+   - For primitives - final value can't be changed
+   - For refrence types (objects) it means the reference cannot be changed.
+
+2. For methods, final dictates that the method cannot be overridden.
+
+3. For classes, final dictates the class cannot be extended
+
+= = Field is basically a variable within an interface.
+= = Any fields declared on interface are: public static final
+= = All methods on an interface are implicitly abstract.
+
+===================================
+
+Primitives vs reference types
+----------------------------
+
+Reference Types
+-----------
+Strings
+Arrays
+
+primitives point directly to the value.
+
+reference types point to the reference - basically a list of addresses;
+We can have multiple refrences to the same state.
+
+int[] myArray = [0,1];
+int[] otherArray = myArray;
+
+IF YOU EDIT myArray, otherArray will change as well. <<<<<<<<< TEST THIS!!!!!!!!!!<<<
+
+Reference types pass the value.
+If you change a reference type within a function, you'll change the reference on the outside as well.
+
+
+JAva is a "pass-by-value" language, ultimately.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
