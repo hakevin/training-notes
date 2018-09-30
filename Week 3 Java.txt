@@ -1,5 +1,7 @@
 WORK IN PROGRESS,
-Roughly 70% complete.
+updated at 2:00pm
+roughly half way through 4-pillars section
+. ---------------suggested notepad size ------------------->
 
 ================================================================================
 -----------------------------------  Java  -------------------------------------
@@ -12,6 +14,9 @@ Sections:
 * Variables 
 * Reference Variables 
 * Arrays
+* Classes
+* Scope
+* Encapsulation
 ================================================================================
 ############################# * Basics #########################################
 - Java is an object-oriented programming language (OOP) maintained by Oracle.
@@ -164,16 +169,19 @@ D. Character Type
 		for(int i = 0; i < 5; i++) {}
 
 ==> Casting - the process of explicitly converting one type to another.
-	- Java supports implicit and explicit type coersion (casting).
+	- Java supports implicit and explicit type conversion (casting).
 	- to Cast, include the type in parenthesis before the value to cast.
-	- Downcasting vs Upcasting
-	  -- Downcasting - represent data more specifically
-	     (ie 32-bit int to 16-bit short or 32-bit int to 32-bit char)
+	- Casting is required to convert char (has a numerical Unicode value)
+	- Boolean has NO NUMERIC REPRESENTATION in Java
+	- Downcasting vs Upcasting (numbers)
+	  -- Downcasting - represent data with less space allocation
+	     (ie 32-bit int to 16-bit short)
 	    - the casting operation must be used explicitly for downcasting.
-	  -- Upcasting - Represent the data less specifically
-	    - Or for integers, increase the size capacity.
-	    - Can be cone explicitly or implicitly
-	Example:_________________________
+	  -- Upcasting - Represent the data with more space allocation
+	    - Can be done explicitly or implicitly
+	    - UPCASTING CHART (automatic type conversion):
+             byte --> short --> int --> long -->float -->double
+__CASTING Example:_________________________
 	public static void main(String[] args) {
 		// Casting is implicit from int to long.
 		int x = 3; //32-bit
@@ -181,7 +189,7 @@ D. Character Type
 		System.out.println("int x: " + x);  //3
 		System.out.println("long y = x: " + y); //3
 		
-		//This require casting since characters are stored in unicode:
+		//This require casting since char & int aren't 
 		char q = 'q'; //16-bit unicode character
 		int r = (char) r; //32-bit
 		System.out.println("char q: " + q); //q
@@ -200,7 +208,7 @@ D. Character Type
 		System.out.println("float c: " + c); //5.4f
 		System.out.println("int d: " + d); //5	
 	}	
-	___________________________________
+________________________________________________
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 __________________________ * Reference Variables _______________________________
@@ -245,6 +253,8 @@ Console prints:
 
 ==> Strings are objects, and NOT datatypes.
   -- Note that despite Strings being reference variables (object), when you edit a string, you clear and recreate the reference on that specific variable.
+  -- Java does NOT support truthy/falsy
+	- only booleans & comparisons (< > ==, ect) are evaluated as true/false
    ____________________________
    //Create a string, and make asecond string reference the same location.
 	String firstString = "hello";
@@ -258,6 +268,8 @@ Console prints:
 	System.out.println("firstString After: " + firstString); //Goodbye
 	System.out.println("sameReference After: " + sameReference);//hello
    ____________________________
+
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [[[[[[[[[[[]]]]]]][[]]][][][][][] * Arrays []]]]]]]]]]][][][][][][][][][][[[[[[
 ********************************************************************************
@@ -278,6 +290,10 @@ Console prints:
 The default array length is 10, but it can be changed.
 		ArrayList myArray = new ArrayList(20);
 --Functionality:
+toString()  // Convert the entire array to a String, generally for output:
+
+System.out.println("myArray has the following values:" + myArray.toString());
+
 See the following:
 https://www.thoughtco.com/using-the-arraylist-2034204
 
@@ -289,16 +305,26 @@ https://www.thoughtco.com/using-the-arraylist-2034204
 	ArrayList dynamicStringArray = new ArrayList(20);
 	dynamicStringArray.addAll(Arrays.asList(names));
 
-toString()  // Convert the entire array to a String, generally for output:
+==> Array dot operator
+	- You can access information about the array with the dot operator:
+	myArray.length();
+==> Arrays of Arrays: Multidimensional Arrays:
+	- It is possible to have arrays inside arrays 
+	- This can be useful for charts and representing scientific data.
+	To declare a multidimensional array:
+	int[][] myArray = new int[3][2];
+	OR
+	int[][] myOtherArray = {{1,2},{2,4},{3,6}};
 
-System.out.println("myArray has the following values:" + myArray.toString());
 
-
-== Classes==
-Classes structure and describe things. They are blueprints fpor objects.
-Objects are instances of classes.
-If class is animal, then class will descries the characteristic of an animal.
-An object (or instance of the class) would be an animal.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+}}}}}}}}}}}}}}}}}}}}}}}}}}{ * Classes  }{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+- Classes structure and describe things. They are blueprints for objects.
+- Objects are instances of classes.
+- An object (or instance of the class) would be an animal.
+	- Objects have an "is a(an)" relationship with their class.
+	- a Dog (object) is an animal (class)
 
 In java, Everything but the primitives in a class or an object of a class.
 
@@ -342,13 +368,155 @@ ___
 
 A class will refrence itself with the keyword "this"
 
+-- Constructors are blocks of code - similar to methods- that initialize an object upon it's creation.
+
+################################################################################
+                                 * Scope
+################################################################################
+Scope Chapter References: 
+	https://www.geeksforgeeks.org/variable-scope-in-java/
+	http://mindprod.com/jgloss/scope.html#CLASS
+	https://www.tutorialspoint.com/java/java_variable_types.htm
+- Java uses block-level scope. This section addresses two categories:
+	class level scope and method scope
+	-  However, keyword modifiers also identify variables accessibility
+	   in package, subclass, and public scopes.
+- Scope determines where in the program the variable is accessible.
+	- Java is lexiecally (statically) scoped.
+- Scope is determined at compiling time
+	- IE  To assign a variable, it must declared first. 
+	- Note that wasn't the case in JavaScript if you used the var keyword.
+- Generally, {curly brackets} define a scope ~ variables will be accessible to
+  methods or operation within that same scope.
+
+==> Class Level Scope
+	- Variables declared INSIDE a class and OUTSIDE any function.
+    See chart for accessibility by keyword:
+  .------------------------------------------.
+  |  Modifier     Package   Subclass   World |
+  |  -------      -------   --------   ----- |
+  |  public         yes      yes        yes  |
+  |  protected      yes      yes        no   | (not available outside package)
+  |  Default        yes      no         no   | (No keyword)
+  |  private        no       no         no   | 
+  '------------------------------------------'
+-----> Instance Variables
+	- Declared within a class, but outside a method, constructor, or block.
+	- Can be declared before or after use 
+		(in class scope before or after main function)
+ 	- Created with use of keyword new, destroyed when object is destroyed
+	~ Something that an instance of a class would have.
+-----> 	Static Variables
+	- Static variables are shared across ALL instances of a class.
+   _____Example, a static variable for a "dog" might be:
+	   static boolean hasBrain = true;
+   _____ 
+	- All Dog()s hasBrain field will be true.
+	- if you decide one Dog() hasBrain = false, all dogs wiill as well.
+
+==> Method-Level Scope
+-----> Local Variables / Method-level Scope
+	- Variables declared inside a method have method-level scope 
+	- they cannot be accessed outside the method.
+	>> They do not exist after the method runs.
+ 	>>  "this" keyword differentiates between local and class variables.
+	~ Something to be used in a method as a parameter
+___Example:(Guess the result!)_________________________
+	public class Test 
+	{ 
+	    static int x = 11; 
+	    private int y = 33; 
+    	public void method1(int x) 
+    	{ 
+	        Test t = new Test(); 
+        	this.x = 22; 
+        	y = 44; 
+  
+	        System.out.println("Test.x: " + Test.x); 
+        	System.out.println("t.x: " + t.x); 
+        	System.out.println("t.y: " + t.y); 
+        	System.out.println("y: " + y); 
+    	} 
+  
+	    public static void main(String args[]) 
+	    { 
+	        Test t = new Test(); 
+	        t.method1(5); 
+	    } 
+	}
+___________________________________________ 
+__OUTPUT:_____________
+	Test.x: 22
+	t.x: 22
+	t.y: 33
+	y: 44
+______________________
 
 
-======================================
-9/26
-======================================
+>>>>>> See reference page to run examples or for more information:<<<<<<<<<
+http://mindprod.com/jgloss/scope.html#CLASS
+https://www.geeksforgeeks.org/variable-scope-in-java/
+https://www.tutorialspoint.com/java/java_variable_types.htm
+================================================================================
+||||||||||||||||||||||||| * 4 Pillars of OOP |||||||||||||||||||||||||||||||||||
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+( Search keywords :
+ * Four Pillars of Object-Oriented Programing * Pillars of Java )
+-Object-Oriented Programming, OOP, refers to a programming development in which
+  we have methods that are applied to the data within objects.
+	- "Structured Programming" like JavaScript applies procedures to the
+	  entire set of accessible global data.
+- OOP = take the engine apart
+	work with the pieces independantly
+	pull all together as the application
+- Structured = work directly on the car 
+	have problems when using the welder right next to the gas tank
+- the 4 Pillars are the requirements a language must meet to be called OOP
 
-Encapsulation:
+1. Inheritance:
+      > Optimizes production time: developer can create a blueprint (class)
+	-- The pillars themselves are an example of inheritance: 
+		= C outlined the requirements for OOP
+		= Java, an instance of the OOP class of programming, took the
+		  pillars and applied them as a blueprint for the language
+	- Has the ability to extend the behavior of a class to a subclass, 
+	  building upon existing code and providing more exacting definition. 
+	- Used by extending classes.
+
+2. Encapsulation:  
+     > Provides levels of security so the consumers don't break the code
+	-- Example: when Java runs your code and returns something, you know it
+	   is doing what you told it to, but maybe not exactly HOW.
+	-- black-box: when you say console.log("whatever"), and the console
+	   replied "whatever," you don't know HOW it moved the text there, but
+	   you know that keyword console.log("whatever") did the trick.
+	- Encapsulation is the hiding of data. 
+	- It is the process of a class encapsulating its own state 
+	  and only exposing ways of changing state through outs own methods. 
+	- Used through: Private fields and getters/setter pattern.
+
+3. Polymorphism:
+  > Despite the "American Dream" stereotype, not all families have 2.7 kids, 
+    a house in a suburbs, and a white picket fence...
+    But people do have their own version of "home" and "family"
+	- Polymorphism means 'many forms'
+	- In OOP: using the same terms(methods) with differing implementations.
+    -Forms of Polymorphism:
+	1. Overriding - change a method for a particular subclass
+	2. Overloading - Having multiple definitions for the same functions,
+			but with different parameters.  
+ 	   Overloading is also possible on constructors.
+
+4. Abstraction - "What, not how" << Think about WHAT something does, not HOW. Abstract classes and interfaces give us access to forms of abstraction. An abstract class is a class that cannot be instantiated*, and can have abstract methods. These are methods with a definiton, but no implementation.
+	- Sets behavior in a higher level....
+	- You must implement bahavior of methods if they haven't been set yet.
+	- implies heirarchy
+http://mrbool.com/the-4-pillars-of-object-oriented-programming-in-java/33900
+
+
+(((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))
+((((((((((((((((((((((((( * Encapsulation   )))))))))))))))))))))))))))))))))))
+))))))))))))))))))))))))))))))))))))))((((((((((((((((((((((((((((((((((((((((((
 Enforced by access Modifiers and getter/setter patterns and accessor/mutate.
 	Access Modifiers:
 	- public  - Accessible Anywhere) > Restroom @ a public park
@@ -437,20 +605,6 @@ int[] array = {1, 2, 3}
 
 
 
-
-===========================
-==================== ALL PILLARS ======================================
-==========================
-1. Inheritance - As the ability to extend the behavior of a class to a subclass, building upon existing code and providing more exacting definition. Driven through : Extending classes.
-
-2. Encapsulation -  Encapsulation is the hiding of data. The process of a class encapsulating its own state, and only exposing ways of changing state through ots own methods. Driven through: Private fields and getters/setter pattern.
-
-3. Polymorphism - 'Many forms'. In OOP, it means using the same terms (methods) with differing implementations. The first form of this is overriding. The second form is overloading - this means having multiple definitionsfor the same functions, but with different parameters.  Overloading is also possible on constructors.
-
-4. Abstraction - "What, not how" << Think about WHAT something does, not HOW. Abstract classes and interfaces give us access to forms of abstraction. An abstract class is a class that cannot be instantiated*, and can have abstract methods. These are methods with a definiton, but no implementation.
-	- Sets behavior in a higher level....
-	- You must implement bahavior of methods if they haven't been set yet.
-	- implies heirarchy
 
 ==================
 Abstraction example
