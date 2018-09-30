@@ -1,4 +1,5 @@
-WORK IN PROGRESS
+WORK IN PROGRESS,
+Roughly 70% complete.
 
 ================================================================================
 -----------------------------------  Java  -------------------------------------
@@ -30,7 +31,11 @@ Sections:
   | |___________________________________________________| |
   |_______________________________________________________|
 
- -- Your machine, as a developer, runs the JDK. The Development Kit contains some tools for development and the JRE, the Java Runtime Environment. The Java Runtime Environment holds all the files and the Java Virtual Machine. The Java Virtual Machine translates the code from bytecode to the human-readable Java language.
+ -- Your machine, as a developer, runs the JDK. 
+The Development Kit contains some tools for development and the JRE(Java
+Runtime Environment), and translates the bytecode into a human-readable form. 
+The Java Runtime Environment is the software, and it holds all the files and the Java Virtual Machine.
+The Java Virtual Machine is the application that runs Java applications or other programs which can be compiled with Java.
 
 - "Write once, run anywhere" 
 	==> Delevopers can work on their own programs in Java since the 
@@ -67,45 +72,8 @@ Sections:
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 <<<<>>><<<<<>>><<<<>>>>>>><>>>>> * Vocabulary  <<<<<>><><<<<<<<<<<>>>>>>>>>>><><
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Java 	- programming language designed for use in distributed environment 
-	(java runtime environment), enforcing object-oriented programming model.
-JDK - Java Development Kit - Software which contains the JRE, development tools,
- 	and JVM
-JRE - Java Runtime Environment - Also written as Java RTE. It is the
-	implementation of the JRE, and it includes libraries and tools for 
-	development.
-JVM - Java Virtual Machine - abstract "machine" with specifications that provide
-	a runtime environment that can run Java's bytecode and other programming
-	langauges compiled by Java. 
-IDE - Integrated Development Environment - program used by software developers
-	which can compile and run code.
-bytecode - computer source code that is processed by a program or virtual
-	machine, rather than by the actual computer's processor.
-Servers	- A computer or network that hosts and runs applications. Servers send
-	 and recieve information to and from users.
-Object-Oriented Programming Language - programming language that utilizes the
-	concept of "objects".
-Objects - Data structures that hold information - data and procedures.
-	Objects hold data called Fields (Variables)
-	Procedures  are called Methods(Functions)
-package - A way to organize java classes into names or modules.
-class - template for creating and utilizing the properties and behaviors 
-	of objects
-Method - a function
-Field - a variable
-(Data types)
-bit - Integer-only data type with 2 possible values, 0 or 1.
-byte - 8-bit data integer, with 2^8 possible values [-2^7, 2^7)
-short - 16-bit data integer, 2^16 possible values. Range: [-2^15, 2^15)
-int -  32-bit integer. Int operations that would result in a
-	decimal will be truncated without rounding 2^24 values, [-2^23,2^23)
-long - 64-bit Integer-only. 
-float  - 32-bit data precision - Allows decimals. 
-	Should not be used for precisce values such as currecy
-double - 62-bit data precision - Allows decimals.
-	Should not be used for precisce values such as currecy
-char - 16-bit Unicode character- min val of '\u0000' (0), max '\uffff' (2^16)
-boolean - data type supporting only 2 values : true or false
+
+
 
                             -------------------
 ============================ * Getting Started ================================
@@ -168,7 +136,7 @@ D. Character Type
  - int data can't represent fractions or decimals 
 	-- it will just truncate (essentially Math.floor) the result.
 
-== Declaration and assignment nment must be specific.
+== Declaration and assignment must be specific.
 	- Assignment must be the literal
 	- Certain types require certian literals. 	
      ==	Example ==	       == Default Value == 
@@ -196,6 +164,7 @@ D. Character Type
 		for(int i = 0; i < 5; i++) {}
 
 ==> Casting - the process of explicitly converting one type to another.
+	- Java supports implicit and explicit type coersion (casting).
 	- to Cast, include the type in parenthesis before the value to cast.
 	- Downcasting vs Upcasting
 	  -- Downcasting - represent data more specifically
@@ -239,30 +208,90 @@ __________________________ * Reference Variables _______________________________
 - Reference Variables point to an OBJECT that is an instance of that class. 
 - the DOT operator (.) accesses fields(variables) and methods(functions) in the reference object, so long as they are declated in the class type.
 - Reference variables point to the object LOCATION, not the OBJECT itself.
+- Example : You're online looking at www.middlezero.net.
+	Your friend is online looking at www.middlezero.net.
+	Your friend has access to www.middlezero.net and changes the homepage.
+	You access www.middlezero.net from your computer after changes are made.
+	The changes your friend made to www.middlezero.net also come up.
+In practice:_____________________________
+// Create array. Create another array that points to the same info as the first
+	int[] someArr = {1, 2, 3, 4};
+	int[] secondArr = someArr;
+//Print them both.
+	System.out.println("Array 1 start:");
+	Arrays.stream(someArr).forEach(System.out::print); 
+	System.out.println();
+	System.out.println("Array 2 start:");				
+	Arrays.stream(secondArr).forEach(System.out::print);
+//Change something about only the first array.		
+	someArr[0] = 7;
+//Print them both.
+	System.out.println();
+	System.out.println("Array 1 end:");
+	Arrays.stream(someArr).forEach(System.out::print); 
+	System.out.println();
+	System.out.println("Array 2 end:");							Arrays.stream(secondArr).forEach(System.out::print);
+   _______________________________________
+Console prints:
+	Array 1 start:
+	1234
+	Array 2 start:
+	1234
 
+	Array 1 end:
+	7234
+	Array 2 end:
+	7234
 
-== * Arrays ==
+==> Strings are objects, and NOT datatypes.
+  -- Note that despite Strings being reference variables (object), when you edit a string, you clear and recreate the reference on that specific variable.
+   ____________________________
+   //Create a string, and make asecond string reference the same location.
+	String firstString = "hello";
+	String sameReference = firstString;
+   // firstString and sameReference now point to location A.
+	System.out.println("firstString before: " + firstString);//hello
+	System.out.println("sameReference before: " + sameReference);//hello   	    // When you edit firstString, you tell it to reference B instead of A.
+	firstString = "Goodbye"; // Note only firstString is edited.  
+   // firstString now references location B,
+   // but sameReference keeps the same refereence location at A ("hello")
+	System.out.println("firstString After: " + firstString); //Goodbye
+	System.out.println("sameReference After: " + sameReference);//hello
+   ____________________________
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[[[[[[[[[[[]]]]]]][[]]][][][][][] * Arrays []]]]]]]]]]][][][][][][][][][][[[[[[
+********************************************************************************
 - Use arrays in Java generally only when you know how many items it will have.
-- Arrays MUST e consistent in size, and calling for an index that it not within the array will crash java.
+- Arrays MUST be consistent in size, and calling for an index that it not within the array will crash java.
 - [] signifies this will be an array.
 	char[] arrayName = new char[10];
 	char[] alsoArray = {1, 2, 3};
 
-==> Strings are objects, and NOT datatypes.
+- Arrays are simple examples of reference variables. They are a collection of variable and object references. 
 
-	ArrayList list;     // gives more flexibility to arrays.
-	To use ArrayList, you must include the package name
+==> ArrayList
+-- ArrayList gives more flexibility to arrays. It is an OBJECT.
+--To use ArrayList, you must include the location between the package and class
+	import java.util.ArrayList;
+-- Once the object class is imported, create an object called ArrayList:
+		ArrayList myArray = new ArrayList();
+The default array length is 10, but it can be changed.
+		ArrayList myArray = new ArrayList(20);
+--Functionality:
+See the following:
+https://www.thoughtco.com/using-the-arraylist-2034204
 
+	myArray.add(10);  // Add element (in this case 10) to the end of array
 
+//If you have already created a string array in Java,
+// You can move the existing array into a new ArrayList object.	
+	String[] names = {"Bob", "George", "Henry", "Peter", "Steven"};
+	ArrayList dynamicStringArray = new ArrayList(20);
+	dynamicStringArray.addAll(Arrays.asList(names));
 
-- Arrays are simple examples of reference variables. They are a colection of variable and object references. 
-	- Strings are arrays of characters, thus also reference variables.
+toString()  // Convert the entire array to a String, generally for output:
 
-- Assigning a new variable name to a String or Array will connect that variable to the same reference rather than make a new copy.
-Example ______________________________________
-
-
-
+System.out.println("myArray has the following values:" + myArray.toString());
 
 
 == Classes==
