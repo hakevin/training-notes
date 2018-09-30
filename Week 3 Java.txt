@@ -1,7 +1,7 @@
 WORK IN PROGRESS,
 updated at 2:00pm
 roughly half way through 4-pillars section
-. ---------------suggested notepad size ------------------->
+--------------------. ---------------suggested notepad size ------------------->
 
 ================================================================================
 -----------------------------------  Java  -------------------------------------
@@ -16,7 +16,13 @@ Sections:
 * Arrays
 * Classes
 * Scope
+* 4 Pillars of OOP
 * Encapsulation
+* Inheritence
+* Polymorphism
+* Abstraction
+* Static
+* Interfaces
 ================================================================================
 ############################# * Basics #########################################
 - Java is an object-oriented programming language (OOP) maintained by Oracle.
@@ -75,10 +81,97 @@ The Java Virtual Machine is the application that runs Java applications or other
                     3 words here ^------^----^-- say this is a CLASS, not object
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-<<<<>>><<<<<>>><<<<>>>>>>><>>>>> * Vocabulary  <<<<<>><><<<<<<<<<<>>>>>>>>>>><><
+<<<<>>><<<<<>>><<<<>>>>>>>>>> * Vocabulary  <<<<<<<<>><><<<<<<<<<<>>>>>>>>>>><><
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
+abstract - keyword to define class or method with incomplete or missing 
+    definitions. 
+    Abstract classes have 1+ abstract methods.
+    Abstract methods have missing definitions.
+abstraction - only essential details are declared to the user.
+    Also, the process of declaring methods without implementation  
+    (Used in interfaces)
+array - refrence variable that lists the locations (refrences) of
+    one or more other variables.
+bit - Integer-only data type with 2 possible values, 0 or 1.
+boolean - data type supporting only 2 values : true or false
+byte - 8-bit data integer, with 2^8 possible values [-2^7, 2^7)
+bytecode - computer source code that is processed by a program or virtual
+char - 16-bit Unicode character- min val of '\u0000' (0), max '\uffff' (2^16)
+class - template for creating and utilizing the properties and behaviors 
+	of objects
+constructor - block of code, similar to a method, that is called when an
+    object is created. Method that initializes an object.
+double - 62-bit data precision - Allows decimals.
+	Should not be used for precisce values such as currecy
+extends - keyword for attaching a subclass to a parent class.
+    A class which extends another will inherit the fields and methods of 
+    the parent class. A child class may only extend ONE parent class.
+Field - a variable inside a class
+float  - 32-bit data precision - Allows decimals. 
+	Should not be used for precisce values such as currecy
+IDE - Integrated Development Environment - program used by software developers
+	which can compile and run code.
+	machine, rather than by the actual computer's processor.
+implement - keyword used to connect a class to an interface.
+Inheritance - A new class is derived from an existing class.
+Instantiation - Term for creating an actual instance of a class.
+    Object created has its own copy of class variables.
+int -  32-bit integer. Int operations that would result in a
+	decimal will be truncated without rounding 2^24 values, [-2^23,2^23)
+interface - Way to acheive polymorphism. Container for static variables
+    specific to the interface. Interfaces declare but do not implement
+    methods. They signal to the developer to implement methods.
+    Classes may implement multiple interfaces.
+Java 	- programming language designed for use in distributed environment 
+	(java runtime environment), enforcing object-oriented programming model.
+JDK - Java Development Kit - Software which contains the compiler, debugger, 
+	and development tools which runs on top of the JRE.
+ 	The JDK translates the bytecode into human readable Java and back. 
+JRE - Java Runtime Environment - Also written as Java RTE. It is the
+	implementation of the JVM. 
+	JRE is essentially the software that runs the JVM application.
+JVM - Java Virtual Machine - abstract "machine" with specifications that provide
+	a runtime environment that can run Java's bytecode and other programming
+	langauges compiled by Java. 
+long - 64-bit Integer-only. 
+Method - a function.
+method signature - part of method declaration that includes the method's
+    name and parameter list. Allows for methods to be created by the same
+    name, but with different parameters.
+new - keyword that creates a new space in the heap memory for data.
+Object-Oriented Programming Language - programming language that utilizes the
+	concept of "objects".
+Objects - Data structures that hold information - data and procedures.
+	Objects hold data called Fields (Variables)
+	Procedures  are called Methods(Functions)
+Oracle - the company that maintains the JRE and JVM.
+pass by reference - Useful if 2 vars are in different scopes. If a reference
+    is passed into a function, the value at location in which it is 
+    referenced is altered.
+    If you pass a reference value into a function, it's kind of like just
+    pasting the function into your script and replacing the parameters with
+    your references; the value referenced to in your working scope will get 
+    updated as a result of the function.
+pass by value - Structure of java's methods: local parameters are COPIES of 
+    the original data sent in to the method call.
+package - A way to organize java classes into names or modules.
+polymorphism - Ability for a class to take multiple forms (IE subclasses)
+polymorphic method - method which differs depending on parameters sent to it.
+private - method/var only accessible in the class it is created.
+public - method/var accessible anywhere inside or outside the class
+    in which it is created.
+Reference - The location in the memory of a value.
+Scanner - Utility object that allows users to get input from the console.
+Servers	- A computer or network that hosts and runs applications. Servers send
+	 and recieve information to and from users.
+short - 16-bit data integer, 2^16 possible values. Range: [-2^15, 2^15)
+Static - a constant across all instances of a class.
+super - keyword used to call/represent the parent class's method code.
+    Used for methods and constructors in subclasses.
+this - keyword in methods to refer to the specific object which is calling the
+    function.
+Value - the value stored somewhere in the memory.
 
                             -------------------
 ============================ * Getting Started ================================
@@ -270,6 +363,8 @@ Console prints:
    ____________________________
 
 
+- Java, ultimately, is a pass-by-value programming language.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [[[[[[[[[[[]]]]]]][[]]][][][][][] * Arrays []]]]]]]]]]][][][][][][][][][][[[[[[
 ********************************************************************************
@@ -326,35 +421,54 @@ https://www.thoughtco.com/using-the-arraylist-2034204
 	- Objects have an "is a(an)" relationship with their class.
 	- a Dog (object) is an animal (class)
 
-In java, Everything but the primitives in a class or an object of a class.
+-In java, everything but primitives are objects, which are insances of a class.
 
-Classes define two things about the object:
-1. State	(Variables)
-2. Behavior	(Functions/Methods)
+-Classes define two things about the object:
+	1. State	(Variables)
+	2. Behavior	(Functions/Methods)
 
->> Declare field:
+Creating a class:
+>> Make a new file named what you'd like your class to be named.
+	public class Animal { ... }
+
+>> To Declare instance variables:
 ___
-String name;
-int legsCount
-___
+	String name;
+	int legsCount;
+__
+-- Each instance of the class will have these varialbes available
+-- Each instance of a class decides what to assign the instance variables.
+
+>> Static Fields
+	static boolean onEarth = true;
+-- All instances of the class will share the same value for a static field.
+
 >> Declaring a method requires specific data:
-1. AN access modifier: [public, protected, (default), private]
-	Note: Default may also be called package-private
-2. A return type of void if no return.
-3. Method name
-4. Method parameters (type name)
+ 	1. AN access modifier: [public, protected, (default), private]
+		Note: Default may also be called package-private
+	 2. A return type of void if no return.	
+	 3. Method name
+	 4. Method parameters (type name)
 
-*****************vv** Important detail for professionalism ** vv****************
-A object will refrence itself with the keyword "this". When you use it in the class, it will fill itself in.
+- In using class methods, a object will reference itself with the keyword this.
+   - the following method will return the assignment of the "name" instance
+     variable for the object that of that class that calls the method.
+	public static void getName(){
+		return this.name;
+	}
 
-in Animal.java  << A file without a MAIN because it isn't executable. 
+- Class files that describe a the structure of objects do not need to be 
+  executable, therefor they do not need a main method.
+
+~~~ See the class example Animal.java (file without a MAIN) we have a method
+    that is available to objects of the Animal class.
 ___
 public void move() {
 	System.out.println("The " + this.name + " Animal Moves around")
 }
-__
+___
 
-in LAUNCHER.java, within the *same package*:
+~~~ See LAUNCHER.java, within the *same package*:
 ___
 public class Launcher
 	public static void main(String[] args){
@@ -365,10 +479,34 @@ public class Launcher
 }
 ___
 
+>> Constructors are blocks of code - similar to methods- 
+   that initialize an object upon it's creation. 
+  - You can have different constructors for different parameters as well.
+  - Requirements:
+	- You are not required to provide one
+		- If no constructor is provided, default no-argument constructor
+		  of the Object class will be called
+	- The name of the constructor is the same as the name of the class
+	- Declared as public, protected, or private (default is public)
+	- Whether or not parameters will be used(if arguments must be passed in)
 
-A class will refrence itself with the keyword "this"
+==> Creating an object that is an instance of a class:
+- Objects are created in two steps. 
+- Lets say you have a Dog class file in your package and want to create a dog.
+- First, you will initialize the object named myDog as a Dog object.
+	- This is just like how you initialize a variale as int or long
+		int x;      OR       long y;
+	     	Dog myDog;           Cat z;
+- Instantiate the object, which means you will tell it which constructor to run.
+		myDog = new Dog();
+ new ~ allocates memory--^   ^------- a Dog() constuctor without arguments.
+- This can all be done in a single line as well:
 
--- Constructors are blocks of code - similar to methods- that initialize an object upon it's creation.
+      class   .---Object keyword/placeholder name
+        V     V
+	Dog myDog = new Dog();
+           .-------------^
+	 calls constructor method to instantiate this Dog class object
 
 ################################################################################
                                  * Scope
@@ -507,27 +645,49 @@ https://www.tutorialspoint.com/java/java_variable_types.htm
 			but with different parameters.  
  	   Overloading is also possible on constructors.
 
-4. Abstraction - "What, not how" << Think about WHAT something does, not HOW. Abstract classes and interfaces give us access to forms of abstraction. An abstract class is a class that cannot be instantiated*, and can have abstract methods. These are methods with a definiton, but no implementation.
-	- Sets behavior in a higher level....
+4. Abstraction - 
+  > Represents the fields/methods an object has without defining them.
+	-"What, not how" 
+	-Abstract classes and interfaces give us access to forms of abstraction.
+	-An abstract class is a class that cannot be instantiated*, 
+	and can have abstract methods. 
+		- These are methods with a definiton, but no implementation.
+	- They set behavior at a higher level.
 	- You must implement bahavior of methods if they haven't been set yet.
-	- implies heirarchy
+	- Implies heirarchy
+	- Example: All electronics may have an abstract "TurnOn()" method
+	  but refrigerator.TurnOn(); would be different from tv.TurnOn();
+
+
 http://mrbool.com/the-4-pillars-of-object-oriented-programming-in-java/33900
 
 
 (((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))
 ((((((((((((((((((((((((( * Encapsulation   )))))))))))))))))))))))))))))))))))
 ))))))))))))))))))))))))))))))))))))))((((((((((((((((((((((((((((((((((((((((((
-Enforced by access Modifiers and getter/setter patterns and accessor/mutate.
+- Encapsulation is also known as data hiding. In java, it allows developers to
+  wrap certian sets of data such as fields and methods into a unit together
+  and decide what other files can use them. 
+- Enforced by access Modifiers and getter/setter patterns and accessor/mutate.
 	Access Modifiers:
-	- public  - Accessible Anywhere) > Restroom @ a public park
-	- protected - Accessible within package or subclass (Employee-only bathroom)
-	- (Default) - Only accessible within same package (Restraunt's bathroom)
-	- private - Only Accessible within the class (Home restroom)
+	- public  - Accessible Anywhere 
+	- protected - Accessible within package or subclass 
+	- (Default) - Only accessible within same package
+	- private - Only Accessible within the class
+Example:
+ - public > restrooms unlocked at a public park. (Anyone can use them)
+ - protected > Employee-only Restroom (for those who WORK there)
+ - default > restroom at a restraunt (for patrons)
+ - private > restroom at your master bedroom (only for you)
 
-getters/setters
-Private fields. Simply methods (basiclaly functions) for changing and getting values are public.
-EXAMPLE IF YOU DID IT MANUALLY:
-
+==> Getters and Setters (once varialbes are declared, press alt+shift+s)
+	- Getters and setters ordinary functions in Java, but they are used in 
+	  encapsulation. Within the class, when a class variable is declared, 
+	  methods can be created to assign(set) or retrieve(get) the value.
+	- This allows the user to set or get the implenemtation without changing
+	  the code that uses the object.
+Example:
+_____________
 public String getTexture(){
 	return texture;
 }
@@ -539,38 +699,51 @@ public Waffle(String texture, boolean glutenFree, float cruchiness) {
 	super();
 	this.texture
 }
+____________
 
->>>>>>>>>>>SHORTCUT ??????? >>>>>>>>>>>>>>>>>>>>>>>> alt shift s >>>>>>>>>>>>>>>>>>>>>>>>
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+xxxxxxxxxxxxxxxxxxxxxxxxxxxx * Inheritance  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+- INHERITANCE is a pillar of object-oriented programming.
+- It is the idea and behavior of reutilizing class definitions by extending 
+  them to provide more detailed implementations.
 
-//Default constructor - constructor that every class is provided fi and only if it has no other class.
--- Classes get default if and only if they have a default.
+- For instance we could create a more generic class called computer and extend computer to create more specifid implementations such as 'DesktopComputer' and "LaptopComputer"
 
--- Default constructor DOESN"T TAKE ANY arguments.
+-When inheriting a class, the inheriting class can utilize all of the inherited classes fields and methods, although the access modifiers must still be respected.
 
-== Inheritance =============================================================================================
-	- INHERITANCE is a pillar of object-oriented programming.
-	- It is the idea and behavior of reutilizing class definitions by extending them to provide more detailed implementations.
-
-For instance we could create a more generic class called computer and extend computer to create more specifid implementations such as 'DesktopComputer' and "LaptopComputer"
-
--When inheriting a class, the inheriting class can utilize all of the inherited classes fields and methods, althoug the access modifies must still be respected.
-
-
-<<<<<<<<<<<<<<<example?
-
-
- Exerything in java must be inherited from another class.
-********* IMPORTANT DEFAULT OBJECTS*****
-=>> toString class is used to decribe how a class should be presented when output as a string.
-	-inherited method. Even if not defined, it is present because it is inherited to the Object class, in which every class is explicitly.
-	- There is a list of default methods that all objects by default absolutely will inherit.
+- Exerything in java must be inherited from another class.
 
 KEYWORD >> "extends"
-	- This itentified which class your new class will inherit.
-	- 'extends' essentially translates to "type of", to allow for more specific classes.
-	- if your LaptopComputer class wants to inherit the computer class, use:
-	public class LaptopComputer 
+	- This identified which class your new class will inherit.
+	- 'extends' essentially translates to "is a(n)", 
+	   but with more specific classes.
 
+>> Default constructor 
+- Constructor that every class is provided if and only if it has no other.
+-- Classes get default constructor if and only if they have no default.
+-- Default constructor DOESN'T TAKE ANY arguments.
+- See Classes for more on constructors.
+
+////////////////////////////////////////////////////////////////////////////////
+ :::::::::::::::::::::::::: * Polymorphism :::::::::::::::::::::::::::::::::::
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+ - The ability for an object to take many forms.
+ - More common use : 
+	>when a parent class reference is used to refer to a child class object
+ - A child should be an instance of the parent
+	>> a Dog is an Animal
+	>> a Laptop is a Computer
+
+ - Conditions:
+	1. Object type Must have an is-a(n) relationship with the reference 
+	   - Object will only get methods/vars gaurenteed to be it's type
+	2. Reference Type cannot be more specific than the Object Type.
+	Example: If you say 
+		Animal myPuppy = new Dog();
+	- Your myPuppy won't inherite the Dog() class bark() method, but it will
+	  have the eat(); function overridden the same as the Dog() class.
+	>> It's wrong because "animal is a dog" is incorrect logic.
 
 KEYWORD >> "instanceof"
 	- reurns true if object is of that class. 
@@ -579,12 +752,10 @@ KEYWORD >> "instanceof"
 		Chihuaha ________      Chihuahua instanceof Dog == True
              instance of         |             &&
      		|                |     Chihuahau instanceof Animal == True
-                V                V
-              Dog instance of Animal
+                V                V          
+              Dog instance of Animal  == True
 
 	- Or variable / field can hold anything that is considered of that type, however, we only have access to information defined on the type the field or variable is defined with, not the actual content of the field/variable.
-
-
 
 
 @Override
@@ -592,35 +763,50 @@ Override - redifined the behavior of a method -- You can change the functionalit
 
 
 
-====== Encapsulation ===============================================================
-Encapsulation is the hiding of data. The process of a class encapsulating its own state, and only exposing ways of changing state through ots own methods.
-Driven through: Private fields and getters/setter pattern.
+                   ********* Important Note **********
+=>> toString method 
+	- is a default method that outputs the location refernced by an object.
+	- inherited method. Even if not defined, it is present because it is
+	 inherited to the Object class, in which every class is explicitly.
+	- toString is called when the object name is passed to a println method
+	- To get the actual values of the object, the toString() method must
+	  be Overridden.
 
+==> Super keyword
+	super.someMethod(); 
+	- Calls the super-class of the method (the parent's version) instantly
+	- Pass arguments into super the same way they would be passed into the
+	  method or construction of the parent class's version of that method.
+	- Often used in polymorphism to expand on the parent's function.
+==> Final Keyword
+	Used as the "final form" to stop mutations (limits polymorphism)
+	- Methods: Cannot be changed/overridden
+	- Primitive variables cannot be modified
+	- Reference variables cannot be changed
+	- Final classes cannot be extended.
 
+	
+ &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&                              * Abstraction
+ &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
->> Java arrays:
-int[] array = {1, 2, 3}
-^^^^^^^^^^^^^^^^^^^^^^^ If you make it yoruself, use curly braces.
+ - Abstraction is the process of laying out a blueprint for classes.
+ - Abstract methods must be overriden for the program to execute.
 
+==> Abstract Keyword
+	- Means incomplete/ mission definition
+	- Cannot be instantiated
+	- Any class with abstract method must be declared as abstract
+	- Classes cannot run if they are abstract.
+	- It a subclass inherits an abstract class, it must 
+	  override all abstract methods
 
-
-
-
-==================
-Abstraction example
-=================
-
-
-=============
-Example of public,private,protected, and default
-
-
-
-===================
-Static
-===================
+%^&*&^%^&^%^&^%&*^%&%^%&^%&^%&^%&^%&^%&^%&^%&^%&^%&^%&%^&^%&^%&^%&^%&^%&^%&^%&^
+      ....................... * Static .......................................
+&&%^&^%^&^%&^%&^%&^%%^&%^&%^&%^&%^&^%&^%&^%&^%&^%&^%&^%&^%&^%&^%&^%&^%&^%&^%%^&
+Recall:
 Class - a blueprint for an object - the outlines that describes something.
-Object - An instance of a class, a specific set of data in the form of variables and methods.
+Object - An instance of a class, a specific set of data in the form of 
+	variables and methods.
 
 - Fields and methods are generally accosiated with OBJECTS.
 - STATIC, however, is associated with CLASS.
@@ -628,45 +814,113 @@ Object - An instance of a class, a specific set of data in the form of variables
 - Objects all will point to the same "static" value in a class - they are shared.
 	- the 'this' keyword has no context in static methods.
 
-3 Important uses and results
+==> 3 Important uses and results:
 
-1. - For fields and variables, Final is essentialy a constant.
-   - For primitives - final value can't be changed
-   - For refrence types (objects) it means the reference cannot be changed.
+  1. - For fields and variables, Final is essentialy a constant.
+     - For primitives - final value can't be changed
+     - For refrence types (objects) it means the reference cannot be changed.
 
-2. For methods, final dictates that the method cannot be overridden.
+  2. For methods, final dictates that the method cannot be overridden.
 
-3. For classes, final dictates the class cannot be extended
+  3. For classes, final dictates the class cannot be extended
 
-= = Field is basically a variable within an interface.
-= = Any fields declared on interface are: public static final
-= = All methods on an interface are implicitly abstract.
+  = = Field is basically a variable within an interface.
+  = = Any fields declared on interface are: public static final
+  = = All methods on an interface are implicitly abstract.
 
-===================================
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;; * Interface ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- Interfaces in Java are used to acheive polymorphism.
+- Interfaces are used to guarantee availibility of methods in implementation
+	- All methods are public or abstract
+	- All variables are public static final
+- A class that implements an interface must provide an implementation for every
+  interface method, or else be considered an abstract class.
 
-Primitives vs reference types
-----------------------------
+How to use Interfaces:
+	1. Create an interface with static variables and/or method definitions
+	2. Create a class that implements the interface(s)
+	3. Provide definitions for all abstract methods within the interface
+	4. Instantiate an object that is of the class which implemented 
+	  the interface.
+	5. Use methods through/on the object.
 
-Reference Types
------------
-Strings
-Arrays
+==> Interface and Inheritence
+- No state/behavior inherited
+- Have "type" inheritence. A class that implements an interface is
+  polymorphically considered an instance of the inheritence.
+- Name interfaces by ADJECTIVES or VERBS.
+- Interface describes BEHAVIORS a class should have and provides a name
+	EX: Runnable, Serializable, Functional, ect
 
-primitives point directly to the value.
+==> Once a java class implements an interface, you can use an instance of that 
+  class as an instance of that interface. 
 
-reference types point to the reference - basically a list of addresses;
-We can have multiple refrences to the same state.
-
-int[] myArray = [0,1];
-int[] otherArray = myArray;
-
-IF YOU EDIT myArray, otherArray will change as well. <<<<<<<<< TEST THIS!!!!!!!!!!<<<
-
-Reference types pass the value.
-If you change a reference type within a function, you'll change the reference on the outside as well.
+==> implements keyword
+- Classes can implement multiple interfaces.
+- Interfaces can extend other interfaces
+- For interfaces, all classes with the interface must define all methods 
 
 
-JAva is a "pass-by-value" language, ultimately.
+==> Default methods :
+ - In modern java (8+), it is possible to get a default method incase the user
+   of a package does not override all of the classes.
+  	- However: if a default method is not defined, classes which inherit an
+	  an astract method will be considered abstract classes, and they will 
+   	  not function at all.
+ - Default methods allow you to add new functionality to existing interfaces 
+   without crashing all classes associted with the interface prior to the
+   update.
+
+>> Interface can have a static method without creating an instance of that class
+	- static method only calls other local static methods
+	- Static interface methods cannot call other interface methods 
+	  that are not also static or default.
+
+==> The Diamond Problem/ Solution
+  - The Diamond problem is a hypothetical solution, not possible in Java.
+	For more details see:
+	 https://www.journaldev.com/1775/multiple-inheritance-in-java
+    Lets say you create a class C which inherits(extends) two other classes A&B
+	+ The two classes (A&B) extended a single class SuperClass
+		+ SuperClass contained one abstract myMethod();
+	+ Both of the classes implemented the method myMethod();
+	+ The child class of A & B attempts to use myMethod
+	>>>Result : The compiler doesn't know which myMethod to run!!
+
+	    SuperClass
+	       / \              The Diamond Problem
+	      /   \            =====================
+     	     /     \           
+        ClassA	    ClassB          Solution to this in Java is interfaces.
+  	    \       /           Since methods are not defined in interfaces,
+             \     /         a class can implement multiple interfaces and 
+	      \   /        give only one definition to the required methods.
+	      ClassC
+
+ 
+ - It is up to the developer to avoid or handle overlapping method declarations
+   when implementing multiple interfaces into a class.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
