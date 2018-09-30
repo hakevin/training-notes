@@ -1,44 +1,136 @@
 WORK IN PROGRESS
-CURRNTLY THIS IS JUST CLASS NOTES
 
-=======================================
-Java
-=======================================
-- Java is an object-oriented programming language (OOP)
-- Java, unlike javascipt, does not run straight from the browser.
-- Java compiles down to bytecode, which is a computer language understood by the Java Runtime Environment(jrv).
-- "Write once, run anywhere" ==> Delevopers can work on their own programs in Java since the runtime environment handels the varying operating systems on its own.
+================================================================================
+-----------------------------------  Java  -------------------------------------
+================================================================================
+Note: To jump to a section, search document for * Title , for example: * Vocabulary.
+Sections: 
+* Basics 
+* Vocabulary
+* Getting Started 
+* Variables 
+* Reference Variables 
+* Arrays
+================================================================================
+############################# * Basics #########################################
+- Java is an object-oriented programming language (OOP) maintained by Oracle.
+- Java runs in the Java Runtime Environment(JRE), rather than in a browser.
+- Java 10 is the newest version, but Java 8 is the most supported.
+- the Java Virtual Machine(JVM) compiles down to bytecode, which is a computer language understood by the Java Runtime Environment(JRE). 
+- As developers, we are using a the Java Developer Kit (JDK), a collection of tools which contains the JRE, tools for application, and the JVM.
+   _______Your Machine____________________________________
+  |  _______________________JDK_________________________  |
+  | |  __________JRE__________    ___________________   | |
+  | | |    _______            |  | Development Tools,|  | |
+  | | |   |_files_|    .....  |  |  javac, java, ect |  | |
+  | | |   _________   | JVM | |  |___________________|  | |
+  | | |  |Libraries|   -----  |                         | |
+  | | |  |___ect___|          |                         | |
+  | | |_______________________|                         | |
+  | |___________________________________________________| |
+  |_______________________________________________________|
+
+ -- Your machine, as a developer, runs the JDK. The Development Kit contains some tools for development and the JRE, the Java Runtime Environment. The Java Runtime Environment holds all the files and the Java Virtual Machine. The Java Virtual Machine translates the code from bytecode to the human-readable Java language.
+
+- "Write once, run anywhere" 
+	==> Delevopers can work on their own programs in Java since the 
+	runtime environment handles the varying operating systems on its own.
 - Java codes begin executing at a main method.
 - All java apps are composed of class files, which describe objects.
-- Java script is strictly typed
-	- Data type MUSt be specified when creating variables
+	== Write class-units of code
+	==> You WRITE/RUN classes, and WORK WITH objects
+- Java script is "strictly typed":
+	- Data type MUST be specified when creating variables
 	- Variable datatype cannot be changed thereafter.
+	- Semi-colons at the end of a line are manditory.
+- JVM (Java Virtual Machine) - Runs the java applications and provides the Java runtime environment
 
->> >> Vocabulary:
-Java
-bytecode
-Servers
-Object-Oriented Programming Language
+>>>>>>>>> Class-unit organization:
+1. Package - packages act like folders which isolate code.
+	   - name packages in camelCase, but generally just with a single word
+2. Classes - classes belong to packages (they live in "folders")
+	   - Name classes NOUNS with the FirstLetterAndFollowingWords capitalized.
+	   - Classes are "blueprints" that describe how objects operate
+	   - Classes MUST ALWAYS contain the following 2 features:
+		- the name of the package it is in as the first line:
+			package myPackage;
+	   	- a public class with the same name as the file
+			public class myClass {}
+	   	- Classes that are EXECUTABLE must contain a main method
+			+ EXAMPLE of a main method
 
-===============
-Starting a Java Project
+               labels main method ----------v
+			public static void main (String[] args) {}
+	accessibility-----^             ^--------void means "returns nothing"
+                    3 words here ^------^----^-- say this is a CLASS, not object
 
-Inside your Java Project, create a package. 
-Packages hold classes, similar to how a folder holds files. 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+<<<<>>><<<<<>>><<<<>>>>>>><>>>>> * Vocabulary  <<<<<>><><<<<<<<<<<>>>>>>>>>>><><
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Java 	- programming language designed for use in distributed environment 
+	(java runtime environment), enforcing object-oriented programming model.
+JDK - Java Development Kit - Software which contains the JRE, development tools,
+ 	and JVM
+JRE - Java Runtime Environment - Also written as Java RTE. It is the
+	implementation of the JRE, and it includes libraries and tools for 
+	development.
+JVM - Java Virtual Machine - abstract "machine" with specifications that provide
+	a runtime environment that can run Java's bytecode and other programming
+	langauges compiled by Java. 
+IDE - Integrated Development Environment - program used by software developers
+	which can compile and run code.
+bytecode - computer source code that is processed by a program or virtual
+	machine, rather than by the actual computer's processor.
+Servers	- A computer or network that hosts and runs applications. Servers send
+	 and recieve information to and from users.
+Object-Oriented Programming Language - programming language that utilizes the
+	concept of "objects".
+Objects - Data structures that hold information - data and procedures.
+	Objects hold data called Fields (Variables)
+	Procedures  are called Methods(Functions)
+package - A way to organize java classes into names or modules.
+class - template for creating and utilizing the properties and behaviors 
+	of objects
+Method - a function
+Field - a variable
+(Data types)
+bit - Integer-only data type with 2 possible values, 0 or 1.
+byte - 8-bit data integer, with 2^8 possible values [-2^7, 2^7)
+short - 16-bit data integer, 2^16 possible values. Range: [-2^15, 2^15)
+int -  32-bit integer. Int operations that would result in a
+	decimal will be truncated without rounding 2^24 values, [-2^23,2^23)
+long - 64-bit Integer-only. 
+float  - 32-bit data precision - Allows decimals. 
+	Should not be used for precisce values such as currecy
+double - 62-bit data precision - Allows decimals.
+	Should not be used for precisce values such as currecy
+char - 16-bit Unicode character- min val of '\u0000' (0), max '\uffff' (2^16)
+boolean - data type supporting only 2 values : true or false
 
-Inside that package, create a new "class" file.
+                            -------------------
+============================ * Getting Started ================================
+                            -------------------
+Starting a Java Project in your IDE isn't as cut-and-dry as HTML or CSS was.
 
-This file should start looking like this:
+1. Inside your Java Project, create a package.
+	++ Shortcut - New : Alt + Shift + N 
+	- Packages hold classes, similar to how a folder holds files. 
+
+2. Inside that package, create a new "class" file.
+	- Name classes with the FirstLetterOfEachWordCapitalized.
+
+	This file should start looking like this:
     ____________________________
-	package yourPackageName;
+	package yourPackage;
 
-	public class yourFile {
+	public class YourFile {
 
 	}
-    ___________________________
+    ____________________________
+- The "public class YourFile" contains your application code. It MUST be named the same as your file.
+- Executable Java files won't run without a main method inside their public class.  
+-A main method is NOT required if, for example, your class will be called somewhere else such as in a "Launcher" File.
 
-- The "public class yourFile" contains your application code. It MUST be named the same as your file.
-- Executable Java files won't run without a main method inside their public class.
 A main method is formatted in the following way:
     ____________________
 	public static void main(String[] args){ 
@@ -47,14 +139,14 @@ A main method is formatted in the following way:
     ____________________
 The keywords in here mean the following:
 > public - this will be accessible to any function that properly calls it.
-> static - 
+> static - this is immutable within the file itself
 > void - function without a return value; it is the application so it shouldn't.
+> main - Defines it as the MAIN method - the only method that will be read directly when this application is compiled.
 > String[] args - Delcares the parameter "args" as an array[] of Strings.
-> main - Defines it at the MAIN method - the only method that will be read directly when this application is compiled.
 
-========================
------- Datatypes -------
-========================
+                           ========================
+  ------------------------------* Datatypes -----------------------------------
+                           ========================
 
 + + 8 Primitive Types in 4 Main Categoties: + +
 A. Integer Primitive Type	-	Range of Values:
@@ -62,7 +154,7 @@ A. Integer Primitive Type	-	Range of Values:
 	2. short (16-bit)		-32768 ~ 32767 [-2^7, 2^7)
 	3. int (32-bit)			-2^31 ~ 2^31-1	[-2^31, 2^31)
 	4. long (64-bit)		-2^63 ~ 2^63-1	[-2^63, 2^63)
-B. Floading Point Primitive
+B. Floating Point Primitive
 	5. float (32-bit precision)
 	6. double (64-bit precision) << Numbers in javascript are 'double'
 C. Boolean
@@ -70,15 +162,13 @@ C. Boolean
 D. Character Type
 	8. char (16-bit unsigned int represented as character)
 
->>>> Conversions / Vocabulary **********************************************************************************************************************************************************
-bit - a unit of data with 2 results. 0 or 1.
-byte - 8 bits.
+== Floating Point Numbers do NOT literally represent the data with a number. 
+	- Instead, approximates with IEEE 754 standards.
+== Integer Division
+ - int data can't represent fractions or decimals 
+	-- it will just truncate (essentially Math.floor) the result.
 
--- Floating Point numbers do NOT literally represent the data with a number.
-
--- Integer Division - int data can't represent fractions or decimals -- it will just truncate (essentially Math.floor) the result.
-
-==> Declaration and aggisnment must be specific.
+== Declaration and assignment nment must be specific.
 	- Assignment must be the literal
 	- Certain types require certian literals. 	
      ==	Example ==	       == Default Value == 
@@ -93,22 +183,65 @@ byte - 8 bits.
    boolean myData = true		false
    char myData = 'clay'			u\0000 (null)
 
-==> Primitives only hold data and are not associated with an object.
+== Primitives only hold data, and they are not associated with an object.
 	- Everything beside data primitives are represented with objects.
 	- Primities are a "lower level" than objects in Java
 		*** Primitives start with lowerCaseLetters
 		*** Objects start with UpperCaseLetters
 -- since chars are REPRESENTATIONS of numbers, myChar++ will give you the next character in the numeric set.
--- Math operations can be used directly on primities in the same was as JavaScript.
+-- Math operations can be used directly on primitives in the same was as JavaScript.
 	- Math operators: +, -, *, /, %
 	- Logical checkers: ||, &&, ==, ^, |, &
 	- Control structures - the same except you initialize with int:
 		for(int i = 0; i < 5; i++) {}
 
 ==> Casting - the process of explicitly converting one type to another.
-	- to Cast, include the type in parenthesis before the value to cast. 
+	- to Cast, include the type in parenthesis before the value to cast.
+	- Downcasting vs Upcasting
+	  -- Downcasting - represent data more specifically
+	     (ie 32-bit int to 16-bit short or 32-bit int to 32-bit char)
+	    - the casting operation must be used explicitly for downcasting.
+	  -- Upcasting - Represent the data less specifically
+	    - Or for integers, increase the size capacity.
+	    - Can be cone explicitly or implicitly
+	Example:_________________________
+	public static void main(String[] args) {
+		// Casting is implicit from int to long.
+		int x = 3; //32-bit
+		long y = x; //64-bit		
+		System.out.println("int x: " + x);  //3
+		System.out.println("long y = x: " + y); //3
+		
+		//This require casting since characters are stored in unicode:
+		char q = 'q'; //16-bit unicode character
+		int r = (char) r; //32-bit
+		System.out.println("char q: " + q); //q
+		System.out.println("float r: " + r); //113
+		
+		// Casting is implicit from int to float, too:
+		int a = 3;
+		float b = a;
+		System.out.println("int a: " + a); //3
+		System.out.println("float b: " + b); //3.0f
+		
+		// You must cast explicitly from float DOWN to int, though.
+		float c = 5.4f;
+		int d = (int) c;
+		
+		System.out.println("float c: " + c); //5.4f
+		System.out.println("int d: " + d); //5	
+	}	
+	___________________________________
 
-== Arrays ==
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+__________________________ * Reference Variables _______________________________
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- Reference Variables point to an OBJECT that is an instance of that class. 
+- the DOT operator (.) accesses fields(variables) and methods(functions) in the reference object, so long as they are declated in the class type.
+- Reference variables point to the object LOCATION, not the OBJECT itself.
+
+
+== * Arrays ==
 - Use arrays in Java generally only when you know how many items it will have.
 - Arrays MUST e consistent in size, and calling for an index that it not within the array will crash java.
 - [] signifies this will be an array.
@@ -116,9 +249,17 @@ byte - 8 bits.
 	char[] alsoArray = {1, 2, 3};
 
 ==> Strings are objects, and NOT datatypes.
+
 	ArrayList list;     // gives more flexibility to arrays.
 	To use ArrayList, you must include the package name
 
+
+
+- Arrays are simple examples of reference variables. They are a colection of variable and object references. 
+	- Strings are arrays of characters, thus also reference variables.
+
+- Assigning a new variable name to a String or Array will connect that variable to the same reference rather than make a new copy.
+Example ______________________________________
 
 
 
