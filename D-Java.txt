@@ -1,0 +1,197 @@
+=====================================================================
+			Week D : More on Java
+=====================================================================
+Topics: 
+* Scanner
+* Try-catch
+* String Manipulation
+* Comparing Strings
+* Utiolity Methods
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+* Scanner - Object
+ Parse primitive types and strings using regular expressions.
+ Breaks input into tokens w/ delimiter pattern 
+	- Split string based on whitespace (default)
+	- Can .useDelimiter(char) to define where to split input
+ - Converts input w/ .next methods.
+	.nextInt()
+	.nextChar/Long/Float/(other PRIMITIVE)
+	.nextLine()  <= for Strings.
+ - InputMismatchException <= error thrown if input incorrect,
+	can be caught(retrieved/skipped) later.
+
+ Better to have 1 static scanner to use for EVERYTHING than to have multiple scanners.
+
+Isolate it to 1 location and let it get input. Let it do all.
+Static, ect.
+============
+Try-catch block
+First, vocabulary:
+try - state of "dangerous" code, either in testing or prone to failure, that you want to run.
+throw - the instance of an error showing up. The program will "throw" the error
+catch - how the code will handle the error. 
+Block of code which generally contains dangerous code. 
+	"dangerous" meaning it could result in (throw) an error.
+We put the dangerous code in the 'try' section. Provide handling instruction in the 'catch' section.
+
+==== Remember to add comments ====
+Adding comments starting with /** before a function will show that section when you hover over the function in other classes.
+
+=== Alt + Shift + S >> Generate (things) such as constructors and setters/getters.
+
+==> printf 
+Used to print variables
+system.printf
+see cheat sheet for printf format specifiers. alvinalexander
+
+== Stack Trace
+ - "Exception in thread "main" java.lang.RuntimeException
+	- Tells you exactly what error occurred and what called the function that caused the error to happen.
+**** You'll get questions about exceptions soon in QC.
+   ==> Make note of exceptions  when we go over it
+
+=====================================================================
+			String Manipulation
+=====================================================================
+- String are immutable; the value of a string in the memory cannot be
+ changed. All String methods return new Strings -- they don't alter
+ the old ones. 
+-There is no way (barring reflection) to alter an existing String,
+ only create a new one.
+
+	~~~~~~~~~~~~~~~Example OSA problem:~~~~~~~~~
+		What does the following print?
+	______________________________
+	String myString = "hello world"
+	myString.substring(0,5);
+	System.out.println(myString);
+	_______________________________
+Answer : hello world					
+Explaination: For Strings, if there is no assignment, nothing will
+ change! Since strings cannot be changed, the function creates a 
+ new String rather than alter the value in memory.
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Important methods:
+>> Substring : 
+	    .substring(int) / .substring(int,int) 
+- Method located on the String Class which allows us to extract
+  subsections of the String as their own String. 
+- 2 overloads:
+.substring(int startingIndex);
+.substring(int startingIndex, int endingCharacter);
+
+==> .substring(int startingIndex) will return a string that starts
+   at the chosen index and continues to the end of the string.
+  - startingIndex ranges from 0 to str.length()-1
+
+==> .substring(int startingIndex,int endingCharacter)
+  - Practice with this; the endingCharacter integer is exclusive-of,
+   and has a range of 0 to str.length(). 
+  - endingCharacter = 0 will result in an empty string every time 
+   (assuming no error) because it is EXCLUSIVE of the 0th index.
+  	> Clay's note: I look at it as "take the nth character of" 
+	so if I want to get "rad" out of "my radio", I would use:
+		"my radio".substring(3,6);
+	because the last letter of "rad" in "my radio" 
+	is the 6th letter of the String.
+      
+>> CharAt :
+	 .charAt(int x)
+- Returns the char at the given index within the String.
+- int x has a rang of 0 to myString.length()-1
+Note: In JavaSCRIPT it returned a string. 
+      In Java it returns a primitive char.
+**Important** 
+	- char literals have single quotes
+	- String literals have double quotes.
+
+>> Length:
+	.length()
+- This is more of a utility, but it is an important method.
+**Important**
+- Strings: myString.length() is a METHOD. Use parenthesis.
+- Arrays: myArray.length is a FIELD. NO parenthesis for array length.
+
+=====================================================================
+			* Comparing Strings
+=====================================================================
+      	         	Strings are objects, 
+         	thus this section also appies to objects
+
+Recall:
+In JavaScript, there are 2 ways of comparing values: 
+1.) == Equality - Leveraged type coercion ie '3' == 3 TRUE
+2.) === Equality - No type coerion. '3'=== 3 is FALSE
+
+Similarly, Java has 2 ways to comparing objects.
+1.)  == Operator : for primitives, this compares VALUES.
+   		   for objects this compares REFERENCES.
+2.) .equals(Object) Method : Content comparison
+
+- Primitives, even as an object's instance variable (field) 
+  can be compared with the == operator since primitives point to
+  a value rather than a location.
+- Strings assigned to a variable are stored in the string pool.
+  However, if we make a string via string manipulation, the string     WON'T show up in the String Pool unless it is assigned to a field.
+
+- .equals() method compares object equality more flexibly. 
+	- .equals() method is provided by the object class;
+	  it is accessible on any object.
+	- By default on the Objects >> myObject.equal(otherObject)
+		.equals compares refrences the same as ==.
+		2 objects will only be equal is you declare a second
+		and assign it to the variable holding the first.
+		Example:
+		myObject cat = new myObject("cat");
+		myObject sameCar = cat;
+	- .equals() CAN be overridden to compare specific fields or
+	anything that would make two objects equal.
+	Example:___________________________________________
+	public boolean equals(myObject obj) {
+		if (this.name.equals(obj.name)) return true;
+		return false;
+	}
+	___________________________________________________
+
+- For strings it is by default overridden to compare the individual
+ characters and return true if and only only if (IFF) the strings
+ represent the same sequence of characters.
+
+=====================================================================
+		====> * Utility methods <====
+=====================================================================
+		    ~~~ String Editing ~~
+.trim() 
+-- removes blank spaces at either side of the string.  
+   (Removes any leading or trailing spaces.)
+
+.concat(" plus this")
+-- Concatenate (add 2 strings together.)
+
+.replace(char old, char new);
+-- Replace a character with something else
+-- Can replace old character, IE "." with an empty string ""
+   if you want to remove a particular type of character.
+
+.replaceAll(String old, String new);
+-- .replace but you can use strings.
+	-- This has an overflow where the first string is regex,
+	   but regex(regular edxpression) isn't covered here.
+
+.toLowerCase()
+.toUpperCase()
+-- Changes entire string to UPPER or lower case.
+
+		   	~~ Boolean ~~
+.contains()
+-- Simple way to see if a string contains a sequence of characters
+-- Returns boolean true/false
+-- Case- Sensitive
+  >> Use .toLowerCase or .toUpperCase if neccessary
+
+.equalsIgnoreCase("STRING")
+-- STRING method... Does exactly as above, but simpler.
+
+.endsWith("try")
+.startsWith("String")
+-- See in the string endsWith or startsWith the given characters.

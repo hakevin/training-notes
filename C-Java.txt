@@ -56,7 +56,7 @@ programs which can be compiled with Java.
 - All java apps are composed of class files, which describe objects.
 	== Write class-units of code
 	==> You WRITE/RUN classes, and WORK WITH objects
-- Java script is "strictly typed":
+- Java is "strictly typed":
 	- Data type MUST be specified when creating variables
 	- Variable datatype cannot be changed thereafter.
 	- Semi-colons at the end of a line are manditory.
@@ -155,8 +155,8 @@ pass by reference - Useful if 2 vars are in different scopes. If a reference
     pasting the function into your script and replacing the parameters with
     your references; the value referenced to in your working scope will get 
     updated as a result of the function.
-pass by value - Structure of java's methods: local parameters are COPIES of 
-    the original data sent in to the method call.
+pass by value - General structure of java's methods: local parameters are COPIES
+   of the original data sent in to the method call.
 package - A way to organize java classes into names or modules.
 polymorphism - Ability for a class to take multiple forms (IE subclasses)
 polymorphic method - method which differs depending on parameters sent to it.
@@ -252,7 +252,7 @@ D. Character Type
    double myData = 99.5			0.0d
 
    boolean myData = true		false
-   char myData = 'clay'			u\0000 (null)
+   char myData = 'c'			u\0000 (null)
 
 == Primitives only hold data, and they are not associated with an object.
 	- Everything beside data primitives are represented with objects.
@@ -290,9 +290,10 @@ __CASTING Example:_________________________
 		
 		//This require casting since char & int aren't 
 		char q = 'q'; //16-bit unicode character
-		int r = (char) r; //32-bit
+		int r = (char) q; //32-bit
 		System.out.println("char q: " + q); //q
 		System.out.println("float r: " + r); //113
+			//(113 is the number represented by char q)
 		
 		// Casting is implicit from int to float, too:
 		int a = 3;
@@ -353,8 +354,8 @@ Console prints:
 	7234
 
 ==> Strings are objects, and NOT datatypes.
-  -- Note that despite Strings being reference variables (object), when you edit a 
-     string, you clear and recreate the reference on that specific variable.
+  -- Note that despite Strings being reference variables (object), when you edit
+     a string, you clear and recreate the reference on that specific variable.
   -- Java does NOT support truthy/falsy
 	- only booleans & comparisons (< > ==, ect) are evaluated as true/false
    ____________________________
@@ -379,8 +380,8 @@ Console prints:
 [[[[[[[[[[[]]]]]]][[]]][][][][][] * Arrays []]]]]]]]]]][][][][][][][][][][[[[[[
 ********************************************************************************
 - Use arrays in Java generally only when you know how many items it will have.
-- Arrays MUST be consistent in size, and calling for an index that it not within the
- array will crash java.
+- Arrays MUST be consistent in size, and calling for an index that it not 
+  within the array will CRASH java.
 - [] signifies this will be an array.
 	char[] arrayName = new char[10];
 	char[] alsoArray = {1, 2, 3};
