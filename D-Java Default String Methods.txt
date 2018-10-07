@@ -4,11 +4,14 @@
 Topics: 
 * Scanner
 * Try-catch
+* Other 
+* Stack Trace
+* Stack vs Heap
 * String Manipulation
 * Comparing Strings
-* Utiolity Methods
+* Utility Methods
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-* Scanner - Object
+			* Scanner - Object
  Parse primitive types and strings using regular expressions.
  Breaks input into tokens w/ delimiter pattern 
 	- Split string based on whitespace (default)
@@ -20,38 +23,144 @@ Topics:
  - InputMismatchException <= error thrown if input incorrect,
 	can be caught(retrieved/skipped) later.
 
- Better to have 1 static scanner to use for EVERYTHING than to have multiple scanners.
+ Mitch Tip : It's better to have 1 static scanner to use for 
+	     all user input than to have multiple scanners.
 
-Isolate it to 1 location and let it get input. Let it do all.
-Static, ect.
-============
-Try-catch block
-First, vocabulary:
-try - state of "dangerous" code, either in testing or prone to failure, that you want to run.
-throw - the instance of an error showing up. The program will "throw" the error
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		  	* Try-catch block
+Try-Catch Vocabulary:
+try - area for "dangerous" code, either in testing or code prone to
+	exceptions, that you want to run. 
+Exception - Inturruption in normal program flow - generally a signal
+	that the code has failed, but it is recoverable.
+throw - the instance of an exception showing up. 
+	The program will "throw" the exception - by default, the JVM
+	will abort and stop running, but if there is a "catch"
+	statement to handle the issue, the program can continue.
 catch - how the code will handle the error. 
-Block of code which generally contains dangerous code. 
-	"dangerous" meaning it could result in (throw) an error.
-We put the dangerous code in the 'try' section. Provide handling instruction in the 'catch' section.
 
-==== Remember to add comments ====
-Adding comments starting with /** before a function will show that section when you hover over the function in other classes.
+Try-Catch 
+==> Use a try-catch statement on a block of code which may be have the  possibility of throwing an exception. 
+- Provide handling instruction in the 'catch' section in the case 
+ that an exception comes up. The "try" sactin actually catches the
+ error, and then it is passed to the catch section to handle it.
+- Useful especially in instances that depend on external sources:
+	- User Input
+	- APIs/sending/gathering data from online/external source
+==> Catch blocks require a try statment above them and a specified 
+	exception type in order to be run.
+	- General catch(Exception e) can be run as well for other
+	unexpected errors.
+- Multiple catch blocks can be used with different exceptions.
+	- To do this, add the exception name in parenthesis:
+		try{...}
+		catch(ExceptionType name){
+		}
+		catch(OtherExceptionType name){
+		}
+	- the same catch block can be used to resolve more than one
+	exception with the | single vertical bar:
+		catch(IOException|SQLException ex) {}
 
-=== Alt + Shift + S >> Generate (things) such as constructors and setters/getters.
+==> Finally block always executes when the try/catch block exits.
+	- Runs wheter or not an exception occurred.
+	- Ensures execution even if unexpected exception happens.
+	- Finally block is optional.
 
-==> printf 
-Used to print variables
-system.printf
-see cheat sheet for printf format specifiers. alvinalexander
-
-== Stack Trace
- - "Exception in thread "main" java.lang.RuntimeException
-	- Tells you exactly what error occurred and what called the function that caused the error to happen.
-**** You'll get questions about exceptions soon in QC.
-   ==> Make note of exceptions  when we go over it
+Syntax:______________
+try {
+	//code
+} 
+catch() {
+	//code
+}
+finally{
+	//code (finally is optional)
+}
 
 =====================================================================
-			String Manipulation
+			* Other Stuff
+=====================================================================
+==> Remember to add comments 
+Adding comments starting with /** before a function will show that
+ section when you hover over the function in other classes.
+
+==> Alt + Shift + S >> Generate (things) such as constructors and
+		       setters/getters.
+
+==> printf 
+- Used to print variables. 
+- Does not by default create a new line.
+	system.printf(...);
+- Has a specific syntax for different data types and certian chars.
+SEE:
+https://alvinalexander.com/programming/printf-format-cheat-sheet
+
+=====================================================================
+			* Stack Trace
+=====================================================================
+ - "Exception in thread "main" java.lang.RuntimeException
+	- Tells you exactly what error occurred and what called the
+function that caused the error to happen.
+ - See Stack vs Heap
+/////////////////////////////////////////////////////////////////////
+		       * Stack vs Heap
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+ - Stack and Heap are the words to define two different locations 
+  in which Java stores memory.
+
+====> Heap Space
+- Allocates memory to OBJECTS and JRE classes. 
+- New objects ALWAYS in heap
+- String pool is part of the heap.
+- Heap memeory - used globally - complex management.
+
+====> Stack Memory
+- Used for execution of an application.. Short-lived memory. 
+- Contains method-specified values (such as copies of primities run
+  through a function) and references to other objects in the Heap.
+- Stack contains local primitives variables and refrences variables.
+- Memory management Last-in-First-out(LIFO) handling order. 
+	- New method called will end before the method that 
+	called it ends. 
+Example: I go to the kitchen to cook.
+	I start chopping up the vegetables
+	While chopping veggies, I drop an egg.
+	I need to clean the egg before I finish chopping veggies.
+	I need to finish chopping veggies before I continue cooking.
+	Then the main cooking method continues from there.
+	_________________________
+	public static void main(String[] args){
+		chopVeggies();
+		cutMeat();
+		// Whatever else.
+	}
+	public static void chopVeggies(){
+		//Chop stuff
+		if (I made a huge mess){
+		cleanMess();
+		}
+		//Keep chopping stuff.
+	}
+	public static void cleanMess(){
+		Attempt to Clean the mess		
+	}
+	__________________________
+Lets say there's a HUGE problem when I'm cleaning the egg.
+I knock the paper towels into the stove. 
+A fire starts as a result of my cleaning of the egg. 
+(Its a stretch, I know. Use your imagination)
+I'm going to abort the whole cooking thing because:
+[[This is the "Stack Trace"]]
+Fire in main kitchen
+	you started cleaning a mess cleanMess(); (line 13)
+	while chopping veggies chopVeggies()(line 9)
+	which was called in the main method (line 2)
+		
+
+
+=====================================================================
+		     * String Manipulation
 =====================================================================
 - String are immutable; the value of a string in the memory cannot be
  changed. All String methods return new Strings -- they don't alter
