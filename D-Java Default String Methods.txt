@@ -40,7 +40,8 @@ throw - the instance of an exception showing up.
 catch - how the code will handle the error. 
 
 Try-Catch 
-==> Use a try-catch statement on a block of code which may be have the  possibility of throwing an exception. 
+==> Use a try-catch statement on a block of code which may be have
+  the possibility of throwing an exception. 
 - Provide handling instruction in the 'catch' section in the case 
  that an exception comes up. The "try" sactin actually catches the
  error, and then it is passed to the catch section to handle it.
@@ -241,7 +242,8 @@ Similarly, Java has 2 ways to comparing objects.
   can be compared with the == operator since primitives point to
   a value rather than a location.
 - Strings assigned to a variable are stored in the string pool.
-  However, if we make a string via string manipulation, the string     WON'T show up in the String Pool unless it is assigned to a field.
+  However, if we make a string via string manipulation, the string 
+  WON'T show up in the String Pool unless it is assigned to a field.
 
 - .equals() method compares object equality more flexibly. 
 	- .equals() method is provided by the object class;

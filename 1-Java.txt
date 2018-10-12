@@ -1,0 +1,551 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ -------------------------   Week 1   --------------------------
+ -------------------------    Java    --------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Topics:
+* Basics 
+* Variables
+
+* Classes
+* Methods
+scopes
+garbage collection
+arrays
+var args
+for each
+access modifiers
+String StringBuilder/StringBuffer
+Exceptions
+Try/Catch
+Throw/throws
+
+
+Abbreviatations used in this document:
+ref : reference
+val : value
+rep/rep'ing/reps. : represent
+prim/prmvt/ prm : prmitive
+Above abbraviations are arbitrary; it's just how I take notes.
+
+Class Notes: 
+=================================================================
+			  * Basics
+=================================================================
+Java:
+>> Object-oriented
+>> Statically typed programming language 
+>> Automatic memeory management 
+>> Write-once run-anywhere support 
+
+Statically typed: Variables/fields don't change 
+  - Once a type is assigned, it cannot be changed. 
+  - This is for more predictable behavior / JDK suggestions.
+
+Write Once Run Anywhere - Supported by the Java architecture (JRE)
+ and the Java Virtual Machine. JVM/JRE Maintained by Oracle.
+>JRE: software that launches the application
+>JVM: the environment in which the applicaiton actually executes. >Oracle: (Originally Sun Microsystems) company manages Java
+	> Manages compatibility between various OS/hardware.
+
+WHY Java?
+ - historically server-side language of the web. 
+ - Hute share of the market  of server development. 
+ - MANY existing work that is available to new developers 
+	- Tools/apps to speed up proejct development & deployment
+	- Tools called Frameworks. 
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~  * Variables  ~~~~~~~~~~~~~~~~~~~~~~~~
+
+2 types of variables:
+	1. Primitive
+	2. Reference
+
+==> Primitives: 8 Different  
+Unlike refs, the data rep'ing the prim val is stored directly.
+ - There is no refrence to another location. 
+8 types, 4 categories:
+Integer:					Literal:
+	byte	8-bit, signed int
+	short	16-bit, signed int
+	int	32-bit, signed int
+	long	64-bit, signed int		10L
+Floating Point:
+	float	32-bit precision
+	double	64-bit precision		10.00d
+Character:
+	char	stored w/ 16-bit unsigned int	 'c'
+Boolean:
+	boolean	true / false logical
+
+Note: If you try to shift a char to a short and it's int value is
+	 greater than 2^15, the short won't be able to handle it.
+
+>> Reference type variables store a reference to an object 
+somewhere in the heap. The reference is used to locate that 
+object. The STORED reference points to the object.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~ ** Classes  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+Every java class has a public class with the same name as file.
+Every java program that is executable has a main method. 
+Execution begins* at the main method. 
+			     (* Generally, unless static block)
+
+	public class NameOfFile{
+	public static void main(String[] args){
+	
+	} 
+	}
+
+
+
+- When a variable is declared in a method scope, it must be
+initialize by assigning a value before use.
+	int myInt;
+
+For INTEGER category
+ > Can use underscores inside the number : easier to read!! 
+	Rules: 
+		can't start with _
+		cant end with _
+		_ can't be directly by the decimal
+
+	long myLong = 1_234_567_890;
+  ,--------------------------------^
+Note : The L or d you technically only need if the number is too
+ big to be represented by an integer literal:
+	myLong = 123_234_456_567_098L;
+
+
+ ~~~~~~~~~~~~~~~~~~~~~~  * Objects ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+>> Java is an object oriented programming language.
+- Thus, much of programming and writing application in java
+ revolves around defining class structure and then instantiating
+ objects of those classes.
+Classes are composed of |class members| which are the combination
+ of fields and methods.
+- Classes are Blueprints.
+
+**Don't define classes inside the bracket of other classes.** 
+- However, you can have other classes in the file of classes so 
+  long as the file has another class named after the file.
+- Fields in a class don't exist until an object of the class is
+  instantiated.
+
+>> Default Constructor
+ - All classes are implicitly extended from the Object class.
+ As extention of an Object, any class that does not define a
+ constructor has a default no-args constructor 
+				(inherited from the object class)
+ Default constr. only available if NO other constr declared 
+ If you want special no-arg constructor, MUSt be defined.
+- Class Names Should Be Capitalized.
+
+>> Default value
+ - Fields in java get default values; all 0-like values.
+	Boolean	  -> false
+	Integers  -> 0
+	Floating  -> 0.0
+	Char	  -> character rep. of 0 
+	Refrence  -> null
+
+Note: Static fields also have these defaults.
+>> No undefined in java, only null. 
+- Primitives cannot be null.
+
+ ======================= * Constructors =========================
+- diff from methods, cannot be called directly. 
+  -- Called when new object is created.
+Signature of a constuctor is similar to that of a method, 
+	but there are some KEY differences:
+ - Constructors have NO return types (not even void)
+ - Constructors only get access modifier keywords.
+ - Constructor methods must have the same name as the class.
+
+class Phone(){
+	String brand;
+
+	public Phone(){
+// Calls the constructor defined with a string parameter.:
+// So if you use Phone() constructor, it will direct the code
+// to Phone("Samsung"); in this case:
+		this("Samsung"); //Call other constructor.
+//		super(); 
+//The first line must either be super or call another constructor.
+//If neither is used, Super will be called implicitly anyway.
+	}
+
+// Constructors can be overloaded (Polymorphism)
+	public Phone(String brand){
+		this.brand = brand;
+	}
+}
+
+- Usually use either:
+    -a constructor that takes everything 
+    -or one that takes nothing. 
+Less options is better for users, for the most part.
+
+- Constructor is a method used to create an object.
+- Constructors are NOT inherited. 
+	- You MUST specify constructor in subclasses.
+
+==> Methods:
+	Actionsand thigns that can be done are generally described using methods. Methods contain executables that are related to object which can be called on an object instante.
+Static methods are owned by the class and should be called using the calss name rather than the object instance.
+
+Components:
+==> Method signature: 	
+ - Minimum:
+ returnType methodName(){}
+	- Access modifiers are required for default access.
+	- returnType or void if no retrn. 
+ - Other keywords:
+	- Access modifiers : private public protected
+	- final : Not overridable
+	- static : make method static
+
+ =========================== * Scope ===========================
+When a variable is decalred, it has a scope for which the variable s available and afterwards it is no longer available (the VARIALBE) is gone
+Scope is about the VARIABLE'S own existence. 
+- There is NO global scope in java.
+
+1. Static Scope
+	variables created when the calss loader first loads the class. It will stay in scope as long as the class is kept in memory.
+2. field sope - variable is declared as a field of an object. The field is accessible and in scope within the object within any on-static context or via an object reference outside the calss.
+3. Function/Method Scope - any parameter defined on a method is accessible throughout hte list of the method.
+
+4. Block scoped - scoped to a code block. Any variable declared within a method is considered to have block scope. It will be scoped to the current code block.
+	- Also you can arbitraritly add {} brackest around a code section to clear the memory for after it runs, that that is generally over-optimization and would be better off as a method called isntead of a bracketed block.
+
+==> Static varialbes assigned first
+==> Then Static code block runs before the main method
+	= Static blocks run in order top down.
+==> Instance code block runs every time we use the constructor ( see execution order.java)
+
+=====================
+Garbage // How program automatically manges memory.
+======
+ Garbage collection is the process of how programming language automatically mange memory.
+
+- Subroutine occasionally run as necessary which clears up memory be removing objects which have no referneces pointing to them. We don't have a lot o control over the collection, but it will happen as we take up more and more memory.
+
+- Let it do its thing be default.
+
+== =======
+Arrays
+===
+Arrays represent an organized block of like types. Generally, we can assume that there is a relationship between the contained items.
+
+declaration
+int[] intArr = new int[size];
+
+size of array is fixed and set upon creation.
+for primitive types the array is iniialized with default values
+for reference theyles the array is initialized with nulls
+
+access to individual values is gained by using the [] and an index balue.
+In java (and the majority of programming languages), index values begin at 0.
+So for an array of 10 elements the range of valid indexes is 0-9.
+Attempting to access an index outside of the valid range will result in IndexOutOfBoundsException
+
+Arrays use {} curly brackets
+INHANCED USE FOR LOOPS! WOW
+
+for(int i: myArr){
+	System.out.print(i + " ");
+}
+^^^^ VERY COOL GOOD YEA WOW USE THIS ALWAYS NEATO
+i = myArr[1] then [2] and [3], ect.... 
+
+======================================
+var args:
+Variable arguments - allows us to declare a function which accepts a variable amount of arguments. The syntax is:
+type... varName
+
+
+What you get is an array of the given type whith th variable being the name.
+
+public void list(int... myInts){
+	for(int i : myInts){
+		System.out.print(i + " ");
+	}
+}
+>> Takes all items, wraps in an array, and provides them.
+
+.printf accepts a string and wraps them into an array to use.
+
+==> Multifunctional: You can have multiple things, so long as the var args is LAST in the method:
+public void list(String message, int... myInts){}
+- can't have multiple var args in a method, either.
+
+==> You can make a main method with var args, sure. 
+====================================
+
+==> String manipulation:
+
+.replace
+.indexOf('e')
++ can privide a string instead of haracter.
++.indexOf("String")
+.indexOf(start int,char)
+.lastIndexOf('e')
+.isEmpty() -- Boolean
+.split(" ")
++ Splits string into array by a particular character.
+.toCharArray()
+
+
+======================
+StringBuffer & StringBuilder:
+
+buffer is "thread safe" thus operates a little slower.
+Multiple threads : use stringBuffer
+if just one thread, use StringBuilder(its faster.)
+
+
+
+===============
+Exceptions/errors
+
+Errors- serious problems - we should not try to catch them.
+Exceptions - we must handle in order to compile. Must have explicit handling or declaration of the error. 
+Runtime Exception - does not need to be handled in order to compile the problem. 
+
+Normal exceptions
+
+Runtime Exceptions - come from logical problems so we don't need try-catch block to prevent them. They're far more frequent so requiring a try-catch block for EVERY one would be too much.
+	- Runtime exception means FIX THE LOGIC.
+
+(normal) Exceptions - cannot be predicted! More exceptions (non-runtime) are the result of external systems (IE Users or API connectivity). The error is not in the scope of our application.
+
+** Mitch will type in the word cat to your program to see what happens.
+
+
+Ways of handling exceptions:
+	try/catch - handle it locally
+	throws	  - Make someone else to it. (another method)
+
+- After an exception, the code in that block is unreachable because the program doesn't know what to do with the information it has. It goes from the line that created the exception straight to the handler. 
+
+throw, throws, throwable
+Throw - keyword in executable code which throws an exception at a location.
+Throws - declarews within method signature that this method could throw an exception
+throwable - superclass of Error and Exception
+
+Difference between final, finalize, and finally?
+final - End be extended ( classes) cant be overridden (method) or reassigned (variables)
+finalize - method called on objects when garbage collected. (pretty much only useful for demonstrating garbage collection)
+finally - code block associate try blocks that will always run. 100% will run. (unless system.exit)
+
+
+
+NullPointerException - when variable on object is null.
+
+--------------------------------------------------------------------
+
+
+===========Checked vs Unchecked Exceptions================
+*******DOUBLE CHECK THIS SECTION ?>? ********
+	- Checked exceptions - non-runtime exceptions. Exceptions we have to handle.
+	- Unchecked exceptions - any kind of run-time exceptions - you don't have to explicitly provide handling.
+
+When to Checked Exceptions occur vs when do unchecked occur?
+	- Checked exceptions occur in runtime.
+	- Unchecked exceptions occur in runtime. 
+	BOTH occur at runtime.
+ 
+Runtime exception / Compile-time exception :Misnomer... Inaccurate naming. Both occur at runtime.
+
+	Checked exceptions are general ones - logic-created 
+	Unchecked exceptions are runtime exceptions - something you could logicaloly work your way around.
+
+
+**** ^^ DOUBLE CHECK THIS SECTION!!! ^^**
+
+
+======== Wrapper Classes ===========
+** probably get Mitch's code ** 
+ - Recall the 8 primitives in Java.  They are not objects.
+ - Object cannot work w/ primitives on their own
+	They use WRAPPER classes.
+ - Wrapper class has the same unabbreviated name w/ Capital Letter
+
+
+
+
+==IO ==
+
+>> What is OutputStream utility?? 
+
+
+==== Serialization ======
+
+====== MAVIN ======
+
+====== JUNI ======
+
+==
+Assertions are used to test applications
+using an assertion we state out expectation for the behavior of the code.
+if the expected behavior occurs, then the test passes.
+if the behavior does not match our assertions then the test fails.
+
+
+
+== unit testing
+there are many kinds of testing unit testing is the most basic and focused method of testing in software development this testing tests individual units of code on the smallest possible scalre. generally this means testing the behavior of individual methods.
+
+this often involves the process of mocking. many methods or classes maybe dependant on other methods/classes. To test in isolation, we oftne mock these dependencies with fake implementations so that our tests only cover the individual unit. 
+JUNIT alone isn't enough for unit testing. Mockino is a good tool that builds on junit.
+
+Unit testing focuses on one method at a time. Shows in which behavior exactly the method is failing.
+
+Good practice to write tests for all completed methods.
+
+TDD - test-driven development.
+Write test first, then implement behavior to implement functionality until all tests pass.
+Assert behavior first then create it.
+
+JUNIT = someone else's java application.
+Dependencies means an external java application. Someone else's code.
+
+==== Reflection ======
+
+
+=================================== Thursday:
+
+ ~~~~~~~~~~~~ * Short Circuit Evaluations ~~~~~~~~~~~~~~~~~~~~~~~
+	
+||, && 		<---short circuit operations
+	If the application can descern wherethera || or && statement is true/false by the left side, it wont look at the right.
+		true || ___never evaluated___
+		  OR
+		false && ___never evaluated___
+
+ALWAYS check/run full operation: use SINGLE operation:
+Non short-circuit:
+|, &   <------- not short circuit operation.
+
+		true | __runs this statment__
+		false & __runs this statement__
+
+Reason for Shit-circuit evaluations:
+  - Efficiency. 
+  - Some expressios may require expensive/long-running ops.
+  - Convenient way of avoid exceptions.
+
+
+~~~~~~~~~~~~~~ * Generics ~~~
+
+ Using the type Object will allow us to hold a reference of ANY  type. However, we rarely know what type is actually being held inb it at any given time. 
+Largely, it is then left to the programmer to determine what type was placed in or what type chould be in it. This dangerout and requires a lot of expliit type casting and can be frustrating.
+
+Want something CLEAR but still acts GENERIC....
+Generic solve this by allowing us to write a class in a generic way that could help many different types, and provide the types infoation to the class (or method) upon creation.
+	"Writing on the box on the outside that it contains books"
+Generics bring "compile time type safety"
+
+if we try ot use the wrong type with generics, it wont let us do it.
+
+Syntax for generics will generally include angle brackets <>
+Type information is generally provided within angle brackets.
+
+Make class generic: 
+
+public class <T> Box {
+}
+^^ LOOK IN TO THIS
+
+Can create generic methods, too. They extend the class "printable"
+public void genericPrint(T toPrint)<T printable> {
+system.out.println(toPrint);
+}
+-- Limited on what you can do. 
+generic method call:
+myStringBox.<String>genericPrint("A String.");
+
+
+== COLLECTIONS =====
+
+Lists allow us to hold a collection of objects of variables size together while maintainging some kind of order. Duplicates are allowed.
+
+We will look at two implementations of Lists - ArrayList and LinkedList
+
+The implementations of these lists are different which means internally, they preform differently. However, since we will reference them using the List infterface, our code will treat them identically. 
+
+
+================================= friday ============================
+  ========================== * Log4J  =============================
+
+
+create file in source/main/resources named log4j.properties
+- java properiettary java format for describing key/val pairs or posibly arrays
+put some kind of key in followed by the format.
+when you try to acces the values, it goes through the application.
+
+>> Know that they work... Required to get logging working.
+
+Logs can be written to other file to look at later.
+
+Really inportant for server applications... We won't have access directly to the console so we have to have logging files to figure out what happened.
+
+org.aoache.log4j2.consoleappender to console
+''  '' ''' '''  .FileAppender logs to append a file.
+
+>> No system out after console project... just change logging level to see less. 
+
+in log4j2 properties, the line:
+rootLogger.level = debug
+can e changed to show which level of errors to actually log. 
+
+Memorize logging levels. ** FLASH CARDS ? *
+
+
+ ======== * Threads =============================
+Processing multiple sections at the same time.
+Multi-threading increases the complexity of the application.
+Threads introduces unpredictability.
+
+There are many ways to create mlti-threading, but here are two:
+Thread class
+Runnable interface.
+
+Thread Class : 
+ - Contains many methods.
+ - first override run method.
+
+"Main method" of your launcher, for example, it one thread.
+Other thraeds are technically not a part of the main method (even if they were started in a main method)
+
+the "run()" method does not start a thread.
+We override run, but we don't call run.
+>> Calling run doesn't start a new thread.
+
+".start()" Method does start a new method.
+Thread class gives you a ton of power to override all kinds of things.
+More specifically, the power to override stuff you really should not override.
+
+
+
+Runnable Interface:
+
+Runnable is a Funcitonal Interface.
+
+
+Functional interfaces have exactly 1 abstract method.
+Marker interface - no methods, used to categorize/mark a class.
+
+
+
+
+
+
+
+
+
+
+
+
+

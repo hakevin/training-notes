@@ -1,0 +1,61 @@
+break target/continue target
+Break:
+	- Used in LOOP to terminate 
+	- used in SWITCH to end the statement.
+
+native keyword
+
+synchronized keyword
+
+why cant boolean be used in switch statement?
+
+look more on local variables/scope
+
+date utiliy package
+
+exceptions - the actual names of varius ones
+
+
+create bolean - valueof and parseboolean
+
+functional interface
+
+the way numbers are stored- they loop around!
+
+trivia - tilder ~ operator : bitwise negation
+and shifting operators << >> > < ect
+
+java.util.function.Predicate
+
+String is a final lass. (Is object?)
+RE: Default final classes.
+
+multidimensional arrays
+
+General/default java APIs
+
+define operand
+
+overriding methods, esp in sublasses and with throws
+
+Know everything about constructos and inheritance as well... especially super() and defaults.
+>> overriden method required return types, primitives ect... It has quirks. Know them. All.
+
+operators : *, /, % all have the same level of precidence.
+
+what is &.
+
+switch blocks << specificts
+Here are the rules for a switch statement:
+1. Only String, byte, char, short, int, (and their wrapper classes Byte, Character, Short, and Integer), and enums can be used as types of a switch variable. (String is allowed only since Java 7). 
+2. The case constants must be assignable to the switch variable. For example, if your switch variable is of class String, your case labels must use Strings as well.
+3. The switch variable must be big enough to hold all the case constants. For example, if the switch variable is of type char, then none of the case constants can be greater than 65535 because a char's range is from 0 to 65535.
+4.  All case labels should be COMPILE TIME CONSTANTS. 
+5. No two of the case constant expressions associated with a switch statement may have the same value.
+6. At most one default label may be associated with the same switch statement
+
+
+
+
+
+
