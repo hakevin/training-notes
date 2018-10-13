@@ -529,17 +529,61 @@ More specifically, the power to override stuff you really should not override.
 
 
 
-Runnable Interface:
+==>Runnable Interface:
 
 Runnable is a Funcitonal Interface.
-
 
 Functional interfaces have exactly 1 abstract method.
 Marker interface - no methods, used to categorize/mark a class.
 
 
+==> Synchronized keyword:
+
+synchronized keyword can be applied to a method or code block and it essentially states that the contents of it should be accessible to only one thread at a time. 
+
+This means when a thread calls the method or enters the code block, it acquires a lock, preventing other threads accessing it until it surrenders the lock. This renders waiting threads into the blocked state.
+
+-- Declare a method as synchronized after access modifier.
+-- You can't choose what order the OS lets threads access the function.
+
+Deadlock <** Interview Question 
+ 	> Two threads waiting for eachother to finish in order to continue. 
+	>> Often by complete random chance. 
+
+- Method acquires lock for one object, and needs the lock for another to proceed.
+- another thread holds the lock for that other object, and needs the lock for the first one object to proceed.
+Both threads are dead. Neither will be able to proceed.
+
+TO AVOID: 
+Provide a consistent order for which the locks can be acquired.
+
+Deadlock is a commonb problem in multithreaded applications
+deadlick is a state in which two treads (or more) are waiting on one another.
+This is the result of threads requireing locks which are being held be other reads.
+
+The result is two or more threads, waiting on resoruces which are held by blocked threads.
+As a result, these threads never release their locks and never progress.
 
 
+
+=============== JavaStreams =======================================
+
+
+List<String> myList = new ArrayList<>();
+String str = "the quick brown fox jumped over the lazy dog and fox and frog wow what a concept";
+String[] words = str.split();
+myList.addAll(Arrays.asList(words));
+
+myList.stream().forEach(System.out::println);
+
+Function Interface - Accepts an input and returns an output.
+Predicate - accepts an input and returns a boolean
+Consumer - accepts an input and returns nothing.
+Producer - Accpets no input and returns something.
+
+- Give a convenient way to write concurrent programming.
+
+Can use "parallelStream()" to create new threads operations... Which can be convenient threaded solutionsfor functionsthat would otherwise be difficult to process.
 
 
 
