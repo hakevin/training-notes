@@ -408,11 +408,15 @@ Runtime Exception - does not need to be handled in order to compile the program.
 
 ==> Normal exceptions
 
-Runtime Exceptions - come from logical problems so we don't need try-catch block to prevent them. They're far more frequent so requiring a try-catch block for EVERY one would be too much.
+Runtime Exceptions - come from logical problems so we don't need
+ try-catch block to prevent them. They're far more frequent so
+ requiring a try-catch block for EVERY one would be too much.
 	- Runtime exception means FIX THE LOGIC.
 	- Unchecked >> JRE can't "check" for them while compiling
 
-(normal) Exceptions - cannot be predicted! These exceptions (non-runtime) are the result of external systems (IE Users or API connectivity). The error is not in the scope of the application.
+(normal) Exceptions - cannot be predicted! These exceptions 
+(non-runtime) are the result of external systems (IE Users or API
+ connectivity). The error is not in the scope of the application.
 
 ** Mitch will type in the word cat to your program to see what happens.
 
@@ -420,7 +424,10 @@ Ways of handling exceptions:
 	try/catch - handle it locally
 	throws	  - Make someone else to it. (another method)
 
-- After an exception, the code in that block is unreachable because the program doesn't know what to do with the information it has. It goes from the line that created the exception straight to the handler. 
+- After an exception, the code in that block is unreachable because
+ the program doesn't know what to do with the information it has. It
+ goes from the line that created the exception straight to the
+ handler. 
 
 throw, throws, throwable
 Throw - keyword in executable code which throws an exception.
@@ -430,10 +437,12 @@ Throws - declares within method signature that this method could
 throwable - superclass of Error and Exception
 
 Difference between final, finalize, and finally?
-final - End be extended ( classes) cant be overridden (method) or reassigned (variables)
+final - End be extended ( classes) cant be overridden (method) or
+	 reassigned (variables)
 finalize - method called on objects when garbage collected.
  (pretty much only useful for demonstrating garbage collection)
-finally - code block associate try blocks that will always run. 100% will run. (unless system.exit)
+finally - code block associate try blocks that will always run. 
+	100% will run. (unless system.exit)
 
 COMMON Runtime Exceptions - Unchecked:
 Casting : CastClassException
@@ -666,17 +675,26 @@ Maven framework.
 ==================================================================
  			* Unit testing
 ==================================================================
-there are many kinds of testing unit testing is the most basic and focused method of testing in software development this testing tests individual units of code on the smallest possible scalre. generally this means testing the behavior of individual methods.
+there are many kinds of testing unit testing is the most basic and
+focused method of testing in software development this testing tests
+individual units of code on the smallest possible scalre. generally
+this means testing the behavior of individual methods.
 
-this often involves the process of mocking. many methods or classes maybe dependant on other methods/classes. To test in isolation, we oftne mock these dependencies with fake implementations so that our tests only cover the individual unit. 
-JUNIT alone isn't enough for unit testing. Mockino is a good tool that builds on junit.
+this often involves the process of mocking. many methods or classes
+maybe dependant on other methods/classes. To test in isolation, we
+oftne mock these dependencies with fake implementations so that our 
+tests only cover the individual unit. 
+JUNIT alone isn't enough for unit testing. Mockino is a good tool
+ that builds on junit.
 
-Unit testing focuses on one method at a time. Shows in which behavior exactly the method is failing.
+Unit testing focuses on one method at a time. Shows in which 
+behavior exactly the method is failing.
 
 Good practice to write tests for all completed methods.
 
 TDD - test-driven development.
-Write test first, then implement behavior to implement functionality until all tests pass.
+Write test first, then implement behavior to implement functionality
+ until all tests pass.
 Assert behavior first then create it.
 
 J-UNIT = someone else's java application.
@@ -735,7 +753,8 @@ Trivia:
 ==================================================================
 	
 ||, && 		<---short circuit operations
-	If the application can descern wherethera || or && statement is true/false by the left side, it wont look at the right.
+    If the application can descern wherethera || or && statement
+    is true/false by the left side, it wont look at the right.
 		true || ___never evaluated___
 		  OR
 		false && ___never evaluated___
@@ -848,7 +867,10 @@ ArrayList vs Linked List
 	- Array list is better if you need to just grab items
 	- Linkedlist is quicker to process for adding/removal
 
-The implementations of these lists are different which means internally, they preform differently. However, since we will reference them using the List infterface, our code will treat them identically. 
+The implementations of these lists are different which means
+ internally, they preform differently. However, since we will 
+ reference them using the List infterface, our code will treat them
+ identically. 
 
 ==>Iterating over Collection: & ConcurrentModificationException
 	- You cannot iterate over a collection in the typical way.
@@ -922,18 +944,28 @@ when you try to acces the values, it goes through the application.
 
 Logs can be written to other file to look at later.
 
-Really inportant for server applications... We won't have access directly to the console so we have to have logging files to figure out what happened.
+Really inportant for server applications... We won't have access 
+directly to the console so we have to have logging files to figure
+ out what happened.
 
 org.aoache.log4j2.consoleappender to console
 ''  '' ''' '''  .FileAppender logs to append a file.
 
->> No system out after console project... just change logging level to see less. 
+>> No system out after console project... just change logging level
+   to see less. 
 
 in log4j2 properties, the line:
 rootLogger.level = debug
 can e changed to show which level of errors to actually log. 
 
-Memorize logging levels. ** FLASH CARDS ? *
+Memorize logging levels. 
+
+ERROR - fatal error/exception
+WARN - WARN of potential problem
+INFO - what we want to know looking at files 
+DEBUG - message we rarely turn on
+
+
 
  ==================================================================
  			 * Threads 
@@ -1108,7 +1140,7 @@ Use notifyAll() if you don't have a very specific set of logic
 JavaStreams allow manipulation of strings as if they were arrays.
 Strings can be added, removed, searched for, or instered, plus more
 List<String> myList = new ArrayList<>();
-String str = "the quick brown fox jumped over the lazy dog and fox and frog wow what a concept";
+String str = "the quick brown fox jumped over the lazy dog";
 String[] words = str.split();
 myList.addAll(Arrays.asList(words));
 
@@ -1121,7 +1153,9 @@ Producer - Accpets no input and returns something.
 
 - Give a convenient way to write concurrent programming.
 
-Can use "parallelStream()" to create new threads operations... Which can be convenient threaded solutionsfor functionsthat would otherwise be difficult to process.
+Can use "parallelStream()" to create new threads operations... Which
+ can be convenient threaded solutionsfor functionsthat would 
+otherwise be difficult to process.
 
 
 
