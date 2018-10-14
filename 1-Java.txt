@@ -9,16 +9,16 @@ Topics:
 
 * Classes
 * Methods
-scopes
-garbage collection
-arrays
-var args
-for each
-access modifiers
-String StringBuilder/StringBuffer
-Exceptions
-Try/Catch
-Throw/throws
+* Scopes
+* Garbage collection
+* Arrays
+* Var args
+* For each
+* Access modifiers
+* String StringBuilder/StringBuffer
+* Exceptions
+* Try/Catch
+* Throw/throws
 
 
 Abbreviatations used in this document:
@@ -45,12 +45,13 @@ Statically typed: Variables/fields don't change
 Write Once Run Anywhere - Supported by the Java architecture (JRE)
  and the Java Virtual Machine. JVM/JRE Maintained by Oracle.
 >JRE: software that launches the application
->JVM: the environment in which the applicaiton actually executes. >Oracle: (Originally Sun Microsystems) company manages Java
+>JVM: the environment in which the applicaiton actually executes. 
+>Oracle: (Originally Sun Microsystems) company manages Java
 	> Manages compatibility between various OS/hardware.
 
 WHY Java?
  - historically server-side language of the web. 
- - Hute share of the market  of server development. 
+ - Huge share of the market  of server development. 
  - MANY existing work that is available to new developers 
 	- Tools/apps to speed up proejct development & deployment
 	- Tools called Frameworks. 
@@ -153,7 +154,7 @@ Classes are composed of |class members| which are the combination
 Note: Static fields also have these defaults.
 >> No undefined in java, only null. 
 - Primitives cannot be null.
-
+=================================================================
  ======================= * Constructors =========================
 - diff from methods, cannot be called directly. 
   -- Called when new object is created.
@@ -205,14 +206,14 @@ Components:
 	- Access modifiers : private public protected
 	- final : Not overridable
 	- static : make method static
-
+================================================================
  =========================== * Scope ===========================
 When a variable is decalred, it has a scope for which the variable s available and afterwards it is no longer available (the VARIALBE) is gone
 Scope is about the VARIABLE'S own existence. 
 - There is NO global scope in java.
 
 1. Static Scope
-	variables created when the calss loader first loads the class. It will stay in scope as long as the class is kept in memory.
+	variables created when the class loader first loads the class. It will stay in scope as long as the class is kept in memory.
 2. field sope - variable is declared as a field of an object. The field is accessible and in scope within the object within any on-static context or via an object reference outside the calss.
 3. Function/Method Scope - any parameter defined on a method is accessible throughout hte list of the method.
 
@@ -224,18 +225,20 @@ Scope is about the VARIABLE'S own existence.
 	= Static blocks run in order top down.
 ==> Instance code block runs every time we use the constructor ( see execution order.java)
 
-=====================
-Garbage // How program automatically manges memory.
-======
+================================================================
+* Garbage Collection 
+================================================================
+// How program automatically manges memory.
+
  Garbage collection is the process of how programming language automatically mange memory.
 
 - Subroutine occasionally run as necessary which clears up memory be removing objects which have no referneces pointing to them. We don't have a lot o control over the collection, but it will happen as we take up more and more memory.
 
 - Let it do its thing be default.
 
-== =======
-Arrays
-===
+================================================================
+ * Arrays
+================================================================
 Arrays represent an organized block of like types. Generally, we can assume that there is a relationship between the contained items.
 
 declaration
@@ -259,8 +262,9 @@ for(int i: myArr){
 ^^^^ VERY COOL GOOD YEA WOW USE THIS ALWAYS NEATO
 i = myArr[1] then [2] and [3], ect.... 
 
-======================================
-var args:
+=================================================================
+* Var Args - Variable Arguments
+=================================================================
 Variable arguments - allows us to declare a function which accepts a variable amount of arguments. The syntax is:
 type... varName
 
@@ -281,10 +285,9 @@ public void list(String message, int... myInts){}
 - can't have multiple var args in a method, either.
 
 ==> You can make a main method with var args, sure. 
-====================================
-
-==> String manipulation:
-
+=================================================================
+* String manipulation:
+=================================================================
 .replace
 .indexOf('e')
 + can privide a string instead of haracter.
@@ -297,31 +300,43 @@ public void list(String message, int... myInts){}
 .toCharArray()
 
 
-======================
-StringBuffer & StringBuilder:
+=================================================================
+		* StringBuffer & StringBuilder:
+=================================================================
+Strings are immutable.
+However, StringBuffer and StringBuilder values can be changed.
+- Useful if your string is changing a LOT
+- Allows appending/inserting into the string.
+- Since new strings aren't created (they're mutable)
+  StringBuffer/Builders are less taxing on the memory
+	- There will be less for Garbage Collection to clean up
 
-buffer is "thread safe" thus operates a little slower.
-Multiple threads : use stringBuffer
-if just one thread, use StringBuilder(its faster.)
+Differences:
+StringBuffer is "thread safe" thus operates a little slower.
+	> You can use synchronize(StringBuffer name) {}
+	but NOT on the -builder.
+General rule:
+	App with multiple threads : use stringBuffer
+	Single thread : use StringBuilder(its faster)
 
+=================================================================
+		* Exceptions/errors
+=================================================================
 
+Errors - serious problems - we should not try to catch them.
+Exceptions - we MUST handle in order to compile. 
+	Must have explicit handling or declaration of the exception. 
+Runtime Exception - does not need to be handled in order to compile the program.
 
-===============
-Exceptions/errors
-
-Errors- serious problems - we should not try to catch them.
-Exceptions - we must handle in order to compile. Must have explicit handling or declaration of the error. 
-Runtime Exception - does not need to be handled in order to compile the problem. 
-
-Normal exceptions
+==> Normal exceptions
 
 Runtime Exceptions - come from logical problems so we don't need try-catch block to prevent them. They're far more frequent so requiring a try-catch block for EVERY one would be too much.
 	- Runtime exception means FIX THE LOGIC.
+	- Unchecked >> JRE can't "check" for them while compiling
 
-(normal) Exceptions - cannot be predicted! More exceptions (non-runtime) are the result of external systems (IE Users or API connectivity). The error is not in the scope of our application.
+(normal) Exceptions - cannot be predicted! These exceptions (non-runtime) are the result of external systems (IE Users or API connectivity). The error is not in the scope of the application.
 
 ** Mitch will type in the word cat to your program to see what happens.
-
 
 Ways of handling exceptions:
 	try/catch - handle it locally
@@ -330,24 +345,36 @@ Ways of handling exceptions:
 - After an exception, the code in that block is unreachable because the program doesn't know what to do with the information it has. It goes from the line that created the exception straight to the handler. 
 
 throw, throws, throwable
-Throw - keyword in executable code which throws an exception at a location.
-Throws - declarews within method signature that this method could throw an exception
+Throw - keyword in executable code which throws an exception.
+	- throw allows you to create a custom exception
+Throws - declares within method signature that this method could
+       throw an exception, and for the caller to handle it.
 throwable - superclass of Error and Exception
 
 Difference between final, finalize, and finally?
 final - End be extended ( classes) cant be overridden (method) or reassigned (variables)
-finalize - method called on objects when garbage collected. (pretty much only useful for demonstrating garbage collection)
+finalize - method called on objects when garbage collected.
+ (pretty much only useful for demonstrating garbage collection)
 finally - code block associate try blocks that will always run. 100% will run. (unless system.exit)
 
+COMMON Runtime Exceptions - Unchecked:
+Casting : CastClassException
+Collections : NullPointerException
+	ClassCastException (Mess up autoboxing)
+Arrays:	NullPointerException - when refrence on object is null.
+	ArrayIndexOutOfBoundsException
+IO (input/output) :
+	java.io.IOException (general class)
+	java.io.FileNotFoundException
+	java.io.EOFException (End of file reached unexpectedly)
+Serialization: java.io.ObjectStreamException (General)
+Threads : InterruptedException
+	SecurityException
+	IllegalThreadStateException
 
 
-NullPointerException - when variable on object is null.
+===========* Checked vs Unchecked Exceptions================
 
---------------------------------------------------------------------
-
-
-===========Checked vs Unchecked Exceptions================
-*******DOUBLE CHECK THIS SECTION ?>? ********
 	- Checked exceptions - non-runtime exceptions. Exceptions we have to handle.
 	- Unchecked exceptions - any kind of run-time exceptions - you don't have to explicitly provide handling.
 
@@ -358,26 +385,68 @@ When to Checked Exceptions occur vs when do unchecked occur?
  
 Runtime exception / Compile-time exception :Misnomer... Inaccurate naming. Both occur at runtime.
 
-	Checked exceptions are general ones - logic-created 
-	Unchecked exceptions are runtime exceptions - something you could logicaloly work your way around.
+	Checked exceptions are general ones - logic-created/syntax 
+	Unchecked exceptions are runtime exceptions 
+	- something you SHOULD logically work your way around.
 
+CHECKED :
+	FileNotFound
+	IOException
+	ClassNotFound
+Unchecked : 
+	Error
+	RuntimeException
+		Aritmetic, NullPointer,NumberFormat,IndexOutOfBounds
 
-**** ^^ DOUBLE CHECK THIS SECTION!!! ^^**
+==================================================================
+ 		   * Wrapper Classes 
+==================================================================
 
-
-======== Wrapper Classes ===========
 ** probably get Mitch's code ** 
  - Recall the 8 primitives in Java.  They are not objects.
  - Object cannot work w/ primitives on their own
 	They use WRAPPER classes.
+	- Examples include java.util classes such as
+	ArrayList, HashSet, Maps, and so on.
  - Wrapper class has the same unabbreviated name w/ Capital Letter
+ - Contain useful helper functions.
+ - Largely can be used like primitives.
+ - "BOX" in Auto-boxing/auto-unboxing refers to the Object
+==> Auto-Boxing: Process of automatically wrapping prim. val. 
+	SomeClass box = new SomeClass();
+	box.setContents(5); (SomeClass has primitive Object contents)
+	box.getContents() instanceOf Object == true;
+	Integer myInt = (Integer) box.getContents;
+	print myInt will give you 5
+
+==> Auto-Unboxing - Auto. extract/use wrapper class's inner prim.
+	int primitiveInt = myInt (myInt was declared as Integer)
 
 
 
+==================================================================
+* IO 
+==================================================================
+* I/O or * Input/Output
 
-==IO ==
+IO - Input/Output allows communication outside the application.
+	- Read/write to/from files
 
->> What is OutputStream utility?? 
+- 3 main packages:
+	io package  <-- The one we will work with for now
+	nio package (new io)
+	nio2 package (new io2)
+
+ - Exceptions : Most fall in broad IOException class.
+ - External resources : close resources when done.
+    -> Use try-with-resources to open then close file after block
+	try(IOClass name = new IOClass(constructor arguments)) {
+	} catch (IOException e) {}
+
+ - OutputStream utility:
+	- Abstract class representing an output stream in bytes
+	- Subclasses of OutputStream must privode @ least 1 method
+	  that writes one byte of output.
 
 
 ==== Serialization ======
@@ -414,9 +483,42 @@ Dependencies means an external java application. Someone else's code.
 ==== Reflection ======
 
 
-=================================== Thursday:
 
+==================================================================
+                      * Hashcode
+==================================================================
+- Object-class method: ALL Classes have a default.
+- Assigns each instantiated object a code based on their data.
+- IF dev. plans to override hashCode, a CONTRACT must be followed:
+	1. If 2 objects are equal, they have the same hashCode.
+	2. If 2 objects have different hashcodes, they're not equal
+- Generally best to define .equals() then auto-generate .hashCode() 
+- Implies objects of different classes CAN have the same hashcode
+- Hashcodes can be different on different application runs.
+
+- Comparing hashcodes is quicker than .equals().
+Trivia:
+- Technically a "native" method - meaning it was written in an
+  operating system language and implemented directly into the JVM.
+
+==================================================================
+		* Object Class
+==================================================================
+- Object is the superclass of all Java classes. 
+- ALL classes/objects inherit Object class methods:
+	.equals(Object o)
+	.getClass()
+	.hashCode()
+	.notify() <used in sync threads
+	.notifyAll() ''
+	.toString() Convert object to string
+	.wait()
+	.clone() < return new object exact copy of calling
+	.finalize() <auto-called before object is garbage collected
+
+==================================================================
  ~~~~~~~~~~~~ * Short Circuit Evaluations ~~~~~~~~~~~~~~~~~~~~~~~
+==================================================================
 	
 ||, && 		<---short circuit operations
 	If the application can descern wherethera || or && statement is true/false by the left side, it wont look at the right.
