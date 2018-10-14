@@ -2,11 +2,9 @@
  -------------------------   Week 1   --------------------------
  -------------------------    Java    --------------------------
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Topics:
 * Basics 
 * Variables
-
 * Classes
 * Methods
 * Scopes
@@ -17,8 +15,26 @@ Topics:
 * Access modifiers
 * String StringBuilder/StringBuffer
 * Exceptions
-* Try/Catch
 * Throw/throws
+* Wrapper Class
+* IO
+* Serialization
+* MAVEN
+* JUNIT
+* Unit Testing
+* HashCode
+* Object Class
+* Short Circuit Evaluations
+* Generics
+* Collections
+* Log4j
+* Threads
+	* Runnable Interface
+	* Thread States
+	* Synchronized keyword
+	* Deadlock
+	* Producer-Consumer Problem
+* JavaStream
 
 
 Abbreviatations used in this document:
@@ -56,7 +72,9 @@ WHY Java?
 	- Tools/apps to speed up proejct development & deployment
 	- Tools called Frameworks. 
 
- ~~~~~~~~~~~~~~~~~~~~~~~~~  * Variables  ~~~~~~~~~~~~~~~~~~~~~~~~
+=================================================================
+			* Variables
+=================================================================
 
 2 types of variables:
 	1. Primitive
@@ -86,7 +104,9 @@ Note: If you try to shift a char to a short and it's int value is
 somewhere in the heap. The reference is used to locate that 
 object. The STORED reference points to the object.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~ ** Classes  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+=================================================================
+			* Classes
+=================================================================
 Every java class has a public class with the same name as file.
 Every java program that is executable has a main method. 
 Execution begins* at the main method. 
@@ -118,7 +138,9 @@ Note : The L or d you technically only need if the number is too
 	myLong = 123_234_456_567_098L;
 
 
- ~~~~~~~~~~~~~~~~~~~~~~  * Objects ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=================================================================
+			* Objects
+=================================================================
 
 >> Java is an object oriented programming language.
 - Thus, much of programming and writing application in java
@@ -155,7 +177,8 @@ Note: Static fields also have these defaults.
 >> No undefined in java, only null. 
 - Primitives cannot be null.
 =================================================================
- ======================= * Constructors =========================
+		 * Constructors
+=================================================================
 - diff from methods, cannot be called directly. 
   -- Called when new object is created.
 Signature of a constuctor is similar to that of a method, 
@@ -192,9 +215,15 @@ Less options is better for users, for the most part.
 - Constructors are NOT inherited. 
 	- You MUST specify constructor in subclasses.
 
-==> Methods:
-	Actionsand thigns that can be done are generally described using methods. Methods contain executables that are related to object which can be called on an object instante.
-Static methods are owned by the class and should be called using the calss name rather than the object instance.
+~~~~~~~~~~~~~~~~~~~~~~ * Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Actions that can be done are generally described
+ using methods. Methods contain executables that are related to
+ object which can be called on an object instante.
+	Static methods are owned by the class and should be called
+ using the calss name rather than the object instance.
+
+DRY. Dont. Repeat. Yourself. If you have to do something more than
+once, probably make a method for it.
 
 Components:
 ==> Method signature: 	
@@ -207,37 +236,86 @@ Components:
 	- final : Not overridable
 	- static : make method static
 ================================================================
- =========================== * Scope ===========================
-When a variable is decalred, it has a scope for which the variable s available and afterwards it is no longer available (the VARIALBE) is gone
+			* Scope
+=================================================================
+When a variable is declared, it has a scope for which the variable
+ is available and afterwards it is no longer available (the
+ VARIALBE) is gone
 Scope is about the VARIABLE'S own existence. 
 - There is NO global scope in java.
 
 1. Static Scope
-	variables created when the class loader first loads the class. It will stay in scope as long as the class is kept in memory.
-2. field sope - variable is declared as a field of an object. The field is accessible and in scope within the object within any on-static context or via an object reference outside the calss.
-3. Function/Method Scope - any parameter defined on a method is accessible throughout hte list of the method.
+	variables created when the class loader first loads the
+ class. It will stay in scope as long as the class is kept in
+ memory.
+2. field sope - variable is declared as a field of an object. The
+ field is accessible and in scope within the object within any 
+ non-static context or via an object reference outside the class.
+3. Function/Method Scope - any parameter defined on a method is
+ accessible throughout the list of the method.
 
-4. Block scoped - scoped to a code block. Any variable declared within a method is considered to have block scope. It will be scoped to the current code block.
-	- Also you can arbitraritly add {} brackest around a code section to clear the memory for after it runs, that that is generally over-optimization and would be better off as a method called isntead of a bracketed block.
+4. Block scoped - scoped to a code block. Any variable declared
+ within a method is considered to have block scope. It will be
+ scoped to the current code block.
+	- Also you can arbitraritly add {} brackest around a code
+ section to clear the memory for after it runs, that that is
+ generally over-optimization and would be better off as a method
+ called instead of a bracketed block.
 
-==> Static varialbes assigned first
+==> Static variables assigned first
 ==> Then Static code block runs before the main method
 	= Static blocks run in order top down.
-==> Instance code block runs every time we use the constructor ( see execution order.java)
+==> Instance code block runs every time we use the constructor (see execution order.java)
 
 ================================================================
-* Garbage Collection 
+		* Garbage Collection 
 ================================================================
-// How program automatically manges memory.
+- How the JVM automatically manges memory.
+>> First, unreferenced objects are identified and marked as ready.
+ Their finalize() method is run. 
+>> Second, they are deleted.
+- Optionaly, existing heap memory can be "compacted" to one
+ contiguous block at the start of the heap. This makes it easier
+ to allocate memory to new objects; the JVM doesn't need to look
+ for or sort through anything to get to the free space
 
- Garbage collection is the process of how programming language automatically mange memory.
-
-- Subroutine occasionally run as necessary which clears up memory be removing objects which have no referneces pointing to them. We don't have a lot o control over the collection, but it will happen as we take up more and more memory.
+- Subroutine occasionally run as necessary which clears up memory
+ by removing objects which have no referneces pointing to them. We
+ don't have a lot o control over the collection, but it will happen
+ as we take up more and more memory.
 
 - Let it do its thing be default.
 
+- HotSpot - Oracle's JVM, the most common, with a large set of 
+garbage collection options.
+	- Implements generational garbage collection
+	- Categorizes objects by age.
+           v-----v-------------------------survivor space
+    [eden](s0)(s1)<tenured>{permanent}    <--memory
+    |---young----||--old--||permanent|    <-- generation labels
+
+Heap's 3 Generations:
+1. Young Generation: Newly created objects are placed here.
+	Very minor event to clear items from young gen.
+2. Old gen : Longer-lived items are eventually moved from young
+	to old. Major event to delete these.
+3. Permanent : Metadata (classes and methods) live here. 
+	Not deleted by the garbage collector.
+
+You can Suggest to JVM to run Garbage collection:
+	System.gc() or Runtim.gc()
+
+HotSpot has various garbate collectors:
+	1. Serial : collection done serially, 1 thrread.
+	2. Parallel : Multi threads run (Stops app)
+	3. CMS : Concurrent Mark Sweep 
+		- Parallel + allos application to be running
+	4. G1 (Garbage first) - Newest made to replace CMS
+This may be userful for server-side things.
+
+
 ================================================================
- * Arrays
+		 * Arrays
 ================================================================
 Arrays represent an organized block of like types. Generally, we can assume that there is a relationship between the contained items.
 
@@ -263,7 +341,7 @@ for(int i: myArr){
 i = myArr[1] then [2] and [3], ect.... 
 
 =================================================================
-* Var Args - Variable Arguments
+		* Var Args - Variable Arguments
 =================================================================
 Variable arguments - allows us to declare a function which accepts a variable amount of arguments. The syntax is:
 type... varName
@@ -286,7 +364,7 @@ public void list(String message, int... myInts){}
 
 ==> You can make a main method with var args, sure. 
 =================================================================
-* String manipulation:
+		* String manipulation:
 =================================================================
 .replace
 .indexOf('e')
@@ -375,15 +453,18 @@ Threads : InterruptedException
 
 ===========* Checked vs Unchecked Exceptions================
 
-	- Checked exceptions - non-runtime exceptions. Exceptions we have to handle.
-	- Unchecked exceptions - any kind of run-time exceptions - you don't have to explicitly provide handling.
+	- Checked exceptions - non-runtime exceptions. Exceptions 
+	we have to handle.
+	- Unchecked exceptions - any kind of run-time exceptions 
+		- you don't have to explicitly provide handling.
 
 When to Checked Exceptions occur vs when do unchecked occur?
 	- Checked exceptions occur in runtime.
 	- Unchecked exceptions occur in runtime. 
 	BOTH occur at runtime.
  
-Runtime exception / Compile-time exception :Misnomer... Inaccurate naming. Both occur at runtime.
+Runtime exception / Compile-time exception 
+	:Misnomer... Inaccurate naming. Both occur at runtime.
 
 	Checked exceptions are general ones - logic-created/syntax 
 	Unchecked exceptions are runtime exceptions 
@@ -392,11 +473,15 @@ Runtime exception / Compile-time exception :Misnomer... Inaccurate naming. Both 
 CHECKED :
 	FileNotFound
 	IOException
+	  > FileNotFound, InterruptedByTimeout, InterruptedIO,
+	    InvalidPropertiesFormat, MalformedURL, ObjectStream,
+	    Protocol, Remote, UnknownHost, UnknownService
+	    UnsupportedDataType
 	ClassNotFound
 Unchecked : 
 	Error
 	RuntimeException
-		Aritmetic, NullPointer,NumberFormat,IndexOutOfBounds
+	   > Aritmetic, NullPointer,NumberFormat,IndexOutOfBounds
 
 ==================================================================
  		   * Wrapper Classes 
@@ -422,10 +507,8 @@ Unchecked :
 ==> Auto-Unboxing - Auto. extract/use wrapper class's inner prim.
 	int primitiveInt = myInt (myInt was declared as Integer)
 
-
-
 ==================================================================
-* IO 
+			* IO 
 ==================================================================
 * I/O or * Input/Output
 
@@ -443,27 +526,146 @@ IO - Input/Output allows communication outside the application.
 	try(IOClass name = new IOClass(constructor arguments)) {
 	} catch (IOException e) {}
 
- - OutputStream utility:
+==> OutputStream utility:
 	- Abstract class representing an output stream in bytes
 	- Subclasses of OutputStream must privode @ least 1 method
 	  that writes one byte of output.
+ >> InputStream and OutputStream classes have subclasses:
+	File(In/Out)putStream
+	ByteArray(In/Out)putStream
+	Filter(In/Out)putStream
+	Object(In/Out)putStream
+ >> The Filter(In/Out)putStream Class has two Subclasses:
+	Data(In/Out)putStream
+	Buffered(In/Out)putStream
 
 
-==== Serialization ======
+==> Classes to Write Files
+ - FileOutputStream
+	- subclass OutputStream object; requires # of bytes to read
+	String data = "yourData";
+	File somefile = new File("Path");
+	try(OutputStream os = new FileOutputStream(somefile)){
+		os.write(data.getBytes(),0,data.length());
+	} catch (IOException) {}
 
-====== MAVIN ======
+  FileOutputStream To object:
+ObjectOutputStream oos = new ObjectOutputStream(FileOutputStream(file)))
 
-====== JUNI ======
+ - FileWriter:
+	- Simplest way. Writes int, byte arr, and string directly
+	- Need to write a loop to write the file line-by-line
+	- Requires input of # of bytes to write each time
+ - BufferedWriter 
+	- Like FileWriter, but uses internal buffer to write data.
+	- Better for multiple write operations
+try(BufferWriter br = new BufferWriter(FileWriter(File(file)))){
+	//for loop to run through lines youd like to write
+	} catch(IOExceptions) {}
+ - Files Utility
+	- Can write file using its write function.
+	- Interally it uses OutputStream
+	Try {
+	Files.write(Path.get("path here"),yourDataHere.getBytes();
+	 } catch (IOException e) {}
 
-==
-Assertions are used to test applications
-using an assertion we state out expectation for the behavior of the code.
-if the expected behavior occurs, then the test passes.
-if the behavior does not match our assertions then the test fails.
+==> Classes to Read Files
+ - FileInputStream
+ - FileReader
+ - BufferedReader
+ - Files Utility
+ - Scanner Class
+
+  >> Use FileInputSteam, FileReader,BufferedReader
+	1. Set up the try just like for writing but with the
+	 input/reader class
+		- BufferReader/FileWrite require a # of bytes
+		  to read and must loop through/append a string
+		- Also should check is the next line is null
+	2.  Be sure to assign the result to something
+	
+  >> Use Scanner class:
+	 File file = new File("Location")
+	try (Scanner sc = new Scanner(file)){
+		while(sc.hasNextLine()) {
+		// put the info somewhere. }
+		sc.close();
+	} catch (IOException){}
+
+	OR WITHOUT LOOP:
+	sc.useDelimiter("\\Z");
+	System.out.println(sc.next());
+
+  >> Use File Utility:
+	- Comes with a handful of ways to read file.
+	- Benefit - you don't have to close the resource, its auto
+
+==> Exceptions
+	IOExceptions:
+	  - Most common : FileNotFound
+	  - Often will need to catch the ClassCastException
+	  - List of a few other possibilities:
+	  > FileNotFound, InterruptedByTimeout, InterruptedIO,
+	    InvalidPropertiesFormat, MalformedURL, ObjectStream,
+	    Protocol, Remote, UnknownHost, UnknownService
+	    UnsupportedDataType
 
 
 
-== unit testing
+==================================================================
+			* Serialization
+==================================================================
+Serialize (v) :
+	1. publish or broadcast in regualar installments.
+	2. arrange (something) in a series
+
+ - Serialization is the process of translating data structures or 
+   object states into a format that can be stored/transmitted
+   and reconstructed later.
+
+ - In java, Serialization writes the object state to a file as
+  Java bytecode, and it cannot be used outside a JVM.
+
+Reading/Writing OBJECTS:
+ - If using (IO)Stream, use subclass Object(In/Out)putStream.
+ - When getting data back, you need to CAST the data
+   as the type you want it when you store it on your variable.
+ - Object must be Serializable in order to be read/written.
+	Serializable is a marker interface: 
+		- it has no methods
+		- It is used to define a class for external source
+	- To be serializable, all firleds must also be serializable
+	- Not serializable fields need to be marked "transient"
+		- Useful for data that doesn't need to be saved.
+
+UID - Number used to represent different stages of an object's life
+   - To utilize this, you must commit your files upon each update
+   - If the object on file has a different UID, it may be missing
+     information that your newest object do have. 
+
+ ==================================================================
+			* Maven
+ ==================================================================
+Maven (Apache Maven at maven.apache.org ) is a software management
+and comprehension tool. 
+>> Library of Frameworks that are open-source to help developers
+   with applications.
+
+
+==================================================================
+			* JUNIT / * J-UNIT
+==================================================================
+Maven framework.
+- Assertions are used to test applications
+- Using an assertion we state out expectation for the behavior of 
+  the code.
+- If the expected behavior occurs, then the test passes.
+- If the behavior does not match our assertions then the test fails.
+
+
+==================================================================
+ 			* Unit testing
+==================================================================
 there are many kinds of testing unit testing is the most basic and focused method of testing in software development this testing tests individual units of code on the smallest possible scalre. generally this means testing the behavior of individual methods.
 
 this often involves the process of mocking. many methods or classes maybe dependant on other methods/classes. To test in isolation, we oftne mock these dependencies with fake implementations so that our tests only cover the individual unit. 
@@ -477,11 +679,23 @@ TDD - test-driven development.
 Write test first, then implement behavior to implement functionality until all tests pass.
 Assert behavior first then create it.
 
-JUNIT = someone else's java application.
+J-UNIT = someone else's java application.
 Dependencies means an external java application. Someone else's code.
 
-==== Reflection ======
+Keywords : @Before
+@BeforeAll
+@After
+@AfterAll
+@Test
 
+
+==================================================================
+		* Reflection 
+==================================================================
+
+Frameworks are written using Reflection.
+It uses abstract coding so that it is flexible yet functional.
+Reflection looks at classes as objects to manipulate code.
 
 
 ==================================================================
@@ -517,7 +731,7 @@ Trivia:
 	.finalize() <auto-called before object is garbage collected
 
 ==================================================================
- ~~~~~~~~~~~~ * Short Circuit Evaluations ~~~~~~~~~~~~~~~~~~~~~~~
+ 		 * Short Circuit Evaluations 
 ==================================================================
 	
 ||, && 		<---short circuit operations
@@ -538,48 +752,165 @@ Reason for Shit-circuit evaluations:
   - Some expressios may require expensive/long-running ops.
   - Convenient way of avoid exceptions.
 
+ ==================================================================
+			 * Generics 
+ ==================================================================
+- Using the type Object will allow us to hold a reference of ANY
+  type. However, we rarely know what type is actually being held
+ in it at any given time. 
+- Largely, it is then left to the programmer to determine what type
+ was placed in or what type could be in it. This dangerous and
+ requires a lot of explicit type casting and can be frustrating.
 
-~~~~~~~~~~~~~~ * Generics ~~~
+GENERICS solve problem
+- Generic solve this by allowing us to write a class in a generic
+ way that could utilize many different types, and provide the types
+ information to the class (or method) upon creation.
 
- Using the type Object will allow us to hold a reference of ANY  type. However, we rarely know what type is actually being held inb it at any given time. 
-Largely, it is then left to the programmer to determine what type was placed in or what type chould be in it. This dangerout and requires a lot of expliit type casting and can be frustrating.
+  "Writing on the box on the outside what should be contained in it"
 
-Want something CLEAR but still acts GENERIC....
-Generic solve this by allowing us to write a class in a generic way that could help many different types, and provide the types infoation to the class (or method) upon creation.
-	"Writing on the box on the outside that it contains books"
-Generics bring "compile time type safety"
+- Generics bring "compile time type safety"
 
-if we try ot use the wrong type with generics, it wont let us do it.
+- if we try to use the wrong type with generics,
+  it wont let us do it.
 
-Syntax for generics will generally include angle brackets <>
-Type information is generally provided within angle brackets.
+- Syntax for generics will generally include angle brackets <>
+- Type information is generally provided within angle brackets.
 
-Make class generic: 
+To MAKE a class Generic: 
 
 public class <T> Box {
 }
-^^ LOOK IN TO THIS
 
-Can create generic methods, too. They extend the class "printable"
-public void genericPrint(T toPrint)<T printable> {
+-can use <T extends SomeClass> as well.
+- Can create generic methods, too. 
+
+Example, they extend the class "printable" and upon calling the
+ method, the user can choose what data type will be sent in and
+ returned.
+
+public void genericPrint(T toPrint)<T extends printable> {
 system.out.println(toPrint);
 }
+
+or to return a type T:
+
+public <T> genericMethod(){ .. }
+
 -- Limited on what you can do. 
 generic method call:
 myStringBox.<String>genericPrint("A String.");
 
+==================================================================
+			* Collections
+==================================================================
+- A collection is like a flexible arrray for objects. 
+- Collection is a java interface implemented by all collections 
+  which contains static methods used to manipulate the collection
 
-== COLLECTIONS =====
+Common Methods:
+	.add(Object)
+	.contains(  )
+	.remove(index)
+	.size();  <- collection version of length()
+		ALL collectionsare flexible in size.
 
-Lists allow us to hold a collection of objects of variables size together while maintainging some kind of order. Duplicates are allowed.
+Class Tree: 
+	 ___________Collection ____________________
+         |                |                       |
+________Set	         List	 	        Queue
+|(sorted)   		  |		        |
+|-HashSet   		  |-LinkedList----------|
+|-LinkedHashSet           |-ArrayList           |-PriorityQueue
+|(not sorted)		  |-Vector
+'-TreeSet		  
 
-We will look at two implementations of Lists - ArrayList and LinkedList
+SET : 
+	- May not have order
+	- Sets contain no deplicate elements. 
+	- Duplicate is determined by the "equals" method
+		- User can, of course, override this in the class
+
+LISTS :
+	- Can have duplicate elements
+	- Have some kind of order.
+
+QUEUE :
+	- First in, first out.
+
+ArrayList vs Linked List
+	- ArrayList is stored like an array
+	- Use ListIterater for dynamic add/removal of items.
+	- LinkedList objects operate like a queue, somewhat
+		- Items have refrence location for themselves
+		- and to the locaiton of the previous and next 
+		  elements in the linkedlist
+	- Array list is better if you need to just grab items
+	- Linkedlist is quicker to process for adding/removal
 
 The implementations of these lists are different which means internally, they preform differently. However, since we will reference them using the List infterface, our code will treat them identically. 
 
+==>Iterating over Collection: & ConcurrentModificationException
+	- You cannot iterate over a collection in the typical way.
+	EXCEPTION will occur if you delete/add element:
+	ConcurrentModificationException
+	- Because odifying list while iterating over it causes
+	  java to not know
+	- Instead use the Iterator object and enhanced for loop:
+	CollectionType<Obj> myCollection = new ______<>();
 
-================================= friday ============================
-  ========================== * Log4J  =============================
+	Iterator<Obj> iter = myCollection.iterator;
+	for(iter;iter.hasNext();) {
+		Obj something = iter.next();
+		iter.remove();
+	}
+
+
+
+==================================================================
+ 		* Data Structures (Basics)
+==================================================================
+Main classes of data storage structures:
+[Collection]
+	<<List>>
+	<<Set>>
+	<<Queue>>
+<<Stack>>
+<<Map>>
+
+==> Stack : Last-in-first-out stack of objects.
+	Extends Vector Class
+	Used for temporary data/quickly changing
+==> Map : Key-value paid data storage. Separate from Collection.
+	- Instantiating Map gets 2 data types
+	Map<String,Integer> myMap = Map<>();
+
+Important types of Maps:
+- HashMap:
+	- Faster, good for single-thread apps.
+	- Can have null values (1 null key max, any null paired val)
+- HashTable :
+	- Can be used in multi-thread applications
+- TreeMap
+	- Sorted version of HashTable
+Map Methods:
+	.put(key,val) Puts val into key, return old val if present
+	.get(key)  get val at key
+	.remove(key)  removes val, leave key
+	.keyset() returns set of all keys in map
+	.values() returns set of all vals w/o keys
+
+Iterate over map:
+Use .entrySet() method to get Set of each map entry.
+
+Then iterate over the Set with an enhanced for loop:
+for(Map.Entry<Object,Object> entry : map.entrySet()) {...}
+
+
+
+ ==================================================================
+			 * Log4J  
+ ==================================================================
 
 
 create file in source/main/resources named log4j.properties
@@ -604,11 +935,12 @@ can e changed to show which level of errors to actually log.
 
 Memorize logging levels. ** FLASH CARDS ? *
 
-
- ======== * Threads =============================
-Processing multiple sections at the same time.
-Multi-threading increases the complexity of the application.
-Threads introduces unpredictability.
+ ==================================================================
+ 			 * Threads 
+ ==================================================================
+- Processing multiple sections at the same time.
+- Multi-threading increases the complexity of the application.
+- Threads introduces unpredictability.
 
 There are many ways to create mlti-threading, but here are two:
 Thread class
@@ -618,59 +950,163 @@ Thread Class :
  - Contains many methods.
  - first override run method.
 
-"Main method" of your launcher, for example, it one thread.
-Other thraeds are technically not a part of the main method (even if they were started in a main method)
+>> "Main method" of your launcher, for example, is one thread.
+  - Other threads are technically not a part of the main thread.
+    They start by executing their own run() method.
 
-the "run()" method does not start a thread.
-We override run, but we don't call run.
->> Calling run doesn't start a new thread.
+The "run()" method does not start a thread.
+	We override run, but we don't call run.
+	>> Calling run doesn't start a new thread.
 
-".start()" Method does start a new method.
-Thread class gives you a ton of power to override all kinds of things.
-More specifically, the power to override stuff you really should not override.
-
-
-
-==>Runnable Interface:
-
-Runnable is a Funcitonal Interface.
-
-Functional interfaces have exactly 1 abstract method.
-Marker interface - no methods, used to categorize/mark a class.
+.start() Method does start a new method.
+	Thread class gives you a ton of power to override all 
+	kinds of things. More specifically, the power to override
+	stuff you really should not override.
 
 
-==> Synchronized keyword:
 
-synchronized keyword can be applied to a method or code block and it essentially states that the contents of it should be accessible to only one thread at a time. 
+==>* Runnable Interface:
 
-This means when a thread calls the method or enters the code block, it acquires a lock, preventing other threads accessing it until it surrenders the lock. This renders waiting threads into the blocked state.
+Runnable is a * Functional Interface.
+It contains one abstract method : run()
+
+>> Functional interfaces have exactly 1 abstract method.
+ (Marker interface - no methods, used to categorize/mark a class)
+
+* Lambda Function and the Functional Interface:
+- The Lambda function can only be used with functional interfaces.
+- It is a shortcut to setting the abstract method without using
+  the overide keyword.
+Runnable myRunnable = () -> System.out.println("new run() method");
+
+Since functional interfaces only have one abstract method, this
+is used in place of a constructor and creating a whole class.
+
+==>Atomic Operations - something that happens in isolation.
+	- An atomic operation is a SINGLE operation.
+	- For example: a = 5;
+	All it does is assign 5 to a.
+w/ multi-threads, it is often important that if a thread accesses
+ a variable, its changes aren't overridden/ignored by another.
+  -AtomicInteger solves the problem.
+	int a =5;
+  -a++ is NOT atomic because JVM has to get a THEN add 1.
+	AtomicInteger a;
+	a.incrementAndGet();
+   - Now any thread that accesses a will get the same value, and
+     every thread's increment will be reflected.
+
+==> * Thread States
+ Thread states detail current state thread is in.
+
+1. NEW - New state upon creation, until started. 
+	- Thread myThread = new Thread(myRunnable);
+2. RUNNABLE - Thread eligible to run, may or may not be running
+3. TIMED_WAITING - stopped/waiting for specified amt of time
+4. WAITING - stopped/waiting unspecified about of time.
+5. BLOCKED - Blocked from proceeding due to a lock
+6. TERMINATED - Thread has completed run method & is dead.
+
+
+==>* Synchronized keyword:
+
+synchronized keyword can be applied to a method or code block and
+ it essentially states that the contents of it should be accessible
+ to only one thread at a time. 
+
+This means when a thread calls the method or enters the code block,
+ it acquires a lock, preventing other threads accessing it until it
+ surrenders the lock. This renders waiting threads into the blocked
+ state.
 
 -- Declare a method as synchronized after access modifier.
 -- You can't choose what order the OS lets threads access the function.
 
-Deadlock <** Interview Question 
- 	> Two threads waiting for eachother to finish in order to continue. 
+==> * Deadlock		 ** Interview Question 
+ 	> Two threads waiting for eachother to finish in order to 
+	  continue. 
 	>> Often by complete random chance. 
 
-- Method acquires lock for one object, and needs the lock for another to proceed.
-- another thread holds the lock for that other object, and needs the lock for the first one object to proceed.
-Both threads are dead. Neither will be able to proceed.
+- Method acquires lock for one object, and needs the lock for 
+  another to proceed.
+- another thread holds the lock for that other object, and needs
+ the lock for the first one object to proceed.
+ - Both threads are dead. Neither will be able to proceed.
 
 TO AVOID: 
 Provide a consistent order for which the locks can be acquired.
 
-Deadlock is a commonb problem in multithreaded applications
-deadlick is a state in which two treads (or more) are waiting on one another.
-This is the result of threads requireing locks which are being held be other reads.
+- Deadlock is a common problem in multithreaded applications.
 
-The result is two or more threads, waiting on resoruces which are held by blocked threads.
-As a result, these threads never release their locks and never progress.
+==> * Producer-Consumer problem
+- Example of multi-process sync (multi-threading) where 2 threads
+  are utilizing the same data set (IE Buffer)
+	-"producer" - adds data
+	-"consumer" - removes data 1 by one
+- Producer shouldn't ADD data if buffer is full
+- Consumer shouldn't TAKE data if buffer is empty
 
+SOLUTION:
+Producer either:
+	(1) Producer sleep if buffer is full
+	(2) Producer discard data if buffer full
+- When consumer takes data, producer is notified to fill buffer
+- Consumer sleeps if buffer is empty
+- Producer wakes up consumer when buffer has data
 
+In java:
+SEE:
+https://www.javamex.com/tutorials/wait_notify_how_to.shtml
+ - Producer/consumer are threads..
+ - wait/notify methods.
+ 	- Wait puts object to "sleep"
+	- Notify "wakes" it up
 
-=============== JavaStreams =======================================
+To use:
+- Object must be synchronized to use wait/notify:
+	[Lets imagine the producer has a List, applesBasket.
+	The consumer .removes an apple from the basket]
 
+- When tell a thread to WAIT, it temporarily releases it's lock 
+  on an object while waiting for "notify()"
+	[The consumer thread has getApple() in it's run() method]
 
+public void getApple() throws InterruptedException{
+	synchronize(applesBasket) {
+		while(applesBasket.isEmpty()) {
+			applesBasket.wait();
+		}
+		applesBasket.remove(0);
+	}
+}
+	
+- The producer thread can access the object while the consumer
+  thread is waiting.
+	[The producer thread has addApple() in it's run() method]
+
+public void addApple(Apple newApple) {
+ 	 synchronized (appleBasket) {
+   		 appleBasket.add(newApple);
+  		 appleBasket.notify();
+ 	 }
+}
+
+- Notify means:
+	"if there is at least one thread waiting on this object,
+ 	please wake up ONE of those threads."
+- After calling notify, we should exit the synchronized block as 
+  soon as possible, as that thread will need to reacquire it's lock
+
+NotifyAll() wakes up all waiting threads for that object. 
+Use notifyAll() if you don't have a very specific set of logic 
+ -- notify is used above because the producer and consumer
+    take and add the exact same amount of apples each turn.
+
+ ==================================================================
+			* JavaStreams 
+ ==================================================================
+JavaStreams allow manipulation of strings as if they were arrays.
+Strings can be added, removed, searched for, or instered, plus more
 List<String> myList = new ArrayList<>();
 String str = "the quick brown fox jumped over the lazy dog and fox and frog wow what a concept";
 String[] words = str.split();
