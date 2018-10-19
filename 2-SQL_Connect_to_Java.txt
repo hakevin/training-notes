@@ -1,0 +1,56 @@
+==================================================================
+	Connecting Postgre SQL Database to Jave Application
+==================================================================
+1.) In AWS : Create Database
+	- Check "free option only"
+	- Be sure you remember your master username and password.
+	- Be sure public accesibility is on
+2.) In pgAdmin
+	- Right click server, Create new Server.
+	- Give it a name 
+	- On the HOST tab, get the host
+		- Go back to AWS. Click Instances and go to your new db
+		- Copy the endpoint
+		- Paste endpoint in as the host
+		- use master username and password
+	- Go to your database (postgre) inside your server & open query tools
+		- Create a role with a username and password
+		- Give the new role permissions
+SQL Query:________________________________________
+CREATE ROLE jdbc WITH LOGIN PASSWORD 'yourPassword'
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO jdbc;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jdbc;
+__________________________________________________
+
+3.) In Java
+	- Add postgre dependacy to your project
+		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>42.2.5</version>
+		</dependency>
+	- Create a class to handle the connection:
+Java Class________________________________________
+package packageName;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConnectionClassName {
+	public static Connection getConnection() {
+		try {
+			// jdbc:postgresql://host:port/database
+			// Username(jdbc):database name:// endpoint : port : 
+			String url = "jdbc:postgresql://AWS_ENDPOINT_HERE:5432/postgres";
+			String username = "jdbc";
+			String password = "yourPassword";
+
+			return DriverManager.getConnection(url,username,password);
+		} catch (SQLException ex) {
+			return null;
+		}
+	}
+}
+__________________________________________________
+4.) Test your connection by printing out a call to the method created above.

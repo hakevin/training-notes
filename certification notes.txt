@@ -1,3 +1,15 @@
+0. 50%
+
+STRINGBUFFER ADN STRING BUILDER >>
+Practice with thses.
+
+Predicate and Lamba functions
+- Predicate tests object for given condition.
+- returns boolean.
+-Interface, can be used with lambda function.
+Predicate <T>
+ 	- Functional interface method : test(T t)
+
 break target/continue target
 Break:
 	- Used in LOOP to terminate 
@@ -5,43 +17,55 @@ Break:
 
 native keyword
 
-synchronized keyword
+synchronized keyword can never be applied to a class.
 
-why cant boolean be used in switch statement?
+Boolean cannot be used in a switch statement.
+You can have a default switch anywhere.
+Short can't be assigned to char without explicit casting.
+
+Wrapper classes:
+Integer x = new Integer(5);
+x != new Integer(5); // True
+x.equals(new Integer(5)); // False
+x == 2 + new Integer(3) // True (adding it to int causes unboxing)
+x = new Short(3); //Won't compile
 
 look more on local variables/scope
+- Local variables don't have ANY accessibility, and also/thus can't be labelled with access modifiers.
+- Local variables remain uninitialized unless expliocitly initialized.
 
-date utiliy package
+Date/Time classes in java 8
+- package: java.time
+- No realtion to java.sql.Date
+- java.time.temporal.TemporalAccessor is the base infercase that is implemented to LocalDate, LocalTime, and LocalDateTime concrete classes. Interfacse defiens read-only access to temporal objects.
+- LocalDate, LocalTime, and LocalDateTime calsses do not have parent/child relationships among themselves; theyre all their own thing. None have time zone info. Use ZonedDateTime instead.
+Immutable, no public constructors
+-Should not cast directly returend values - may or may not throw ClassCastException
+-java.time also provides Period(years, months, or dats quantity) and Duration classes (sec, hour, min quantities). 
 
 exceptions - the actual names of varius ones
-
-
-create bolean - valueof and parseboolean
-
-functional interface
-
-the way numbers are stored- they loop around!
 
 trivia - tilder ~ operator : bitwise negation
 and shifting operators << >> > < ect
 
-java.util.function.Predicate
-
-String is a final lass. (Is object?)
+String is a final class. (Is object?)
 RE: Default final classes.
 
 multidimensional arrays
 
+try must have a catch, finally, or both. >> Exception can be caught elsewhere, and thefinally will still fun.
+
 General/default java APIs
 
-define operand
 
 overriding methods, esp in sublasses and with throws
 
 Know everything about constructos and inheritance as well... especially super() and defaults.
 >> overriden method required return types, primitives ect... It has quirks. Know them. All.
+- Constructors can be declared private. 
 
 operators : *, /, % all have the same level of precidence.
+- All mathematical operators evaluate all the operands.
 
 what is &.
 
@@ -54,6 +78,95 @@ Here are the rules for a switch statement:
 5. No two of the case constant expressions associated with a switch statement may have the same value.
 6. At most one default label may be associated with the same switch statement
 
+
+===========================================================
+
+ATTEMPT 2 NOTES 57%
+
+PREDICATE
+
+when is garbage collection auto-run
+
+
+
+Where stack trace leads to exceptsion?
+>>>>>>>package exceptions;
+public class TestClass{
+    public static void main(String[] args) {
+        try{
+            hello();
+        }
+        catch(MyException me){
+            System.out.println(me);
+        }
+    }
+    
+    static void hello() throws MyException{
+        int[] dear = new int[7];
+        dear[0] = 747;
+        foo();
+    }
+    
+    static void foo() throws MyException{
+        throw new MyException("Exception from foo");
+    }
+}
+
+class MyException extends Exception {
+    public MyException(String msg){
+        super(msg);
+    }
+}
+>>>>>>>>>>>>>>
+Explanation:
+Note that there are a few questions in the exam that test your knowledge about how exception messages are printed.  When you use System.out.println(exception), a stack trace is not printed. Just the name of the exception class and the message is printed. When you use exception.printStackTrace(), a complete chain of the names of the methods called, along with the line numbers, is printed. It contains the names of the methods in the chain of method calls that led to the place where the exception was created going back up to the point where the thread, in which the exception was created, was started.
+
+
+>> WRAPPER CLASS:
+CAN do: 
+new Long("1234");
+
+>> ASIGNMENT: 
+a=b=c=2; IS valid. Assignment CAN be chained.
+
+>> String str = null;
+String str2 = str + "hello"
+str2 is nullhello
+
+>> In loops, if the condition is FALSE, the i doesn't incrememnt:
+int i = 0;
+for ( i; i<1; ++i)
+-- i is still 0.
+
+STRING CONCAT/STRING POOL STUFF
+These are the six facts on Strings:
+1. Literal strings within the same class in the same package represent references to the same String object. 
+2. Literal strings within different classes in the same package represent references to the same String object. 
+3. Literal strings within different classes in different packages likewise represent references to the same String object. 
+4. Strings computed by constant expressions are computed at compile time and then treated as if they were literals. 
+5. Strings computed at run time are newly created and therefore are distinct. (So line 4 prints false.)
+6. The result of explicitly interning a computed string is the same string as any pre-existing literal string with the same contents. (So line 5 prints true.)
+
+ABSTRACT classes can be executed so long as the main method doesn't point to an abstract method
+
+Trying to use an abstract, unimplemented method will cause a nullpointerexception at runtime
+
+having a method :
+public static long main(String args[]){ ... }
+WILL compile, but it'll throw a runtime error. 
+
+The add method of ArrayList returns a boolean. Further, it returns true if the list is altered because of the call to add. In this case, al.add("hello") indeed alters the list because a new element is added to the list.
+
+Remember that a lambda expression does not create a new scope for variables. Therefore, you cannot reuse the variable names that have already been used to define new variables in your argument list . 
+
+You can't functional instantiate interfaces without implementing the abastract method
+
+- In interfaces, default methods are always implemented instance methods. Thus they cannot be static or abstract.
+	- You can't override a static interface method with a non-static one.
+	- You CAN override default method with a static one in the sub-class/subinterface.
+	- Static interface methods must havea body
+
+- .equals() checks it 2 objects are the same class IE new Long(1).equals(new Integer(1)) will be FALSE.
 
 
 

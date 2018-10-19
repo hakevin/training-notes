@@ -1,0 +1,1133 @@
+=================================================================
+SQL - Structured Query Language
+=================================================================
+
+Data is structures in table 
+
+Tables are made up of rows (x) and columns (y).
+Rows : represents instances (object)
+Columns : represents variables (field)
+
+==> TYPES: 
+character-related
+	CHAR - will append whitespace generally
+	VARCHAR - won't append. Varying # of character(string)
+	TEXT - arbitraty size.
+Integer
+	int
+	bigint
+	smallint
+boolean
+
+- use all capitals for SQL words.
+- use all lowercase for yout variable names
+Different SQL and DBs have differing datatypes.
+Stick with varchar for strings.
+
+==> PostgreSQL
+
+Tables should have an index column/ID Column 
+	-Something unique for each element
+
+The ID column is called a Primary Key.
+Primary Key is unique idenifier for any given rom.
+Typically numeric.
+
+Database structure - AKA Model.
+
+==> What is a database?
+
+Not part of java application. 
+API to comminicate between java and DB:
+Java 2DB (to database)  API -> JDBC
+
+==> General standards for SQL:
+	- SQL keywords are written in CAPITAL letters
+	- non-SQL letters(user-created) are written in lowercase
+	- Multi-word names written using underscores_to_seperate
+
+
+=================================================================
+* Sublanguages
+=================================================================
+SQL is broken into a number of sublanguages. 
+- Sublanguages are groupings of commangs on related operations.
+- Consider thinking about it in steps.
+	Step 1. Define data structures
+	Step 2. Manipulate Data
+	Step 3. Using Querys, select the data
+	Step 4. Control who gets to use the data
+Main lanuages:
+DDL : Data Definition Language
+DML : Data Manipulation Language
+DQL : Data Query Language
+DCL : Data Control Language
+
+
+==> 1. DDL - Data Definition Language.
+- DDL is dedicated to creating, altering, & removing db objects
+	(DB objects are primarily tables.)
+
+- Key operations as part of DDL are:
+1. CREATE - create an object (table)
+2. ALTER - alter an object (an existing table)
+3. DROP - Remove/delete a table
+4. TRUNCATE - remove data from table, but leave table structure.
+
+Create a user table:
+Syntax:__________________________________(note -- means comment)
+CREATE TABLE users (
+	-- column definitions
+	-- column_name COLUMN_TYPE OTHER_SPECIFICATIONS
+	id INTEGER PRIMARY KEY,
+	first_name VARCHAR(20),
+	last_name VARCHAR(20),
+	phone VARCHAR(10),
+	email VARCHAR(50)
+)
+
+-- Can use 
+	CREATE TABLE IF NOT EXISTS users 
+ if you plan to run the same script multiple times.
+
+
+-- CONSTRAINTS provide rule(s) for limiting valid data beyond type
+1. UNIQUE - a unique colunm specifies that all rows must have 
+	 - all unique values in this column.
+2. NOT NULL - at least one not null column is required
+	 - no null values are accepted.
+3. CHECK - accepts an expression that row data must pass.
+4. PRIMARY KEY - unique identifying column for any given row. 
+	- Implicitly UNIQUE and NOT NULL
+5. FOREIGN KEY(REFERENCES) - points to another column 
+	- must hold a valid reference to that column.
+6. EXCLUDE - Allows you to check a given comparison operator
+	and fails if all comparisons return true
+
+
+Combine keywords to create a 2nd table which references the 1st
+-- A post by some user
+CREATE TABLE IF NOT EXISTS posts (
+	id INTEGER PRIMARY KEY,
+	author_id INTEGER REFERENCES users(id) NOT NULL --has foreign key definition!
+	content VARCHAR(500) NOT NULL
+)
+
+-- IF NOT EXISTS function only creates the table IF the table by that name doesn't exist.
+-- DROP removes tables completely.	
+	DROP TABLE posts;
+	DROP TABLE users;
+
+-- ALTER table modifies existing tables.
+   -- Add column: 
+	ALTER TABLE users
+		ADD COLUMN test INTEGER;
+   -- Change datatype of column
+	ALTER TABLE users
+		ALTER COLUMN test SET DATA TYPE VARCHAR(2);
+   -- Add constraint to column
+	ALTER TABLE users
+		ALTER COLUMN test SET NOT NULL;
+   -- Remove a column
+	ALTER TABLE users
+		DROP COLUMN test;
+
+
+======= WORKING DOC =============
+CREATE TABLE users (
+	-- column definitions
+	-- column_name column_type (..others)
+	id INTEGER PRIMARY KEY,
+	first_name VARCHAR(20),
+	last_name VARCHAR(20),
+	phone VARCHAR(10),
+	email VARCHAR(50)
+)
+CREATE TABLE IF NOT EXISTS posts (
+	id INTEGER PRIMARY KEY,
+	author_id INTEGER REFERENCES users(id) NOT NULL --has foreign key definition!
+	content VARCHAR(500) NOT NULL
+)
+
+DROP TABLE posts;
+DROP TABLE users;
+
+ALTER TABLE users
+	ADD COLUMN test INTEGER;
+ALTER TABLE users
+	ALTER COLUMN test SET DATA TYPE VARCHAR(2);
+ALTER TABLE users
+	ALTER COLUMN test SET NOT NULL;
+ALTER TABLE users
+	DROP COLUMN test;
+
+___________________________________
+
+==> Review: 
+DDL operations:
+	CREATE
+	ALTER
+	DROP
+	TRUNCATE
+CONSTRAINTS:
+	PRIMARY KEY
+	NOT NULL
+	REFERENCES
+	UNIQUE
+	CHECK
+	EXCLUDE
+	
+=====================================
+DML - Data manipulation Language
+====================================
+
+DML - Data manipulation language,
+1. INSERT - Allows us to enter new data. (row)
+2. UPDATE - allows us to update existing table data (row)
+3. DELETE - allows us to gelete table data (row)
+4. SELECT - allows us to view table data (is also often considered part of a different sublanguage)
+
+
+- INSERT anatomy
+INSERT INTO table_name (col_1, col_2, ...) VALUES (data_1, data_2, ...);
+
+INSERT INTO users (id, first_name, last_name, phone, email) VALUES
+	(1, 'Abby', 'Addams', '1234567890', 'email@amail.com');
+
+
+
+-DELETE : 
+DELETE FROM users; -- Will delete all of the data on users.
+
+- WHERE :
+WHERE is a control-flow keyword.
+
+DELETE FROM users WHERE id = 2;
+
+
+
+-SERIAL psuedotype - If you set a column to type serial on creation, it will be converted into an integre column, generate a Sequence, and use that sequence as a default value.
+Functionally, setting column to serial results in us getting default sequential numbers.
+  - if you have a SERIAL ID, it Allows you to insert data into the table without specifying an ID.
+
+
+>>>>>>>>>>>>>>
+DROP TABLE posts;
+DROP TABLE users;
+
+CREATE TABLE IF NOT EXISTS users (
+	-- column definitions
+	-- column_name column_type (..others)
+	id SERIAL PRIMARY KEY,
+	first_name VARCHAR(20),
+	last_name VARCHAR(20),
+	phone VARCHAR(10),
+	email VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS posts (
+	id SERIAL PRIMARY KEY,
+	author_id INTEGER REFERENCES users(id) NOT NULL, --has foreign key definition!
+	content VARCHAR(500) NOT NULL
+);
+
+INSERT INTO users(first_name, last_name, phone, email) VALUES
+	('Abby','Adama','1234567890', 'bt@ag.com'),
+	('Don','Donald','144567890', 'abb@ag.com'),
+	('Jill','Jilly','12344890', 'ab@a.com'),
+	('Rob','Robsss','123454490', 'at@ag.com');
+
+>>>>>>>>>>>>>>>>>
+** CAREFUL because the tool auto-commits.
+	You can change it, but overall just don't mess up.
+UPDATE allows you to change things.
+	ROLLBACK is OK
+UPDATE 'column_name'  = 'newName' WHERE id = 4;
+
+
+===============================================================
+DQL	
+===============================================================
+DQL ONLY has SELECT. 
+SELECT - tool for retrieving data from out database.\	
+	- Some consider SELECT to be DQL, others simply categorize it with DMW. (DRAW A TREE OR CHART ORGANIZING THESE "LANGUAGES".
+
+BASIC ANATOMY;-__________
+SELECT col_1, col_2, ... FROM TABLE;
+
+SELECT id, first_name, last_name, FROM users;
+
+
+* is a wild card/ gives all possible  vals
+- CAN ALSO USE SOME BASIC EXPRESSIONS / CONCATENTATION.
+CONCATENTAION : first_name || 'Abby'   will add "Abby" to all first_name vals selected.
+
+- SELECTING THINGS IN A CERTIAN WAY:
+
+SELECT * FROM users WHERE email LIKE '%ag.com';
+--will select only emails that end with 'ag.com'
+
+-- FINE A LETTER in a name
+SELECT * FROM users WHERE LOWER(last_name) LIKE '%c%';
+
+Use UNDERSCORES to find letters done a certain way:
+ ____y (4 underscores and a y) will look for a username 5 chracaters ling ending in y.
+
+Function LOWER(column_whatever) converts the column into all lowercase.
+
+
+SELECT * FROM users where LOWER 
+
+
+Can use boolean writing:
+SELECT * FROM user WHERE id > 1
+SELECT * FROM user WHERE id < 1
+
+- Provide a set to get a number of sections:
+- Utilizes information in the form of specific numbers.
+SELECT * FROM users WHERE id IN (1, 2, 4);
+
+- use BETWEEN x AND y for ranges:
+SELECT * FROM user WHERE id BETWEEN 1 AND 4;'
+
+- Combine queries :
+SELECT * FROM user WHERE (id BETWEEN 1 AND 4) AND last_name = '%a%;
+
+SELECT * FROM user WHERE (id BETWEEN 1 AND 4) OR last_name = '%a%;
+
+
+===> IN CLASS PROJECT:
+Create tables that represent the tables in your project.
+Minimum : You should have an accounts and users table. With accounts referencing the users. Think about common ways you might try to retrieve data (by username, accouns, by user)_id) and write those queris.
+
+
+
+======================================================================
+
+DML - Data manipulation Language
+1. INSERT
+2. UPDATE
+3. DELETE
+4. SELECT ( Some say this is DQL, though)
+
+INSERT INTO posts()
+
+
+
+>>>>
+
+Agregate functions - aggregate: to put things together.
+
+
+-- Counts ALL rows in posts table and returns one bigint number.
+SELECT COUNT(*) FROM posts;
+
+-- Gets author ID, counts ALL from posts grouped by(with the same) author_id 
+SELECT author_id, COUNT(*) FROM posts GROUP BY author_id;
+
+-- WHERE FILTER filters PRIOR to aggregation
+
+
+SELECT author_id, count(*)
+	FROM posts
+	WHERE author_id < 2
+	GROUP BY author_id;
+
+-- to filter POST (after) aggregation, we should use a HAVING clausea
+SELECT author_id, count(*)
+	FROM posts
+--	WHERE author_id < 2
+	GROUP BY author_id
+	HAVING count(*) > 20;
+-- > Counts posts of authors with ID 2 or less. 
+
+-- Could, for example, add up all the money in all of your accounts"
+
+SELECT user_id, count(*)
+	FROM key_table
+	WHERE username = 'someuser2'
+	(??? how to add the values together?)
+
+SELECT author_id, MAX(id)      < --- Can get MAX, MIN
+	FROM posts;
+
+-- AVG(column) will get the AVERAGE of all the selected values.
+IE Get the average of all user's posts:
+SELECT author_id, AVG(id)
+	FROM posts
+	GROUP BY author_id  
+
+Other functions : FLOOR(___) CEIL(___)
+
+===============
+NESTED Query
+===============
+- A way of putting a query inside a query.
+Usually using the result of a query as part of another query.
+
+CONSIDER: want to get all posts by abby HOWEVER we don't know abby's ID, just her first name - 'Abby'
+
+- Work from the inside out.
+SELECT * FROM POSTS WHERE author_id = 
+	(SELECT id FROM users WHERE LOWER(first_name) LIKE 'billy')
+
+============
+INLINE VIEW 
+============
+Replace "from" section with another Query.
+
+SELECT content FROM
+	(SELECT * FROM posts WHERE id < 50) inner_table
+WHERE id > 30;
+
+-- inner_table is an "alias" that can be used to get that same table again later on.
+
+====> 
+SELECT/FIELDS INNER QUERY
+-=====
+
+SELECT * FROM users;
+
+SELECT count(*) FROM posts GROUP BY author_id;
+
+   |
+   |    Instead of "FROM," you a comma and calls that value AS total_posts
+   |   FROM the users
+   V
+
+SELECT *, (SELECT count(*) FROM posts WHERE author_id = users.id) AS total_posts FROM users;
+
+
+== > SCRIPT ANALYSIS:
+- IFrst query runs on users, getting all data realted to users.
+The ID field on the users table is then used to provide the filter on the inner query. This results in each row having the count of only the current row's user's posts.
+
+
+
+SCALAR FUNCTION CS AGGREGATE FUNCTION
+-- Aggregate fnctions accept sets of data and operate by utilizing the function on the entire set.
+Ex: AVG finds the average of a set of data.
+
+-- Scalar functions operate on a singlar data-points. Scalar funtions will not condence a result set, but will return a single values. FLOOR, CEIL, ROUND, UPPER, LOWER.
+
+-- Scalar functions Has no affect on the result set itself, only individual column values
+SELECT UPPER(first_name) FROM USERS;
+
+-- Aggregate function - condenses results to a single row or rows for each factor in a 'group by' clause
+SELECT AVG(id) FROM users;
+
+SELECT author_id, MIN(id) FROM posts GROUP BY author_id;
+
+==========
+JOINS
+===========================
+Joins allows to combine results from multiple tables horizontally. 
+When joining we join ON some expression, which provides how rows from one talbe are related to another table. Generally, this will be a foreigh key.
+
+Creating a many-to-many relationship:
+
+CREATE TABLE friends (
+	id SERIAL PRIMARY KEY,
+	requester INTEGER REFERENCES users(id) NOT NULL,
+	reciever INTEGER REFERENCES users(id) NOT NULL
+);
+
+INSERT INTO users (first_name, last_name, phone, email) VALUES
+	('Danny', 'Deloto', '1231231234', 'danny@dogpile.com'),
+	('Emily','Erikson', '1233465234','emily@dsaf.xom');
+
+SELECT * FROM users;
+
+INSERT INTO friends (requester,receiver) VALUES
+	(1,3), --Abby is friends with Billy
+	(3,4),
+	(1,4),
+	(4,6);
+	
+SELECT * FROM users WHERE id = 1;
+
+-- Joins to put info of 2 tables together : 
+SELECT reciever,users.first_name, users.last_name, posts.* FROM friends
+-- JOINS friends table with users to find abby's friends
+	LEFT JOIN users ON reciever = users.id
+	LEFT JOIN posts ON reciever = posts.author_id
+WHERE requester = 1
+ORDER BY posts.id DESC --descending, ACS > ascending
+LIMIT 10 --newest 10;
+
+
+SELECT * FROM friends;
+
+SELECT friends.requester, request_users.first_name, reciever_users.first_name, friends.reciever FROM friends
+	LEFT JOIN users AS request_users ON requester = request_users.id
+	LEFT JOIN users AS reciever_users ON receiver = receiver_users.id;
+
+==================================================================
+Roles:
+
+-Roles ar3e a way for us to provide new credentials for other users, either people of applications.
+When defining a role, we can specify a login and password, and then grant or revoke various privileges. This allows us to limit the use of a database to exactly the tasks they require
+
+-- IE Can limit roles to specific actions (view, delete, add, ect.)
+
+-- VALID UNTIL 'yyyy-mm-dd' lets password ect expire.
+
+CREATE ROLE jdbc WITH LOGIN PASSWORD 'p4ssw0rd' VALID UNTIL '2018-12-12'
+
+then run and add new server on your db
+>> Use the same endpoint as your DB (copy from properties)
+>> add a name
+>> username : jdbc
+>> password : p4ssw0rd
+^^ Above is so we can do testing. We will use something similar in java so that we have our specific password ect like this instead of putting passwords to the entire database in our java program.
+
+--Allow jdbc role to use the SELECT operation on the users table.
+GRANT SELECT ON users TO jdbc;
+
+For all:
+GRANT ALL PRIVILEGES ON users TO jdbc;
+or:
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO jdbc;
+still might not be able to insert since insert works on the schema.
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jdbc;
+
+REVOKE SELECT ON users FROM jdbc;
+
+remove user:
+DROP ROLE jdbc;
+
+-- Provide default privileges which will apply to even new database object:
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ON ALL TABLES TO jdbc;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO jdc;
+-- ^^ Automatically is applied to new db objects created by jdbc
+-- IF default privileges not aplied to jdbc, they could create a new table
+-- and then not be able to access it at all.
+
+
+CORRECTED FOR ERRORS:
+--CREATE ROLE jdbc WITH LOGIN PASSWORD 'p4ssw0rd' VALID UNTIL '2018-12-12';
+
+GRANT ALL PRIVILEGES ON users TO jdbc;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO jdbc;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jdbc;
+
+-- Provide default privileges which will apply to even new database object:
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO jdbc;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO jdbc;
+-- ^^ Automatically is applied to new db objects created by jdbc
+-- IF default privileges not aplied to jdbc, they could create a new table
+-- and then not be able to access it at all.
+
+
+********************* IN JAVA **********************
+Connecting to a DB vai DriverManager, more likely to get SQLException, esp if connection fails
+******************************************************
+
+Java util package.  ConnectionUtil class:
+_________________________________________________
+public class ConnectionUtil {
+	
+	public static Connection getConnection() {
+		try {
+			// FROM https://jdbc.postgresql.org/documentation/80/connect.html
+			// jdbc:postgresql://host:port/database
+			// Username(which is jdbc) : database name :// endpoint : port : 
+			String url = "jdbc:postgresql://ENDPOINT:5432/postgres";
+			return DriverManager.getConnection("a","jdbc","p4ssw0rd");
+		} catch (SQLException e) {
+			return null;
+		}
+	}          
+}
+_________________________________________________
+
+
+-- Using the Statement class with user provided data opens yourself up to SQL Injection attacks.
+SQL injection can be devestationg. Fortunately, there're easy to prevent. Don't concatonate user data into a SQL query. Use prepared statements and the appropriate paramets setting emthods to add data to a query. WHen using prepared statements correctly, SQL injection will be rendered impossible.
+
+==> ALWAYS use the "?" thing when putting user stuff into your app
+
+
+
+HIDING INFORMATION : 
+--Don't put your password blatantly on the source file.
+--Files containings source files should be hidden with environment variables -- variables stored on one's actual SYSTEM.
+
+
+System.getenv("jdbc_login");
+
+ON WINDOWS:
+start > Edit environment Variables (in System Properties)
+>> New
+	>> input variable name and the value is the username
+	>> Do the same but for password.
+in Java:
+System.getenv("JDBC_LOGIN");
+System.getenv("JDBC_PASSWORD");
+
+Out DAO should be able to handle CRUD functionality for user entity
+C - Create   -	INSERT
+R - Read     -	SELECT
+U - Update   -	UPDATE
+D - Delete   -	DELETE
+
+
+Note :PreparedStatement ps
+ ps.executeQuery() returns something vs s.execute() does not
+
+Postgres allows us to use a returning clause to return info on the instnace we just created in the table.
+
+INSERT INTO users (first_name, last_name, phone, email) VALUES 	('Frank','Georgeson','1231231234','georg@goerge.net)
+	RETURNING id;
+
+
+
+
+==> Instead of making HUGE select statements in your java, its easier to use IDs.
+
+-- VIEWS - views are essentailly a saved and named query that can be used again.
+
+ -- table gets friends abby has requested at least.
+SELECT user_friends.* FROM users
+	INNER JOIN friends ON users.id = requester
+	LEFT JOIN users AS user_friends ON recIever = user_friends.id
+	WHERE requester = 1;
+	
+or rather
+
+CREATE VIEW friend_view AS SELECT requester, user_friends.* FROM users
+	INNER JOIN friends ON users.id = requester
+	LEFT JOIN users AS user_friends ON recIever = user_friends.id;
+
+-- Now use to get all of someone's friends (requester with id 1)
+SELECT * FROM friend_view WHERE requester = 1;
+
+-- Altering view: use CREATE OR REPLACE
+CREATE OR REPLACE VIEW friend_view AS SELECT requester, user_friends.* FROM users
+	INNER JOIN friends ON users.id = requester
+	LEFT JOIN users AS user_friends ON recIever = user_friends.id;
+
+===================
+Sequences
+===================
+Sequences provide a way of creating stateful counters within our database.
+We can create sequences using standard DDL notation.
+
+CREATE SEQUENCE my_custom_sequence;
+
+SELECT nextval('my_custom_sequence');
+
+
+- Will keep going down the list.
+- Use for bank account numbers: 
+CREATE IS NOT EXISTS my_basic_sequence
+	increment by -3
+	MINVALUE 1000
+	MAXVALUE 1010
+	START 1000
+	CACHE 1 --FOR SAVING VALUES TO USE LATER, SPEED AND STUFF
+	CYCLE;
+
+-- Banking account sequence:
+CREATE SEQUENCE IF NOT EXISTS
+	INCREMENT BY 1
+	MINVALUE 1000000;
+SELECT nextval('banking_account_sequence')
+SELECT nextval('my_basic_sequence');
+
+
+
+
+
+
+==============================================================
+FRIDAY
+
+Composite Primary Keys:
+-- Composite key that is composed of two or more columns.
+
+
+CREATE TABLE IF NOT EXISTS example_composite (	
+	val_one INTEGER PRIMARY KEY,
+	val_two SERIAL,
+	PRIMARY KEY (val_one,val_two)
+);
+INSERT INTO example_composite VALUES (1),(1),(1);
+SELECT * FROM example_composite;
+--OR
+INSERT INTO exmaple_composite (val_one, val_two) VALUES (2,1);
+-- This is fine, so long as that particular composite value isn't repeated. 
+
+
+ Can also have composite Unique constraints:
+CREATE TABLE IF NOT EXISTS example_composite (	
+	val_one INTEGER PRIMARY KEY,
+	val_two SERIAL,
+	UNIQUE (val_one, val_two)
+);
+-- Unique constraints doesn't consider null values as unique or not. set NOT NULL to avoid that.
+
+
+
+
+============
+TABLE INHERITENCE: (Posgres specific)
+============
+CREATE TABLE IF NOT EXISTS birds (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(20)
+);
+
+CREATE TABLE IF NOT EXISTS chickens (
+	eggs_laid INTEGER
+) INHERITS (birds);
+
+CREATE TABLE IF NOT EXISTS hawk (
+	rabbits_eaten INTEGER
+) INHERITS (birds);
+
+
+INSERT INTO chickens (name, eggs_laid) VALUES ('Cluck',200);
+INSERT INTO hawk (name, rabbits_eaten) VALUES ('Claw',20);
+INSERT INTO birds(name) VALUES ('rebirdo');
+
+--SHOWS all 3 rows but no extra columns
+SELECT * FROM birds; --Gets everything considered a type of bird. They all share the same serial sequence. THey're drawn from the same set of IDs. Can select directly from the chickens table and see only chickens (and get the extra row) 
+-- only chickens, with chicken extra columns
+
+SELECT * FROM chickens
+-- only hawks, with hawk column
+
+SELECT * FROM hawk
+--Only things defined on birds, not inheriting tables.
+SELECT * FROM ONLY birds
+
+
+==============
+UNION
+===========
+UNION, UNION ALL, INTERSECT, AND MINUS
+
+Joins combine result sets horizonally. 
+These operations combine or interact with result sets horizontally.
+
+SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3
+UNION -- Combine result set of 2 diff queries.
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 3;
+-- Note that union adds new rows and does NOT add duplicates.
+
+-- You can use UNION ALL to keep duplicates/repeated columns.
+SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3;
+UNION -- Combine result set of 2 diff queries.
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
+UNION ALL
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 3;
+
+====== EXCEPT / INTERSECT
+====== This can be done with WHERE clauses, but this is simpler
+-- This table is feidns with BILLY who are NOT fiends with Abby
+-- Basically the opposite of friends in common.
+-------------------------------------------friends of billy
+(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3;
+UNION -- Combine result set of 2 diff queries.
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
+UNION ALL
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 3)
+EXCEPT -----------------------EXCEPT
+---------------------------------- This shows abbys' friends
+(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 1
+UNION -- Combine result set of 2 diff queries.
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 1)
+
+-- Finding MUTUAL FREINDS use INTERSECT to remove results that are not present in both data sets
+(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3;
+UNION -- Combine result set of 2 diff queries.
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
+UNION ALL
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 3)
+INTERSECT-------------------------------------------INTERSECT
+---------------------------------- This shows abbys' friends
+(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 1
+UNION -- Combine result set of 2 diff queries.
+SELECT id, requester AS friend_id FROM friends WHERE reciever = 1)
+
+==========================================================
+
+DISTINCT keyword wil remove duplicate items from the results.
+SELECT DISTINCT content FROM POSTS
+
+==========================================================
+OPTIMIZATION:
+
+Databases can more quickly look things up via primary key. 
+Primary keys are indexed, and can go right to it.
+
+Databases can also define indexes for table elements.
+IE it makes sense for emails to be indexed so that we can more quickly find them.
+
+SELECT * FROM USERS;
+CREATE INDEX users_email_index ON users(email);
+
+-- Don't just create indexes everywhere.
+-- Updates/inserts/deletes will have more overhead, and we need more space allocated. Choose it carefully depending upon HOW the data is used. IE for logging in with a username.
+
+
+-- CLustering - Culstering allows to restructure data in the database to fit the ordering of an index. Note : This ordering is not maintained - it must be done again occasionally if its necessary to maintain this ordering for performance.
+
+CLUSTER users USING users_email_index;
+SELECT * users;
+
+-- Will now show a list of users with their email addresses in order.
+
+
+=====================
+Normalization
+=====================
+-- The process of removing redundant data from our system. 
+
+-- Process is broken into levels.
+Rules of the levels of normal form
+-- First normal form (1NF)
+    -- 1. Every tables must have a primary key
+    -- 2. Every column must be automic
+      ----automic : no column should be able to be broken into smaller bits of data. IE: Name is not (generally) automic, firstname/lastname columns are.
+      ---- IE Addresses should be broken into a lot of parts
+
+-- Second normal form (2NF)
+   --1. Must meet restrictions of first normal form
+   --2. The non-key columns within a composite key table must be specific to both entities which make up the composite relationship.
+	---- Must be directly about ALL parts of the key.
+	EX: customer_account could have a row called # of transactions which is specifically that user's # transactions on that account.
+
+-- Third normal form. (more complex than we're making it)
+   --1. Must meet restrictionsof second normal form.
+   --2. Columns must not represent transitive functional dependencies
+	-- No column data should be able to be derivable from column statement.
+
+Functional Dependency:
+(table about sales) 
+quantity  price_at_time_of_sale  total
+ 2                5                10
+ total can be derived from other columns, so it is not necessary. This violates 3NF.
+
+
+Transitive Dependency
+  city 	  state
+  Tampa	    FL
+We should be able to derive a state from a city. These representatios should be borken into multiple tables - IE city and state table, where each city holds a reference to its respective state.
+
+
+Denormalization
+-- Adding redundancy back into your database  may imporove performances if you've normalized tooo far.
+
+
+=============================================================
+			TRANSACTIONS
+=============================================================
+Transactions - the idea of multiple database interactions being combined into a single atomic transaction.
+
+The idea is that many interactionsare depndent upon preceeding interactions. And many larger problems or solutions we utilize require multiple edits to the database. Transactions allow us to be sure that all parts of a transaction occur correctly without fail.
+
+-- When a customer orders something a few things should all happen:
+1. The order is add to the user's order history.
+2. Inventory is an intentory table is updated to respect the new form of the inventory.
+3. The order is placed in a table for pending fulfulments for picking from warehouse.
+
+
+-- Transactionsallow us to place multiple operations together, where if one fails they can all fail together.
+-- Transaction related changes make up the sublanguage TCL
+
+*************** TCL *******************
+1. BEGIN (among others) - starts a new transaction
+2. COMMIT - Commits a transaction, saving all changes)
+3. ROLLBACK - Rolls back al changes to a given point.
+4. SAVEPOINT - creates a savepoint withing a transactionwhich can be rolled back to
+5. RELEASE - releases a savepoint from memory within a transaction. 
+
+BEGIN
+	INSERT INTO users (first_name, last_name, phone, email, city_id) VALUES
+	('Isabely','Ivy','1234567890','isy@imail.com')
+
+
+
+
+
+
+IF SOMEONE ASKS YOU ABOUT PROPERTIES OF TRANSACTION, KNOW:
+ACID
+
+ACID is a huge concept for SQL databases. Be able to explain it confidently. 
+
+A - Automicity - Transaction that can't be broken down into smaller parts.
+	- Either finish wholly or are completely rolled back. 		- There should be no partial completion of any 
+	transaction.
+	- In acid this applies to transactions
+C - Consistency - (The rules of the database)
+	- Transactions take us from one consistent state to another consistent state. Rules should still be consistent before, after, adn throughout the transaction.
+I - Isolated - Transactions occur as if they are occuring in a vacuum. If multiple concurrent transactions occur on the database at one time, the changes of these interactionsshould not interact.
+D - Durable - Once a transaction is committed, There is no going back.
+	After completion, the changes are the new state of the application.
+	IF you are a DBA: is also means that out database should maintain transactions even in the case of disaster.
+
+===> -- Transaction Isolation Levels
+
+In order to make transactionssuffieiently isonaled, we must select an appropriate Isolation Level. Each isolation level 
+trades performance for further isolation in varying amounts.
+
+Errors which can happen due to poor isolation:
+1. Dirty Reads - Reading committed changes from another transaction
+2. Non-Repeatable reads - reading of data from a row, then when read again the row has changed due to an ongoing transaction committed.
+3. Phantom RReads - The reading of data reutrning a result set then the rereading of the same query, which returns different rows of data.
+Phamton because rows disappear then reappear.
+
+Isolation Levels and what they prevent:
+1. READ UMCOMMITTED - Prevents nothing, not available in postgresQL
+2.READ COMMITTED - Prevents dirty reads. Vulnerable to nonrepeatable and phantom reads.
+3 Repeatable read - prevents dirty reads and nonrepeatabe reads. Vulnerable to phantom reads.
+4. Serializable - Prevents all 3 problems. However, may cause a serialization eror, in postgresql, that chould be handeled by  java server
+
+BEGIN;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	INSERT INTO users (first_name, last_name, phone,email,city_id) VALUES
+		('Maddy','Moore', '1231231234', 'amadf@match',4);
+COMMIT;
+
+
+PROCEDURAL LANGUAGE:
+-- In oracle functions are broken into two categories: FUNCTION & STORED PROCEDURE.
+	- In postgresql, there is no syntactical difference between the two. (Postgre does not made this distinction)
+- PstgreSQL actually supposets many languages for writing functions, including Java.
+
+CREATE OR REPLACE FUNCTION my_sum(a INTEGER, b INTEGER)
+RETURNS INTEGER AS $$ 
+  --Delimiter here ^^ signifies beginning and (later) end of fcn
+	BEGIN
+		RETURN a + b;
+	END;
+$$ LANGUAGE plpgsql;
+--plpgsql stands for procedural language postgresql
+
+SELECT my_sum(1,2);
+
+SELECT my_sum(requester,reciever) FROM friends;
+
+---------------------------------------------Function to create a new user:
+
+CREATE OR REPLACE FUNCTION insert_new_user(first_name VARCHAR, last_name VARCHAR, phone VARCHAR, email VARCHAR, city_id INTEGER)
+	RETURNS VOID AS $$
+		BEGIN
+			INSERT INTO users (first_name, last_name, phone,email,city_id) VALUES 
+			(first_name, last_name, phone,email,city_id);
+		END;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+--Security definer function runs with permissions of runction definer, not caller.
+-- Good way to let people have access to DB without giving them anything else.
+SELECT insert_new_user('o''riely','Okinawa','2345678909','oriley@oop.org');
+
+
+==================
+CURSORS:
+-- Allows to pass a cursor and id value in, shoul return a cursor which holds the reult set from the query finding a user by id.
+-- Cursor - virtual result set that can be returned from function. 
+=======
+CREATE OR REPLACE FUNCTION get_user(curs refcursor, u_id INTEGER)
+	RETURNS refcursor as $$
+		BEGIN
+  		    OPEN curs FOR SELECT * FROM users WHERE users.id = u_id;	
+			RETURN curs;
+		END;
+$$ LANGUAGE plpsql;
+
+-- NOTE Cursors only exist within a transaction.
+-- This isn't makign any sense. Mitch says its easier to do this in Java than pgAdmin.
+
+BEGIN;
+SELECT get_user('user',1);
+FETCH ALL IN "user";
+COMMIT;
+
+==============
+
+--RETURN QUERY
+Function to pass in id# and get back a list of friends:
+
+CREATE OR REPLACE FUNCTION get_friends(user_id INTEGER)
+	RETURNS TABLE (
+		id INTEGER,
+		first_name VARCHAR,
+		last_name VARCHAR,
+		phone VARCHAR,
+		email VARCHAR,
+		city_id INTEGER) AS $$
+	BEGIN
+	RETURN QUERY SELECT users.id,users.first_name,users.last_name, users.phone, users.email, users.city_id FROM (
+		SELECT reciever AS friend_id FROM friends WHERE requester = user_id
+		UNION 
+		SELECT requester AS friend_id FROM friends WHERE reciever = 3
+	) AS origin LEFT JOIN users ON origin.friend_id = users.id;
+	END;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+SELECT * FROM get_friends(4);
+
+====================
+TRIGGERS:
+
+ALTER TABLE posts ADD COLUMN post_date TIMESTAMP;
+ALTER TABLE posts ADD COLUMN edit_date TIMESTAMP;
+UPDATE posts SET post_date = CURRENT_TIMESTAMP;
+ALTER TABLE posts ALTER COLUMN post_date SET NOT NULL;
+
+ 
+SELECT * FROM posts;
+
+-- FIRST: Should we expect a developer to always reasonable set the time stamp to the appropriate post date timestamp?
+>Should we expect that the developers never accidentally changes the timestamp?
+>Should we expect that any time the posts table is updated, the developer remembers to update  the edited tiem stamp?
+>Important question, but answer is NO.
+> Should be forget about the original post content? We probably want some revision history that will track past content values.
+-- Triggers can be used to insure that the rules are followed.
+
+CREATE TABLE IF NOT EXISTS post_revision_histoy (
+	id SERIAL PRIMARY KEY,
+	post_id INTEGER REFERENCES posts(id) NOT NULL,
+	revision_timestamp TIMESTAMP NOT NULL,
+	revision_content VARCHAR(500) NOT NULL
+);
+
+-- TRIGGER :
+CREATE OR REPLACE FUNCTION post_revision_trigger_func()
+RETURNS trigger AS $$
+	BEGIN
+--TG_OP -> trigger operation (such as insert, updates, ect)
+		IF(TG_OP = 'UPDATE') THEN
+			INSERT INTO post_revision_history (post_id,revision_timestamp,revision_content)
+				--OLD represents OLD data from UPDATED rows
+				VALUES(OLD, id, COALESCE(OLD.edit_date,OLD.post_date), OLD.content);
+					-- Coalesce gives first non-null value
+			NEW.edit_date = CURRENT_TIMESTAMP;
+		END IF;
+		IF(TG_OP = 'INSERT') THEN
+			NEW.post_date = CURRENT_TIMESTAMP;
+			NEW.edit_date = null;
+		END IF;
+		RETURN NEW;
+	END;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+
+CREATE TRIGGER post_revision_trigger
+-- Triggers can happen BEFORE, AFTER, or INSTEAD OF----------------------------
+	BEFORE INSERT OR UPDATE ON POSTS
+	FOR EACH ROW
+	EXECUTE PROCEDURE post_revision_trigger_func();
+
+SELECT * FROM posts WHERE id=1
+SELECT * FROM post_revision_history;
+
+
+
+
+
+ALTER TABLE posts 
+ADD COLUMN post_date TIMESTAMP;
+
+ALTER TABLE posts ADD COLUMN edit_date TIMESTAMP;
+
+UPDATE posts SET post_date = CURRENT_TIMESTAMP;
+
+ALTER TABLE posts ALTER COLUMN post_date SET NOT NULL;
+
+
+SELECT * FROM posts;
+
+
+-- 1. Should we expect the developer to always reasonably set the timestamp
+
+-- to the appropriate post date timestamp?
+-- 
+2. Should we expect that the developer never accidentally changes the timestamp?
+
+-- 3. Should we expect that anytime the posts table is updated, the developer
+
+-- 		remembers to update the edited time stamp?
+
+-- Other consideration: Should we forget about the original post content? We probably want some kind
+
+-- of revision history that will track past content values.
+
+
+
+CREATE TABLE IF NOT EXISTS post_revision_history (
+
+	id SERIAL PRIMARY KEY,
+
+	post_id INTEGER REFERENCES posts(id) NOT NULL,
+
+	revision_timestamp
+ TIMESTAMP NOT NULL,
+
+	revision_content VARCHAR(500) NOT NULL
+);
+
+
+
+
+CREATE OR REPLACE FUNCTION post_revision_trigger_func()
+
+RETURNS trigger AS $$
+
+	BEGIN
+
+-- TG_OP -> Trigger Operation (such as: INSERT, UPDATE, etc)
+
+		IF(TG_OP = 'UPDATE') THEN
+
+			INSERT INTO post_revision_history (post_id, revision_timestamp, revision_content)
+
+				--     OLD represents old data from updated rows
+
+				VALUES (OLD.id, COALESCE(OLD.edit_date, OLD.post_date), OLD.content);
+
+			NEW.edit_date = CURRENT_TIMESTAMP;
+
+		END IF;
+
+		IF(TG_OP = 'INSERT') THEN
+
+			NEW.post_date = CURRENT_TIMESTAMP;
+
+			NEW.edit_date = NULL;
+
+		END IF;
+
+		RETURN NEW;
+
+	END;
+
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+
+CREATE TRIGGER post_revision_trigger
+
+	BEFORE INSERT OR UPDATE ON posts
+
+	FOR EACH ROW
+
+	EXECUTE PROCEDURE post_revision_trigger_func();
+
+	
+SELECT * FROM posts WHERE author_id = 1;
+
+SELECT * FROM post_revision_history;
+
+
+INSERT INTO posts (author_id, content, post_date, edit_date) VALUES
+
+	(1, 'It''s raining', to_timestamp(2000120400), CURRENT_TIMESTAMP);
+
+UPDATE posts SET content = 'it''s still raining!' WHERE id = 311;
+
+
+
+
+
