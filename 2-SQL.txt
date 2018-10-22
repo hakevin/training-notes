@@ -137,7 +137,7 @@ Columns : represents variables (field)
 - Primary Key is unique idenifier for any given rom.
 - Typically numeric.
 
-==> COMMOT TYPES: 
+==> COMMON TYPES: 
 character-related
 	CHAR - will append whitespace generally
 	VARCHAR - won't append. Varying # of characters(String)
