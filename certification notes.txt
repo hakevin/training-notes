@@ -1,4 +1,4 @@
-0. 50%
+0. 50
 
 STRINGBUFFER ADN STRING BUILDER >>
 Practice with thses.
@@ -81,7 +81,7 @@ Here are the rules for a switch statement:
 
 ===========================================================
 
-ATTEMPT 2 NOTES 57%
+ATTEMPT 2 NOTES 57
 
 PREDICATE
 

@@ -876,7 +876,7 @@ trades performance for further isolation in varying amounts.
 Errors which can happen due to poor isolation:
 1. Dirty Reads - Reading committed changes from another transaction
 2. Non-Repeatable reads - reading of data from a row, then when read again the row has changed due to an ongoing transaction committed.
-3. Phantom RReads - The reading of data reutrning a result set then the rereading of the same query, which returns different rows of data.
+3. Phantom Reads - The reading of data reutrning a result set then the rereading of the same query, which returns different rows of data.
 Phamton because rows disappear then reappear.
 
 Isolation Levels and what they prevent:
@@ -972,6 +972,7 @@ SELECT * FROM get_friends(4);
 ====================
 TRIGGERS:
 
+Consider :
 ALTER TABLE posts ADD COLUMN post_date TIMESTAMP;
 ALTER TABLE posts ADD COLUMN edit_date TIMESTAMP;
 UPDATE posts SET post_date = CURRENT_TIMESTAMP;

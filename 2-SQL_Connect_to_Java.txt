@@ -1,5 +1,5 @@
 ==================================================================
-	Connecting Postgre SQL Database to Jave Application
+	Connecting Postgre SQL Database to Java Application
 ==================================================================
 1.) In AWS : Create Database
 	- Check "free option only"
@@ -8,27 +8,31 @@
 2.) In pgAdmin
 	- Right click server, Create new Server.
 	- Give it a name 
+	- Wait a couple minutes for it to initialize
+	- Add your IP to the Security Group if it isn't already 
 	- On the HOST tab, get the host
-		- Go back to AWS. Click Instances and go to your new db
+		- Go back to AWS. In Instances, go to your new db
 		- Copy the endpoint
 		- Paste endpoint in as the host
 		- use master username and password
-	- Go to your database (postgre) inside your server & open query tools
+	- Click your database (postgre) inside your server 
+		- Open query tools
 		- Create a role with a username and password
 		- Give the new role permissions
 SQL Query:________________________________________
-CREATE ROLE jdbc WITH LOGIN PASSWORD 'yourPassword'
+CREATE ROLE jdbc WITH LOGIN PASSWORD 'yourPassword';
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO jdbc;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jdbc;
 __________________________________________________
 
 3.) In Java
-	- Add postgre dependacy to your project
+	- Add postgre dependacy to your Maven project
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
 		    <version>42.2.5</version>
 		</dependency>
+	- Update maven project
 	- Create a class to handle the connection:
 Java Class________________________________________
 package packageName;
