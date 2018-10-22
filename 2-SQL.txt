@@ -1,3 +1,30 @@
+=================================================================
+		  Databases and Postgre SQL
+=================================================================
+>>>>>>>>>>>>>  Revature Week 2 Training Notes  <<<<<<<<<<<<<<<<<<
+
+Table of Contents:
+* Relational Databases
+* SQL - Structured Query Language
+* Sublanguages
+* DDL
+* DML
+* DQL
+* Scalar vs Aggregate
+* Nested Query (AKA Subquery or Inner Query)
+	* Inline View
+	* Select/Fields Inner Query
+* Joins
+* Roles
+* Connecting With Java
+* Sequences
+* Composite Primary Keys
+* Table Inheritance
+* Unions
+* Opimization
+* Normailzation
+* Procedural Language
+
 ==>Vocab/acronyms
 AWS -	Amazon Web Services.
 RDS - 	Relational Datatase Service (RDS is Amazon's SPECIFC ser-
@@ -12,6 +39,22 @@ ACID - Atomicity, Consistency, Isolation, Durability. Acronym rep-
 	resenting transactions in a database. 
 Security Group - holds rules to filter traffic to/from virtual 
 	server.
+DDL : Data Definition Language
+	CREATE, ALTER, DROP, TRUNCATE
+DML : Data Manipulation Language
+	INSERT, UPDATE, DELETE, (SELECT)
+DQL : Data Query Language
+	SELECT
+DCL : Data Control Language
+	GRANT, REVOKE
+TCL : Transaction Control Language
+	BEGIN TRANSACTION, COMMIT, SET TRANSACTION LEVEL
+
+Constraints : Part of CREATE table, provides rules for limiting
+	 data beyond data type 
+	UNIQUE, NOT NULL, CHECK condition, PRIMARY KEY,
+	FOREIGN KEY (REFERENCES), EXCLUDE
+
 =================================================================
 ================== * Relational Databases =======================
 =================================================================
@@ -1033,51 +1076,68 @@ Rules of the levels of normal form
 -- First normal form (1NF)
     -- 1. Every tables must have a primary key
     -- 2. Every column must be automic
-      ----automic : no column should be able to be broken into smaller bits of data. IE: Name is not (generally) automic, firstname/lastname columns are.
+      ---- automic : no column should be able to be broken into smaller 
+		     bits of data. IE: Name is not (generally) automic,
+		     firstname/lastname columns are.
       ---- IE Addresses should be broken into a lot of parts
 
 -- Second normal form (2NF)
    --1. Must meet restrictions of first normal form
-   --2. The non-key columns within a composite key table must be specific to both entities which make up the composite relationship.
+   --2. The non-key columns within a composite key table must be specific
+	to both entities which make up the composite relationship.
 	---- Must be directly about ALL parts of the key.
-	EX: customer_account could have a row called # of transactions which is specifically that user's # transactions on that account.
+	EX: customer_account could have a row called # of transactions
+	which is specifically that user's # transactions on that account.
 
 -- Third normal form. (more complex than we're making it)
    --1. Must meet restrictionsof second normal form.
    --2. Columns must not represent transitive functional dependencies
-	-- No column data should be able to be derivable from column statement.
+	-- No column data should be able to be derivable from column
+	   statement.
 
-Functional Dependency:
-(table about sales) 
-quantity  price_at_time_of_sale  total
- 2                5                10
- total can be derived from other columns, so it is not necessary. This violates 3NF.
+==> Functional Dependency:
+       		(table about sales) 
+	quantity  price_at_time_of_sale  total
+	 2                5                10
+
+-Total can be derived from other columns, so it is not necessary. 
+	This violates 3NF.
 
 
-Transitive Dependency
-  city 	  state
-  Tampa	    FL
-We should be able to derive a state from a city. These representatios should be borken into multiple tables - IE city and state table, where each city holds a reference to its respective state.
+==>Transitive Dependency
+	  city 	  state
+	  Tampa	    FL
+- We should be able to derive a state from a city. These representatios 
+  should be borken into multiple tables - IE city and state table, where
+  each city holds a reference to its respective state.
 
 
 Denormalization
--- Adding redundancy back into your database  may imporove performances if you've normalized tooo far.
+-- Adding redundancy back into your database  may imporove performances
+   if you've normalized tooo far.
 
 
-=============================================================
-			TRANSACTIONS
-=============================================================
-Transactions - the idea of multiple database interactions being combined into a single atomic transaction.
+=========================================================================
+			* TRANSACTIONS
+=========================================================================
+- Transactions - the idea of multiple database interactions being combined 
+into a single atomic transaction.
 
-The idea is that many interactionsare depndent upon preceeding interactions. And many larger problems or solutions we utilize require multiple edits to the database. Transactions allow us to be sure that all parts of a transaction occur correctly without fail.
+- The idea is that many interactions are dependant upon preceeding 
+ interactions. And many larger problems or solutions we utilize require 
+ multiple edits to the database. Transactions allow us to be sure that 
+ all parts of a transaction occur correctly without fail.
 
 -- When a customer orders something a few things should all happen:
 1. The order is add to the user's order history.
-2. Inventory is an intentory table is updated to respect the new form of the inventory.
-3. The order is placed in a table for pending fulfulments for picking from warehouse.
+2. Inventory is an intentory table is updated to respect the new form of
+   the inventory.
+3. The order is placed in a table for pending fulfulments for picking
+   from warehouse.
 
 
--- Transactionsallow us to place multiple operations together, where if one fails they can all fail together.
+-- Transactions allow us to place multiple operations together, where
+   if one fails they can all fail together.
 -- Transaction related changes make up the sublanguage TCL
 
 *************** TCL *******************
@@ -1087,9 +1147,9 @@ The idea is that many interactionsare depndent upon preceeding interactions. And
 4. SAVEPOINT - creates a savepoint withing a transactionwhich can be rolled back to
 5. RELEASE - releases a savepoint from memory within a transaction. 
 
-BEGIN
-	INSERT INTO users (first_name, last_name, phone, email, city_id) VALUES
-	('Isabely','Ivy','1234567890','isy@imail.com')
+ BEGIN
+   INSERT INTO users (first_name, last_name, phone, email, city_id) VALUES
+   ('Isabely','Ivy','1234567890','isy@imail.com')
 
 
 
@@ -1097,66 +1157,91 @@ BEGIN
 
 
 IF SOMEONE ASKS YOU ABOUT PROPERTIES OF TRANSACTION, KNOW:
-ACID
 
-ACID is a huge concept for SQL databases. Be able to explain it confidently. 
+***************** ACID *****************
+
+- ACID is a huge concept for SQL databases. 
+- Be able to explain it confidently. 
 
 A - Automicity - Transaction that can't be broken down into smaller parts.
-	- Either finish wholly or are completely rolled back. 		- There should be no partial completion of any 
+	- Either finish wholly or are completely rolled back.
+ 		- There should be no partial completion of any 
 	transaction.
 	- In acid this applies to transactions
 C - Consistency - (The rules of the database)
-	- Transactions take us from one consistent state to another consistent state. Rules should still be consistent before, after, adn throughout the transaction.
-I - Isolated - Transactions occur as if they are occuring in a vacuum. If multiple concurrent transactions occur on the database at one time, the changes of these interactionsshould not interact.
+	- Transactions take us from one consistent state to another 
+	 consistent state. Rules should still be consistent before, after,
+	 and throughout the transaction.
+I - Isolated - Transactions occur as if they are occuring in a vacuum. 
+	If multiple concurrent transactions occur on the database at one 
+	time, the changes of these interactionsshould not interact.
 D - Durable - Once a transaction is committed, There is no going back.
 	After completion, the changes are the new state of the application.
-	IF you are a DBA: is also means that out database should maintain transactions even in the case of disaster.
+	IF you are a DBA: is also means that out database should maintain 
+	transactions even in the case of disaster.
 
-===> -- Transaction Isolation Levels
+===> Transaction Isolation Levels
 
-In order to make transactionssuffieiently isonaled, we must select an appropriate Isolation Level. Each isolation level 
-trades performance for further isolation in varying amounts.
+In order to make transactions suffieiently isolated, we must select an 
+appropriate Isolation Level. Each isolation level trades performance for
+ further isolation in varying amounts.
 
 Errors which can happen due to poor isolation:
 1. Dirty Reads - Reading committed changes from another transaction
-2. Non-Repeatable reads - reading of data from a row, then when read again the row has changed due to an ongoing transaction committed.
-3. Phantom RReads - The reading of data reutrning a result set then the rereading of the same query, which returns different rows of data.
-Phamton because rows disappear then reappear.
+2. Non-Repeatable reads - reading of data from a row, then when read 
+   again the row has changed due to an ongoing transaction committed.
+3. Phantom RReads - The reading of data reutrning a result set then 
+   the rereading of the same query, which returns different rows of data.
+   Phamton because rows disappear then reappear.
 
 Isolation Levels and what they prevent:
-1. READ UMCOMMITTED - Prevents nothing, not available in postgresQL
-2.READ COMMITTED - Prevents dirty reads. Vulnerable to nonrepeatable and phantom reads.
-3 Repeatable read - prevents dirty reads and nonrepeatabe reads. Vulnerable to phantom reads.
-4. Serializable - Prevents all 3 problems. However, may cause a serialization eror, in postgresql, that chould be handeled by  java server
+1. READ UNCOMMITTED - Prevents nothing, not available in postgresQL
+2.READ COMMITTED - Prevents dirty reads. 
+		 - Vulnerable to nonrepeatable and phantom reads.
+3 Repeatable read - prevents dirty reads and nonrepeatabe reads. 
+		  - Vulnerable to phantom reads.
+4. Serializable - Prevents all 3 problems. However, may cause a 
+		  serialization eror, in postgresql, that should be
+		 handeled by  java server
 
-BEGIN;
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-	INSERT INTO users (first_name, last_name, phone,email,city_id) VALUES
-		('Maddy','Moore', '1231231234', 'amadf@match',4);
-COMMIT;
+ BEGIN;
+ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+     INSERT INTO users (first_name, last_name, phone,email,city_id) VALUES
+	('Maddy','Moore', '1231231234', 'amadf@match',4);
+ COMMIT;
 
+=========================================================================
+			* Procedural Langage
+=========================================================================
+==>PROCEDURAL LANGUAGE:
+-- In oracle functions are broken into two categories:
+	-  FUNCTION & STORED PROCEDURE.
+	- In postgresql, there is no syntactical difference between them
+	 (Postgre does not made this distinction)
+- PstgreSQL actually supports many languages for writing functions,
+  including Java.
+- Functions must return a value, but returns are optional in procedures
 
-PROCEDURAL LANGUAGE:
--- In oracle functions are broken into two categories: FUNCTION & STORED PROCEDURE.
-	- In postgresql, there is no syntactical difference between the two. (Postgre does not made this distinction)
-- PstgreSQL actually supposets many languages for writing functions, including Java.
-
-CREATE OR REPLACE FUNCTION my_sum(a INTEGER, b INTEGER)
-RETURNS INTEGER AS $$ 
-  --Delimiter here ^^ signifies beginning and (later) end of fcn
-	BEGIN
+ CREATE OR REPLACE FUNCTION my_sum(a INTEGER, b INTEGER)
+ RETURNS INTEGER AS $$ 
+   --Delimiter here ^^ signifies beginning and (later) end of fcn
+ 	BEGIN
 		RETURN a + b;
 	END;
-$$ LANGUAGE plpgsql;
---plpgsql stands for procedural language postgresql
+ $$ LANGUAGE plpgsql;
+ --plpgsql stands for procedural language postgresql
 
-SELECT my_sum(1,2);
+ SELECT my_sum(1,2);
 
-SELECT my_sum(requester,reciever) FROM friends;
+ SELECT my_sum(requester,reciever) FROM friends;
 
----------------------------------------------Function to create a new user:
-
-CREATE OR REPLACE FUNCTION insert_new_user(first_name VARCHAR, last_name VARCHAR, phone VARCHAR, email VARCHAR, city_id INTEGER)
+-------------------------------------------Function to create a new user:
+ CREATE OR REPLACE FUNCTION insert_new_user(
+	first_name VARCHAR, 
+	last_name VARCHAR, 
+	phone VARCHAR, 
+	email VARCHAR, 
+	city_id INTEGER)
 	RETURNS VOID AS $$
 		BEGIN
 			INSERT INTO users (first_name, last_name, phone,email,city_id) VALUES 
@@ -1165,12 +1250,12 @@ CREATE OR REPLACE FUNCTION insert_new_user(first_name VARCHAR, last_name VARCHAR
 $$ SECURITY DEFINER LANGUAGE plpgsql;
 --Security definer function runs with permissions of runction definer, not caller.
 -- Good way to let people have access to DB without giving them anything else.
-SELECT insert_new_user('o''riely','Okinawa','2345678909','oriley@oop.org');
-
+ SELECT insert_new_user('o''riely','Okinawa','2345678909','oriley@oop.org');
 
 ==================
 CURSORS:
--- Allows to pass a cursor and id value in, shoul return a cursor which holds the reult set from the query finding a user by id.
+-- Allows to pass a cursor and id value in, should return a cursor which 
+   holds the reult set from the query finding a user by id.
 -- Cursor - virtual result set that can be returned from function. 
 =======
 CREATE OR REPLACE FUNCTION get_user(curs refcursor, u_id INTEGER)
@@ -1182,12 +1267,11 @@ CREATE OR REPLACE FUNCTION get_user(curs refcursor, u_id INTEGER)
 $$ LANGUAGE plpsql;
 
 -- NOTE Cursors only exist within a transaction.
--- This isn't makign any sense. Mitch says its easier to do this in Java than pgAdmin.
 
-BEGIN;
-SELECT get_user('user',1);
-FETCH ALL IN "user";
-COMMIT;
+ BEGIN;
+  SELECT get_user('user',1);
+  FETCH ALL IN "user";
+ COMMIT;
 
 ==============
 
