@@ -1,54 +1,187 @@
+==>Vocab/acronyms
+AWS -	Amazon Web Services.
+RDS - 	Relational Datatase Service (RDS is Amazon's SPECIFC ser-
+	vice; it hosts Relational Databases (RDs).
+RDMS - Relational Database Managing System understands SQL and
+	puts the data into the database. Has CRUD functionality,
+	normalizes, and ACID concepts
+Relational Database (RDs) - Uses relational model for data in 
+	which tuples (sequences) are stored (in practice, tables)
+CRUD - Create Read Update Delete
+ACID - Atomicity, Consistency, Isolation, Durability. Acronym rep-
+	resenting transactions in a database. 
+Security Group - holds rules to filter traffic to/from virtual 
+	server.
 =================================================================
-SQL - Structured Query Language
+================== * Relational Databases =======================
+=================================================================
+DB tools we use remind me of Java's structure: JDK has tools and
+houses the JRE which has other files and uses the JVM.
+Similarly: AWS contains RDS which uses RDMS that takes user's SQL
+and de-codes it to store data in the database(DB)
+ ________________	 ________________
+| AWS		 | 	| RDMS           |
+| ______________ |	| ..... -Tools   |
+|| RDS 		||----->| :SQL: -Inteface| 
+||-Database	|<------| :...: 	 |
+||-S.G.		||	|________________|
+||______________||		
+|       	 |
+/ +++more tools  /
+
+AWS is the Amazon Web service. Secure cloud services platform with
+   server, database & computing-related tools. Essentially, AWS 
+   tools are for developers to create and launch applications 
+   without their own hardware/servers. The physical servers are 
+   off somewhere else remotely. 
+RDS -Amazon Relational Database Services - AWS's Relational data-
+   base service. From here, databases can be created and data
+   is actually stored. The RDS has security group capability which
+   restricts access to only permitted users.
+	*** The DB is located here
+S.G. - Security Group
+RDMS - 	Relational Database Managing System - program that enables
+   permitted users to interact with a relational database. Most 
+   commonly, RDMSs use SQL. Basic CRUD funcionality. Uses normal-
+   ization, primary/foreign keys,integrity checks, and ACID 
+   properties. Security groups provide security at protocol/port
+   access level. They work like a firewall and contains rules that
+   filter traffic to/from virtual server.
+	-- RDMS (Also called RDBMS) examples 
+		- Oracle
+		- PostgreSQL
+		- MySQL
+		- SQLite
+	- DBMS (Database Management Systems) not specific to RDBs
+	  are about to house multiple different types of database
+	  management systems.
+SQL - Structured Query Language (More in next section)
+Relational Database - data is represented with tuples - a finite 
+   order list(sequence) of elements - in which users state what 
+   information the database contains and what information they 
+   want to see, letting the database deal with the data structure
+   for storing data and retrieving procedure.
+	>> Relational Database describes tables and holds data in
+	a way that data can be accessed without reorganizing the 
+	entire database table.
+
+==> Relational Databases Relation to Java
+        ___RDs___             _____Java_____
+	- Columns	- Fields/Instance variables
+	- Rows		- Object/ Instance of a class
+	- Tables	- Collection
+
+==> ERD : Entity-Relationship Diagram
+[Source : https://www.techopedia.com/definition/1200 ]
+- Modeling technique that graphically illustrates DB relationships
+
+1. Entities - Database Tables
+2. Relationships - Foreign keys references
+3. Attributes - Columns
+
+==> What does "relational" really mean?
+- Relational refers to how we label data in the columns.
+- Say we have this table:
+	 _________________________
+	|_Name_|_Age_|_Hair Color_|
+	| Tom  | 24  |  brown     |
+	| Sandy| 55  |  black     |
+	|Brooke| 21  |  blonde    |
+	 -------------------------
+ It represents the data's relationship to other sections. 
+The columns represent an attribute and teh rows represnt a 
+instance. So we can say "In this database, what are the names"
+and get "Tom, Sandy, Brook" because the relationship between
+Tom, Sandy, and Brook is that they are all names.
+We can also say "In this table where name = Tom, what are the
+related attributes?" and get back another table:
+	|_Name_|_Age_|_Hair Color_|
+	| Tom  | 24  |  brown     |
+Because 24 and Brown are related to the row where name = Tom.
+
+==> Why do we need to specify we are using Relational Databases?
+[Source : https://computer.howstuffworks.com/question599.htm ]
+--- Prior to the development and popularity of RDs, data was
+ typically stored in the form of one long text file with entries
+ divided by a specfic character. For example:
+
+Lname, FName, Age, Salary|Smith, John, 35, $280|Doe, Jane, 28, 
+$325|Brown, Scott, 41, $265|Howard, Shemp, 48, $359|Taylor, Tom,
+22, $250
+
+---Data stored in a long file can be read and accessed, but 
+it is difficult to reorder the information. You need to search
+through the entire sequence in order to get one piece of infor-
+mation.  
+--- With Relational Databases, you can easily find specific infor-
+mation because it allow you to bort based on any field and gener-
+ate a report that contains only certain fields.
+
+
+=================================================================
+============ * SQL - Structured Query Language ==================
 =================================================================
 
-Data is structures in table 
+- SQL is a language used to communicate with a database.
+- ANSI(American National Standards Institute)manages its standards
 
+==> Relational Database System
 Tables are made up of rows (x) and columns (y).
 Rows : represents instances (object)
 Columns : represents variables (field)
 
-==> TYPES: 
+- Tables should have an index column/ID Column 
+	-Something unique for each element
+- When tables are created, a data type must be specified.
+- The ID column is called a Primary Key.
+- Primary Key is unique idenifier for any given rom.
+- Typically numeric.
+
+==> COMMOT TYPES: 
 character-related
 	CHAR - will append whitespace generally
-	VARCHAR - won't append. Varying # of character(string)
+	VARCHAR - won't append. Varying # of characters(String)
 	TEXT - arbitraty size.
 Integer
-	int
-	bigint
-	smallint
+	INTEGER (in java, int)
+	BIGINT (in java, long)
+	SMALLINT (in java, short)
 boolean
+date
+numeric <- Variable precision
++ and many more
 
-- use all capitals for SQL words.
-- use all lowercase for yout variable names
-Different SQL and DBs have differing datatypes.
-Stick with varchar for strings.
+==> PostgreSQL  
+- An object-relational RDBMS which extends SQL
+- This document includes some PostgreSQL-specific operations 
+- PostgreSQL is liscenced by PostgreSQL Global  Development Group.
 
-==> PostgreSQL
-
-Tables should have an index column/ID Column 
-	-Something unique for each element
-
-The ID column is called a Primary Key.
-Primary Key is unique idenifier for any given rom.
-Typically numeric.
-
-Database structure - AKA Model.
+- WHY?
+	- Object-relational DBMS
+		-tables support classes/inheritance
+	- ACID-compliant and transactional.
+	- Reliable
+	- Many 3rd party tools
+	- Can programmatically store procedures
+- Disadvantage :
+	- Not as popular as MySQL (more difficult to host)
+	- Not the fastest 
 
 ==> What is a database?
+	Database stores data. See first section.
+- DB is not part of java application. 
+- To get started, add a Maven Dependency to your Java project:
 
-Not part of java application. 
 API to comminicate between java and DB:
-Java 2DB (to database)  API -> JDBC
+	Java 2DB (to database)  API -> JDBC
 
 ==> General standards for SQL:
 	- SQL keywords are written in CAPITAL letters
 	- non-SQL letters(user-created) are written in lowercase
 	- Multi-word names written using underscores_to_seperate
 
-
 =================================================================
-* Sublanguages
+			* Sublanguages
 =================================================================
 SQL is broken into a number of sublanguages. 
 - Sublanguages are groupings of commangs on related operations.
@@ -59,12 +192,21 @@ SQL is broken into a number of sublanguages.
 	Step 4. Control who gets to use the data
 Main lanuages:
 DDL : Data Definition Language
+	CREATE, ALTER, DROP, TRUNCATE
 DML : Data Manipulation Language
+	INSERT, UPDATE, DELETE, (SELECT)
 DQL : Data Query Language
+	SELECT
+
+Other Important Languages (Defined later on)
 DCL : Data Control Language
+	GRANT, REVOKE
+TCL : Transaction Control Language
+	BEGIN TRANSACTION, COMMIT, SET TRANSACTION LEVEL
 
-
-==> 1. DDL - Data Definition Language.
+=================================================================
+		* DDL - Data Definition Language.
+=================================================================
 - DDL is dedicated to creating, altering, & removing db objects
 	(DB objects are primarily tables.)
 
@@ -75,7 +217,7 @@ DCL : Data Control Language
 4. TRUNCATE - remove data from table, but leave table structure.
 
 Create a user table:
-Syntax:__________________________________(note -- means comment)
+Syntax:__________________________________(-- creates comment)
 CREATE TABLE users (
 	-- column definitions
 	-- column_name COLUMN_TYPE OTHER_SPECIFICATIONS
@@ -85,10 +227,21 @@ CREATE TABLE users (
 	phone VARCHAR(10),
 	email VARCHAR(50)
 )
-
--- Can use 
+__________________________________________
+-- Can use:
 	CREATE TABLE IF NOT EXISTS users 
  if you plan to run the same script multiple times.
+
+
+-SERIAL psuedotype 
+	- If you set a column to type serial on creation, it will 
+ be converted into an integer column, generate a Sequence, and
+ use that sequence as a default value.
+	- Functionally, setting column to serial results in us 
+ getting default sequential numbers.
+ 	- if you have a SERIAL ID, it Allows you to insert data 
+ into the table without specifying an ID by automatically 
+ generating one
 
 
 -- CONSTRAINTS provide rule(s) for limiting valid data beyond type
@@ -104,16 +257,17 @@ CREATE TABLE users (
 6. EXCLUDE - Allows you to check a given comparison operator
 	and fails if all comparisons return true
 
-
+Foreign key:
 Combine keywords to create a 2nd table which references the 1st
--- A post by some user
+-- Table structure for a post by some user (user table above)
 CREATE TABLE IF NOT EXISTS posts (
 	id INTEGER PRIMARY KEY,
-	author_id INTEGER REFERENCES users(id) NOT NULL --has foreign key definition!
+	author_id INTEGER REFERENCES users(id) NOT NULL
 	content VARCHAR(500) NOT NULL
 )
 
--- IF NOT EXISTS function only creates the table IF the table by that name doesn't exist.
+-- IF NOT EXISTS function only creates the table IF a table by
+	--that name doesn't exist.
 -- DROP removes tables completely.	
 	DROP TABLE posts;
 	DROP TABLE users;
@@ -133,36 +287,6 @@ CREATE TABLE IF NOT EXISTS posts (
 		DROP COLUMN test;
 
 
-======= WORKING DOC =============
-CREATE TABLE users (
-	-- column definitions
-	-- column_name column_type (..others)
-	id INTEGER PRIMARY KEY,
-	first_name VARCHAR(20),
-	last_name VARCHAR(20),
-	phone VARCHAR(10),
-	email VARCHAR(50)
-)
-CREATE TABLE IF NOT EXISTS posts (
-	id INTEGER PRIMARY KEY,
-	author_id INTEGER REFERENCES users(id) NOT NULL --has foreign key definition!
-	content VARCHAR(500) NOT NULL
-)
-
-DROP TABLE posts;
-DROP TABLE users;
-
-ALTER TABLE users
-	ADD COLUMN test INTEGER;
-ALTER TABLE users
-	ALTER COLUMN test SET DATA TYPE VARCHAR(2);
-ALTER TABLE users
-	ALTER COLUMN test SET NOT NULL;
-ALTER TABLE users
-	DROP COLUMN test;
-
-___________________________________
-
 ==> Review: 
 DDL operations:
 	CREATE
@@ -177,10 +301,9 @@ CONSTRAINTS:
 	CHECK
 	EXCLUDE
 	
-=====================================
-DML - Data manipulation Language
-====================================
-
+=================================================================
+		* DML - Data manipulation Language
+=================================================================
 DML - Data manipulation language,
 1. INSERT - Allows us to enter new data. (row)
 2. UPDATE - allows us to update existing table data (row)
@@ -188,55 +311,47 @@ DML - Data manipulation language,
 4. SELECT - allows us to view table data (is also often considered part of a different sublanguage)
 
 
-- INSERT anatomy
-INSERT INTO table_name (col_1, col_2, ...) VALUES (data_1, data_2, ...);
+-- INSERT anatomy
+  INSERT INTO table_name (col_1, col_2, ...) VALUES 
+	(data_1, data_2, ...);
 
-INSERT INTO users (id, first_name, last_name, phone, email) VALUES
+---- EXAMPLE: 
+  INSERT INTO users (id, first_name, last_name, phone, email) VALUES
 	(1, 'Abby', 'Addams', '1234567890', 'email@amail.com');
 
 
 
--DELETE : 
-DELETE FROM users; -- Will delete all of the data on users.
+-- DELETE 
+	-- Delete clause will delete the specified information
+	-- Does NOT delete table structure, just the info inside
+  DELETE FROM users; -- Will delete all of the data on users.
 
-- WHERE :
-WHERE is a control-flow keyword.
+==> WHERE
+	--WHERE is a control-flow clause used to filter results
+	--Use after defining a table. 
+  DELETE FROM users WHERE id = 2;
 
-DELETE FROM users WHERE id = 2;
+-- IN operation specifies multiple values in WHERE clause
+	-- Works like "OR"
+	-- Example from https://www.w3schools.com/sql/sql_in.asp
+  --Table Customers has information on Country
+  SELECT * FROM Customers
+  WHERE Country IN ('Germany', 'France', 'UK');
+	-- Can be combined with SELECT statement
+  SELECT * FROM Customers
+  WHERE Country IN (SELECT Country FROM Suppliers);
+
+-- BETWEEN operator selects values within a range 
+  SELECT * FROM Products
+  WHERE Price BETWEEN 10 AND 20;
+	-- Can also be used with text values to select alphabetically
+
+-- Checking for NULL
+	-- Null is nto a value, so use IS or IS NOT instead of =
+  SELECT * FROM Products
+  WHERE Price IS NOT NULL;
 
 
-
--SERIAL psuedotype - If you set a column to type serial on creation, it will be converted into an integre column, generate a Sequence, and use that sequence as a default value.
-Functionally, setting column to serial results in us getting default sequential numbers.
-  - if you have a SERIAL ID, it Allows you to insert data into the table without specifying an ID.
-
-
->>>>>>>>>>>>>>
-DROP TABLE posts;
-DROP TABLE users;
-
-CREATE TABLE IF NOT EXISTS users (
-	-- column definitions
-	-- column_name column_type (..others)
-	id SERIAL PRIMARY KEY,
-	first_name VARCHAR(20),
-	last_name VARCHAR(20),
-	phone VARCHAR(10),
-	email VARCHAR(50)
-);
-CREATE TABLE IF NOT EXISTS posts (
-	id SERIAL PRIMARY KEY,
-	author_id INTEGER REFERENCES users(id) NOT NULL, --has foreign key definition!
-	content VARCHAR(500) NOT NULL
-);
-
-INSERT INTO users(first_name, last_name, phone, email) VALUES
-	('Abby','Adama','1234567890', 'bt@ag.com'),
-	('Don','Donald','144567890', 'abb@ag.com'),
-	('Jill','Jilly','12344890', 'ab@a.com'),
-	('Rob','Robsss','123454490', 'at@ag.com');
-
->>>>>>>>>>>>>>>>>
 ** CAREFUL because the tool auto-commits.
 	You can change it, but overall just don't mess up.
 UPDATE allows you to change things.
@@ -245,63 +360,70 @@ UPDATE 'column_name'  = 'newName' WHERE id = 4;
 
 
 ===============================================================
-DQL	
+		*DQL - Data Query Language	
 ===============================================================
-DQL ONLY has SELECT. 
+
+-- DQL ONLY has SELECT. 
 SELECT - tool for retrieving data from out database.\	
 	- Some consider SELECT to be DQL, others simply categorize it with DMW. (DRAW A TREE OR CHART ORGANIZING THESE "LANGUAGES".
 
 BASIC ANATOMY;-__________
-SELECT col_1, col_2, ... FROM TABLE;
+SELECT col_1, col_2, ... FROM TABLE table_name;
 
 SELECT id, first_name, last_name, FROM users;
 
+==> Wildcards
+-- * is a wild card/ gives all possible  vals
+	- CAN ALSO USE SOME BASIC EXPRESSIONS / CONCATENTATION.
+  CONCATENATION : first_name || 'Abby'   
+	will add "Abby" to all first_name vals selected.
 
-* is a wild card/ gives all possible  vals
-- CAN ALSO USE SOME BASIC EXPRESSIONS / CONCATENTATION.
-CONCATENTAION : first_name || 'Abby'   will add "Abby" to all first_name vals selected.
+-- LIKE works with the % wildcard.
+	- % is a substitution for zero or more characters
+	-- LIKE keyword translates roughlt to "containing"
+  SELECT * FROM users WHERE email LIKE '%ag.com';
+	--will select only emails that end with 'ag.com'
 
-- SELECTING THINGS IN A CERTIAN WAY:
+	-- FIND A LETTER in a name
+  SELECT * FROM users WHERE LOWER(last_name) LIKE '%c%';
 
-SELECT * FROM users WHERE email LIKE '%ag.com';
---will select only emails that end with 'ag.com'
+--_ Underscores: find letters done a certain way:
+ ____y (4 underscores and a y) 
+	-- will look for a username 5 chracaters long ending in y.
 
--- FINE A LETTER in a name
-SELECT * FROM users WHERE LOWER(last_name) LIKE '%c%';
-
-Use UNDERSCORES to find letters done a certain way:
- ____y (4 underscores and a y) will look for a username 5 chracaters ling ending in y.
-
-Function LOWER(column_whatever) converts the column into all lowercase.
-
-
-SELECT * FROM users where LOWER 
+--[charlist] Wildcard
+	-Operates like "or" betwen each letter
+	- Example, from cities table, get name starting with [b or c or d]
+ SELECT * FROM cities
+ WHERE name LIKE '[bcd]%';
+--[!charlist] or [^charlist]
+	-- matches only characters NOT specified within brackets
 
 
-Can use boolean writing:
-SELECT * FROM user WHERE id > 1
-SELECT * FROM user WHERE id < 1
+==> LOWER(column_whatever) converts the column into all lowercase.
 
-- Provide a set to get a number of sections:
+  SELECT * FROM users where LOWER 
+
+
+==> Can use boolean writing:
+  SELECT * FROM user WHERE id > 1
+  SELECT * FROM user WHERE id < 1
+
+==> Provide a set to get a number of sections:
 - Utilizes information in the form of specific numbers.
-SELECT * FROM users WHERE id IN (1, 2, 4);
+  SELECT * FROM users WHERE id IN (1, 2, 4);
 
-- use BETWEEN x AND y for ranges:
-SELECT * FROM user WHERE id BETWEEN 1 AND 4;'
+==> use BETWEEN x AND y for ranges:
+  SELECT * FROM user WHERE id BETWEEN 1 AND 4;'
 
-- Combine queries :
+==> Combine queries :
 SELECT * FROM user WHERE (id BETWEEN 1 AND 4) AND last_name = '%a%;
 
 SELECT * FROM user WHERE (id BETWEEN 1 AND 4) OR last_name = '%a%;
 
-
-===> IN CLASS PROJECT:
-Create tables that represent the tables in your project.
-Minimum : You should have an accounts and users table. With accounts referencing the users. Think about common ways you might try to retrieve data (by username, accouns, by user)_id) and write those queris.
-
-
-
-======================================================================
+==========================================================================
+		* DML - Data manipulation Language
+==========================================================================
 
 DML - Data manipulation Language
 1. INSERT
@@ -312,37 +434,53 @@ DML - Data manipulation Language
 INSERT INTO posts()
 
 
+==========================================================================
+			* Scalar vs Aggregate
+==========================================================================
 
->>>>
+==> Scalar functions return single values, as opposed to sets of values.
+	- SQL scalar, for example, may return a username associated with
+	  a specific user ID
+	- DEFAULT EXAMPLES:
+		- CURRENT_TIMESTAMP
+		- Numberic functions * / + -
+		- Concatentation
+			string_value || string_value
+		= Substring 
+			SUBSTRING(starting_string FROM start_letter)
+			SUBSTRING(starting_str FROM start_ltr FOR end_ltr)
 
-Agregate functions - aggregate: to put things together.
+==> Agregate functions - aggregate: to put things together.
+	- Aggregate functions return tables or multiple values.
+	- DEFAULE EXAMPLES:
+		-COUNT (see below)
+		-MAX - returns data item with highest value for column
+		-MIN
+		-SUM
 
+==Aggregate COUNT function
+	-- Counts ALL rows in posts table and returns one bigint number.
+  SELECT COUNT(*) FROM posts;
+ 
+-- Gets author ID, 
+	& counts ALL from posts grouped by (with the same) author_id 
+  SELECT author_id, COUNT(*) FROM posts GROUP BY author_id;
 
--- Counts ALL rows in posts table and returns one bigint number.
-SELECT COUNT(*) FROM posts;
+-- WHERE [FILTER] filters PRIOR to aggregation
 
--- Gets author ID, counts ALL from posts grouped by(with the same) author_id 
-SELECT author_id, COUNT(*) FROM posts GROUP BY author_id;
-
--- WHERE FILTER filters PRIOR to aggregation
-
-
-SELECT author_id, count(*)
+  SELECT author_id, count(*)
 	FROM posts
 	WHERE author_id < 2
 	GROUP BY author_id;
 
--- to filter POST (after) aggregation, we should use a HAVING clausea
-SELECT author_id, count(*)
+-- To filter POST (after) aggregation, we should use a HAVING clause a
+  SELECT author_id, count(*)
 	FROM posts
---	WHERE author_id < 2
 	GROUP BY author_id
 	HAVING count(*) > 20;
--- > Counts posts of authors with ID 2 or less. 
+	-- Counts posts, showing authors having more than 20 posts
 
--- Could, for example, add up all the money in all of your accounts"
-
-SELECT user_id, count(*)
+SELECT user_id, sum(*)
 	FROM key_table
 	WHERE username = 'someuser2'
 	(??? how to add the values together?)
@@ -358,50 +496,86 @@ SELECT author_id, AVG(id)
 
 Other functions : FLOOR(___) CEIL(___)
 
-===============
-NESTED Query
-===============
+ORDER BY COUNT(CustomerID) DESC
+ORDER BY COUNT(CustomerID) ASC
+
+LIMIT clause 
+-sets the upper limit on the number of tuples (rows) returned
+==========================================================================
+				* Nested Query
+==========================================================================
+- Nested query also called Subquery or Inner query
 - A way of putting a query inside a query.
-Usually using the result of a query as part of another query.
+- Principally, using the result of a query as part of another query.
 
-CONSIDER: want to get all posts by abby HOWEVER we don't know abby's ID, just her first name - 'Abby'
+CONSIDER: How to get all posts by abby HOWEVER we don't know abby's ID,
+	  just her first name - 'Abby'
 
-- Work from the inside out.
+TIP : Work from the inside out.
 SELECT * FROM POSTS WHERE author_id = 
 	(SELECT id FROM users WHERE LOWER(first_name) LIKE 'billy')
 
-============
-INLINE VIEW 
-============
-Replace "from" section with another Query.
+==> Guidelines: 
+https://www.w3resource.com/sql/subqueries/understanding-sql-subqueries.php
+- Subquery must be enclosed in parenthesis.
+- Must be placed on the right side of the comparicon operator(of any)
+- Cannot maniuplate results interally; ORDER BY clause cannot be added.
+- Use single-row operators with single-row subqueries
+- If subquery/inner query returns null value to outer, the outer will
+   not return any rows when using certain comparison operators in WHERE
+==> TYPES of SubQueries
+- Single Row Subquery : Return zero or one row
+- Multiple row 
+- Multiple Column
+- Correlated Subquery - references one of more columns in the outer SQL
+		 	statement. 
+		      - Called correlated because it relates to outer table
+- Nested Subquery : Subquery placed inside another subquery
 
-SELECT content FROM
+==> Allowed statements in Subqueries
+- INSERT
+
+
+--------------------------------------------------------------------------
+* INLINE VIEW 
+--------------------------------------------------------------------------
+- A VIEW is a virtual table - it is a tables presented when selecting
+  particular data from the database table, but does not acutally hold any
+  data of it's own. It references sections of the real table.
+- Inline view is a SELECT statement in a FROM clause.
+
+  SELECT content FROM
 	(SELECT * FROM posts WHERE id < 50) inner_table
-WHERE id > 30;
+  WHERE id > 30;
 
 -- inner_table is an "alias" that can be used to get that same table again later on.
 
-====> 
-SELECT/FIELDS INNER QUERY
--=====
+--------------------------------------------------------------------------
+* SELECT/FIELDS INNER QUERY
+--------------------------------------------------------------------------
 
-SELECT * FROM users;
+ SELECT * FROM users;
 
-SELECT count(*) FROM posts GROUP BY author_id;
+ SELECT count(*) FROM posts GROUP BY author_id;
+ SELECT count(*) FROM posts WHERE author_id = 1;
 
    |
-   |    Instead of "FROM," you a comma and calls that value AS total_posts
+   |    Instead of "FROM," a comma calls that value AS total_posts
    |   FROM the users
    V
 
-SELECT *, (SELECT count(*) FROM posts WHERE author_id = users.id) AS total_posts FROM users;
+ SELECT *, 
+  (SELECT count(*) FROM posts WHERE author_id = users.id) AS total_posts 
+ FROM users;
 
+-Note total_posts is an alias used to make the code more readable.
+ it is the name given to the column of the results.
 
 == > SCRIPT ANALYSIS:
-- IFrst query runs on users, getting all data realted to users.
-The ID field on the users table is then used to provide the filter on the inner query. This results in each row having the count of only the current row's user's posts.
-
-
+- First query runs on users, getting all data realted to users.
+The ID field on the users table is then used to provide the filter on the 
+inner query. This results is each row having the count of only the current 
+row's user's posts.
 
 SCALAR FUNCTION CS AGGREGATE FUNCTION
 -- Aggregate fnctions accept sets of data and operate by utilizing the function on the entire set.
@@ -417,68 +591,111 @@ SELECT AVG(id) FROM users;
 
 SELECT author_id, MIN(id) FROM posts GROUP BY author_id;
 
-==========
-JOINS
-===========================
+==========================================================================
+		* Joins
+==========================================================================
 Joins allows to combine results from multiple tables horizontally. 
-When joining we join ON some expression, which provides how rows from one talbe are related to another table. Generally, this will be a foreigh key.
+ When joining we join ON some expression, which provides how rows from one
+table are related to another table. Generally, this will be a foreign key.
 
-Creating a many-to-many relationship:
+-- Example use: Many-to-many relationship:
 
-CREATE TABLE friends (
+  CREATE TABLE friends (
 	id SERIAL PRIMARY KEY,
 	requester INTEGER REFERENCES users(id) NOT NULL,
 	reciever INTEGER REFERENCES users(id) NOT NULL
-);
+  );
 
-INSERT INTO users (first_name, last_name, phone, email) VALUES
+  INSERT INTO users (first_name, last_name, phone, email) VALUES
 	('Danny', 'Deloto', '1231231234', 'danny@dogpile.com'),
 	('Emily','Erikson', '1233465234','emily@dsaf.xom');
 
-SELECT * FROM users;
+  SELECT * FROM users;
 
-INSERT INTO friends (requester,receiver) VALUES
+  INSERT INTO friends (requester,receiver) VALUES
 	(1,3), --Abby is friends with Billy
 	(3,4),
 	(1,4),
 	(4,6);
 	
-SELECT * FROM users WHERE id = 1;
+  SELECT * FROM users WHERE id = 1;
 
--- Joins to put info of 2 tables together : 
-SELECT reciever,users.first_name, users.last_name, posts.* FROM friends
--- JOINS friends table with users to find abby's friends
+-- Show user's 10 newest posts:
+-- Joins to put information from the 2 tables together :
+  SELECT reciever,users.first_name, users.last_name, posts.*
+  	FROM friends
 	LEFT JOIN users ON reciever = users.id
 	LEFT JOIN posts ON reciever = posts.author_id
-WHERE requester = 1
-ORDER BY posts.id DESC --descending, ACS > ascending
-LIMIT 10 --newest 10;
+	WHERE requester = 1
+	ORDER BY posts.id DESC --descending, ACS > ascending
+	LIMIT 10; --newest 10 only
 
-
-SELECT * FROM friends;
-
-SELECT friends.requester, request_users.first_name, reciever_users.first_name, friends.reciever FROM friends
+-- Or show ALL FRIENDS
+ SELECT * FROM friends;
+ SELECT friends.requester, request_users.first_name, reciever_users.first_name, friends.reciever
+	FROM friends
 	LEFT JOIN users AS request_users ON requester = request_users.id
 	LEFT JOIN users AS reciever_users ON receiver = receiver_users.id;
 
-==================================================================
-Roles:
+==>Referential Integrity
+- All relationships between tables should be described by foreign keys.
+- When you violate referential integrity, we're left with "orphan rows" 
+  or "orphan references!"
+- Bad idea to violate referential integrity
+- Ideally, only join tables that have referencing rows.
 
--Roles ar3e a way for us to provide new credentials for other users, either people of applications.
-When defining a role, we can specify a login and password, and then grant or revoke various privileges. This allows us to limit the use of a database to exactly the tasks they require
+==> Types of Joins:
+- INNER JOIN - Selects only overlapping row (matches both)
+		
+- FULL OUTER JOIN - Selects only records unique to each table
+- LEFT OUTER JOIN - Selects all, matches equal, if no match, right null.
+		    use WHERE TableB.is IS NULL to get only unique 
+		    records in A
+- CROSS JOIN	Joins each element in A with each element in B
+		Multiplies size. 
+     IE: Table1.Letters [a, b, c] Table2.Numbers[1,2,3]
+	SELECT Table1.Letters, Table2.Numbers
+	FROM Table1
+	CROSS JOIN Table 2
+		--Results:
+		a 1
+		a 2
+		a 3
+		b 1
+		b 2
+		b 3
+		c 1
+		c 2
+		c 3
+- LEFT JOIN just tacks on the other tables, typically at reference 
+- SELF-JOIN - regular join, but the table joins with itself.
+	Example: You have a table with people and cities.
+		You can use self-join to create a new table that pairs up
+		people by what city they are in.
 
--- IE Can limit roles to specific actions (view, delete, add, ect.)
+==========================================================================
+				* Roles
+==========================================================================
 
--- VALID UNTIL 'yyyy-mm-dd' lets password ect expire.
+-Roles are a way for us to provide new credentials for other users, either
+ people or applications.
+- When defining a role, we first specify a login and password, and then can
+ grant or revoke various privileges. This allows us to limit the use of a
+ database to exactly the tasks the user requires
+--- IE Can limit roles to specific actions (view, delete, add, ect.)
+
 
 CREATE ROLE jdbc WITH LOGIN PASSWORD 'p4ssw0rd' VALID UNTIL '2018-12-12'
+-- VALID UNTIL 'yyyy-mm-dd' lets password ect expire, not mandatory
 
-then run and add new server on your db
+--If you want to test this, you can add a new server to you DB as new user
 >> Use the same endpoint as your DB (copy from properties)
 >> add a name
 >> username : jdbc
 >> password : p4ssw0rd
-^^ Above is so we can do testing. We will use something similar in java so that we have our specific password ect like this instead of putting passwords to the entire database in our java program.
+^^ Above is so we can do testing. We will use something similar in java 
+so that we have our specific password ect like this instead of putting 
+passwords to the entire database in our java program.
 
 --Allow jdbc role to use the SELECT operation on the users table.
 GRANT SELECT ON users TO jdbc;
@@ -517,10 +734,14 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO jdbc;
 -- IF default privileges not aplied to jdbc, they could create a new table
 -- and then not be able to access it at all.
 
+==========================================================================
+			* Connecting with Java
+==========================================================================
 
 ********************* IN JAVA **********************
-Connecting to a DB vai DriverManager, more likely to get SQLException, esp if connection fails
-******************************************************
+Connecting to a DB via DriverManager, more likely to 
+get SQLException, esp if connection fails
+*****************************************************
 
 Java util package.  ConnectionUtil class:
 _________________________________________________
@@ -541,22 +762,25 @@ public class ConnectionUtil {
 _________________________________________________
 
 
--- Using the Statement class with user provided data opens yourself up to SQL Injection attacks.
-SQL injection can be devestationg. Fortunately, there're easy to prevent. Don't concatonate user data into a SQL query. Use prepared statements and the appropriate paramets setting emthods to add data to a query. WHen using prepared statements correctly, SQL injection will be rendered impossible.
+-- Using the Statement class with user provided data opens yourself up to
+   SQL Injection attacks.
+ SQL injection can be devestationg. Fortunately, there're easy to prevent.
+ Don't concatanate user data into a SQL query. Use prepared statements and
+ the appropriate paramets setting emthods to add data to a query. WHen 
+ using prepared statements correctly, SQL injection will be rendered 
+ impossible.
 
-==> ALWAYS use the "?" thing when putting user stuff into your app
-
-
+==> ALWAYS use the "?" and PreparedStatements
 
 HIDING INFORMATION : 
 --Don't put your password blatantly on the source file.
---Files containings source files should be hidden with environment variables -- variables stored on one's actual SYSTEM.
-
+--Files containings source files should be hidden with environment
+  variables -- variables stored on one's actual SYSTEM.
 
 System.getenv("jdbc_login");
 
 ON WINDOWS:
-start > Edit environment Variables (in System Properties)
+Start > Edit environment Variables (in System Properties)
 >> New
 	>> input variable name and the value is the username
 	>> Do the same but for password.
@@ -564,27 +788,29 @@ in Java:
 System.getenv("JDBC_LOGIN");
 System.getenv("JDBC_PASSWORD");
 
+
+==> DAO Database Access Object
 Out DAO should be able to handle CRUD functionality for user entity
 C - Create   -	INSERT
 R - Read     -	SELECT
 U - Update   -	UPDATE
 D - Delete   -	DELETE
 
-
-Note :PreparedStatement ps
+Note : PreparedStatement ps
  ps.executeQuery() returns something vs s.execute() does not
 
-Postgres allows us to use a returning clause to return info on the instnace we just created in the table.
+Postgres allows us to use a returning clause to return info on the 
+instance we just created in the table.
 
-INSERT INTO users (first_name, last_name, phone, email) VALUES 	('Frank','Georgeson','1231231234','georg@goerge.net)
+INSERT INTO users (first_name, last_name, phone, email) VALUES 
+	('Frank','Georgeson','1231231234','georg@goerge.net)
 	RETURNING id;
 
+==> Instead of making HUGE select statements in your java, its easier to 
+	use IDs.
 
-
-
-==> Instead of making HUGE select statements in your java, its easier to use IDs.
-
--- VIEWS - views are essentailly a saved and named query that can be used again.
+-- VIEWS - views are essentailly a saved and named query that can be used
+	   again later.
 
  -- table gets friends abby has requested at least.
 SELECT user_friends.* FROM users
@@ -592,9 +818,10 @@ SELECT user_friends.* FROM users
 	LEFT JOIN users AS user_friends ON recIever = user_friends.id
 	WHERE requester = 1;
 	
-or rather
+Use rather
 
-CREATE VIEW friend_view AS SELECT requester, user_friends.* FROM users
+CREATE VIEW friend_view AS SELECT requester, 
+	user_friends.* FROM users
 	INNER JOIN friends ON users.id = requester
 	LEFT JOIN users AS user_friends ON recIever = user_friends.id;
 
@@ -602,13 +829,14 @@ CREATE VIEW friend_view AS SELECT requester, user_friends.* FROM users
 SELECT * FROM friend_view WHERE requester = 1;
 
 -- Altering view: use CREATE OR REPLACE
-CREATE OR REPLACE VIEW friend_view AS SELECT requester, user_friends.* FROM users
+CREATE OR REPLACE VIEW friend_view AS SELECT requester,
+	user_friends.* FROM users
 	INNER JOIN friends ON users.id = requester
 	LEFT JOIN users AS user_friends ON recIever = user_friends.id;
 
-===================
-Sequences
-===================
+==========================================================================
+			* Sequences
+==========================================================================
 Sequences provide a way of creating stateful counters within our database.
 We can create sequences using standard DDL notation.
 
@@ -619,7 +847,7 @@ SELECT nextval('my_custom_sequence');
 
 - Will keep going down the list.
 - Use for bank account numbers: 
-CREATE IS NOT EXISTS my_basic_sequence
+CREATE IF NOT EXISTS my_basic_sequence
 	increment by -3
 	MINVALUE 1000
 	MAXVALUE 1010
@@ -635,63 +863,65 @@ SELECT nextval('banking_account_sequence')
 SELECT nextval('my_basic_sequence');
 
 
-
-
-
-
-==============================================================
-FRIDAY
+=========================================================================
+			* Composite Primary Keys
+=========================================================================
 
 Composite Primary Keys:
 -- Composite key that is composed of two or more columns.
 
 
-CREATE TABLE IF NOT EXISTS example_composite (	
+  CREATE TABLE IF NOT EXISTS example_composite (	
 	val_one INTEGER PRIMARY KEY,
 	val_two SERIAL,
 	PRIMARY KEY (val_one,val_two)
-);
-INSERT INTO example_composite VALUES (1),(1),(1);
-SELECT * FROM example_composite;
+  );
+  INSERT INTO example_composite VALUES (1),(1),(1);
+  SELECT * FROM example_composite;
 --OR
-INSERT INTO exmaple_composite (val_one, val_two) VALUES (2,1);
+  INSERT INTO exmaple_composite (val_one, val_two) VALUES (2,1);
 -- This is fine, so long as that particular composite value isn't repeated. 
 
 
  Can also have composite Unique constraints:
-CREATE TABLE IF NOT EXISTS example_composite (	
+  CREATE TABLE IF NOT EXISTS example_composite (	
 	val_one INTEGER PRIMARY KEY,
 	val_two SERIAL,
 	UNIQUE (val_one, val_two)
-);
--- Unique constraints doesn't consider null values as unique or not. set NOT NULL to avoid that.
+  );
+-- Unique constraints doesn't consider null values as unique or not. 
+-- set NOT NULL to avoid that.
 
 
 
 
-============
-TABLE INHERITENCE: (Posgres specific)
-============
-CREATE TABLE IF NOT EXISTS birds (
+===========================================================================
+		* TABLE INHERITENCE: (Posgres specific)
+===========================================================================
+  CREATE TABLE IF NOT EXISTS birds (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(20)
-);
+  );
 
-CREATE TABLE IF NOT EXISTS chickens (
+  CREATE TABLE IF NOT EXISTS chickens (
 	eggs_laid INTEGER
-) INHERITS (birds);
+  ) INHERITS (birds);
 
-CREATE TABLE IF NOT EXISTS hawk (
+  CREATE TABLE IF NOT EXISTS hawk (
 	rabbits_eaten INTEGER
-) INHERITS (birds);
+  ) INHERITS (birds);
 
 
-INSERT INTO chickens (name, eggs_laid) VALUES ('Cluck',200);
-INSERT INTO hawk (name, rabbits_eaten) VALUES ('Claw',20);
-INSERT INTO birds(name) VALUES ('rebirdo');
+  INSERT INTO chickens (name, eggs_laid) VALUES ('Cluck',200);
+  INSERT INTO hawk (name, rabbits_eaten) VALUES ('Claw',20);
+  INSERT INTO birds(name) VALUES ('rebirdo');
 
 --SHOWS all 3 rows but no extra columns
-SELECT * FROM birds; --Gets everything considered a type of bird. They all share the same serial sequence. THey're drawn from the same set of IDs. Can select directly from the chickens table and see only chickens (and get the extra row) 
+ SELECT * FROM birds; --Gets everything considered a type of bird. 
+--They all share the same serial sequence. 
+--THey're drawn from the same set of IDs. 
+--Can select directly from the chickens table and see only chickens 
+--(and get the extra row) 
 -- only chickens, with chicken extra columns
 
 SELECT * FROM chickens
@@ -702,9 +932,9 @@ SELECT * FROM hawk
 SELECT * FROM ONLY birds
 
 
-==============
-UNION
-===========
+=========================================================================
+			        * UNION
+=========================================================================
 UNION, UNION ALL, INTERSECT, AND MINUS
 
 Joins combine result sets horizonally. 
@@ -722,66 +952,80 @@ SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
 UNION ALL
 SELECT id, requester AS friend_id FROM friends WHERE reciever = 3;
 
-====== EXCEPT / INTERSECT
-====== This can be done with WHERE clauses, but this is simpler
--- This table is feidns with BILLY who are NOT fiends with Abby
--- Basically the opposite of friends in common.
--------------------------------------------friends of billy
-(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3;
-UNION -- Combine result set of 2 diff queries.
-SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
-UNION ALL
-SELECT id, requester AS friend_id FROM friends WHERE reciever = 3)
-EXCEPT -----------------------EXCEPT
+==> EXCEPT / INTERSECT
+- This can be done with WHERE clauses, but this is simpler
+-- EXCEPT returns distinct values from the query on the left
+   that are NOT returned from the right query
+Example: This table is friedns with BILLY who are NOT fiends with Abby
+	- Basically the opposite of friends in common.
+  -------------------------------------------friends of billy
+  (SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3;
+  UNION -- Combine result set of 2 diff queries.
+  SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
+  UNION ALL
+  SELECT id, requester AS friend_id FROM friends WHERE reciever = 3)
+  EXCEPT -----------------------EXCEPT
+  ---------------------------------- This shows abbys' friends
+  (SELECT id, reciever AS friend_ID FROM friends WHERE requester = 1
+  UNION -- Combine result set of 2 diff queries.
+  SELECT id, requester AS friend_id FROM friends WHERE reciever = 1)
+
+- Basic Syntax:
+View 1
+EXCEPT 
+View 2
+
+-INTERSECT returns distince values returned by BOTH queries.
+  -- Finding MUTUAL FREINDS use INTERSECT to remove results that are 
+  -- not present in both data sets
+  (SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3;
+  UNION -- Combine result set of 2 diff queries.
+  SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
+  UNION ALL
+  SELECT id, requester AS friend_id FROM friends WHERE reciever = 3)
+  INTERSECT-------------------------------------------INTERSECT
 ---------------------------------- This shows abbys' friends
-(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 1
-UNION -- Combine result set of 2 diff queries.
-SELECT id, requester AS friend_id FROM friends WHERE reciever = 1)
+  (SELECT id, reciever AS friend_ID FROM friends WHERE requester = 1
+  UNION -- Combine result set of 2 diff queries.
+  SELECT id, requester AS friend_id FROM friends WHERE reciever = 1)
 
--- Finding MUTUAL FREINDS use INTERSECT to remove results that are not present in both data sets
-(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 3;
-UNION -- Combine result set of 2 diff queries.
-SELECT id, requester AS friend_id FROM friends WHERE reciever = 3
-UNION ALL
-SELECT id, requester AS friend_id FROM friends WHERE reciever = 3)
-INTERSECT-------------------------------------------INTERSECT
----------------------------------- This shows abbys' friends
-(SELECT id, reciever AS friend_ID FROM friends WHERE requester = 1
-UNION -- Combine result set of 2 diff queries.
-SELECT id, requester AS friend_id FROM friends WHERE reciever = 1)
-
-==========================================================
-
-DISTINCT keyword wil remove duplicate items from the results.
+==> DISTINCT keyword wil remove duplicate items from the results.
 SELECT DISTINCT content FROM POSTS
+=========================================================================
+			* OPTIMIZATION:
+=========================================================================
 
-==========================================================
-OPTIMIZATION:
+- Databases can more quickly look things up via primary key. 
+  This is because primary keys are indexed, and can go right to it.
 
-Databases can more quickly look things up via primary key. 
-Primary keys are indexed, and can go right to it.
+- Databases can also define indexes for table elements.
+-- IE it makes sense for emails to be indexed so that we can more quickly 
+   find them.
 
-Databases can also define indexes for table elements.
-IE it makes sense for emails to be indexed so that we can more quickly find them.
-
-SELECT * FROM USERS;
-CREATE INDEX users_email_index ON users(email);
+  SELECT * FROM USERS;
+  CREATE INDEX users_email_index ON users(email);
 
 -- Don't just create indexes everywhere.
--- Updates/inserts/deletes will have more overhead, and we need more space allocated. Choose it carefully depending upon HOW the data is used. IE for logging in with a username.
+-- Updates/inserts/deletes will have more overhead, and we need more space
+   allocated. Choose it carefully depending upon HOW the data is used. 
+   Example : for logging in with a username.
+- Downside : There can only be 1 clustered index per table.
 
+==> Clustering - Clustering allows to restructure data in the database to
+    fit the ordering of an index.
+- Note : This ordering is not maintained; 
+ 	 it must be done again occasionally if its necessary, 
+	 to maintain this ordering for performance.
 
--- CLustering - Culstering allows to restructure data in the database to fit the ordering of an index. Note : This ordering is not maintained - it must be done again occasionally if its necessary to maintain this ordering for performance.
-
-CLUSTER users USING users_email_index;
-SELECT * users;
+  CLUSTER users USING users_email_index;
+  SELECT * users;
 
 -- Will now show a list of users with their email addresses in order.
 
 
-=====================
-Normalization
-=====================
+=========================================================================
+			* Normalization
+=========================================================================
 -- The process of removing redundant data from our system. 
 
 -- Process is broken into levels.
