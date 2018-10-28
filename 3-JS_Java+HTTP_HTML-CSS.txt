@@ -1,14 +1,28 @@
 Contents:
-I. HTML/CSS Quick Review
-II. HTML
-III. CSS
+* HTML/CSS Review
+	~ HTML
+	~ CSS
 * Bootstrap
-IV. Javascript
+* JavaScript
+	* Variables
+	* Truthy-Falsey
+	* Template Litearals
+	* Object-Oriented Programming in JS
+		~ Inheritance
+		~ Polymorphism
+		~ Abstraction
+		~ Encapsulation
+	* Functions
+	* Enhanced For Loop
+	* Events
+	* Working with the DOM
+	* Fetch
+	* AJAX
 V. Java & Connecting
 ====================================================================
-		   I. HTML / CSS Quick Review
+		   * HTML / CSS Review
 ====================================================================
---------------------------------HTML--------------------------------
+ ----------------------------~ HTML--------------------------------
 - stands for HyperText Markup Language 
 - HTML5 (newest version) maintained by W3C WorldWideWeb Consortium.
 - Purpose: a symantic language used to describe content.
@@ -97,7 +111,7 @@ form (Group of inputs that would be sent together.)
  types : text, button, color, number, check, radio, select, 
          datepicker, password, hidden
 
---------------------------------CSS--------------------------------
+ -----------------------------~ CSS--------------------------------
 CSS stands for Cascading Stylesheet
 - Provides styling rules 
 	inline, in style tag, or in a link(extenal)
@@ -146,242 +160,10 @@ inline flex, inline-block bombine features
 %, px, em, rem, vh, vw, vmin, vmax
 
 - Colors:
-Literal - (blue, red, ect)
-hex - #RRGGBB with each character being 0-f representing 256 vals
-rgb / rgba - (n,n,n{,0 <= a <= 1}) where n = [0,255]
-hsl([0,255],%,%);
-
-====================================================================
-			   II. HTML
-====================================================================
-------- Vocabulary -------
-Tag - keyword used as syntax to organize and label types of content
-      on a page
-    - Tags are contained within right angle brackets < and >
-    - Beginning tags include the keyword and may include other
-      properties.
-    - End tags are created with the tag name in angle brackets
-      preceede with /
-    <tag property="value"> content </tag>
-Self-closing Tags - Do NOT need closing tags. 
-       Examples: <img> <input> <br> <hr>
-        TRIVIA - you used to be told to use <br /> to signify the end
-	of self-closing tags before 2009 when they threw out XHTML 
-	guidelines
-Element - A beginning tag, matching end tag, and the content between.
-Attribute - a property/value pair given to an HTML element.
-     <tag attribute> Content </tag>
-      Attribute syntax is property="value"
-Property - keyword describing characteristic an element may have
-Value - the assignment given to a property
-Server - centralized computer which manages website or application 
-       by sending information to client and processing requests
------ HTML Elements ------
-+ Heading-Related tags
-  <heading> </heading> 
-  Syntax tag to describe which part of the document is the heading
-  <h1> <h2> ... <h6>
-  h1 is a main heading
-  Proceeding h#s are subheadings
-  By default, h1 has the largest sized font, and the font size decreses
-
-+ List-Related Elements
-  <ul>  Unordered List (Not numbered/Bulleted list)
-  <ol>  Ordered List (Numbered List)
-  <li>  List Item
-
-+ Basic HTML Requirements
-<!DOCTYPE html5>          
-<html>
-   <head> .. </head>
-   <body> .. </body>
-</html>
-
-+DOCTYPE tells the browser it is getting an HTML page.
-    This is not required always - a browser will "guess" usually that 
-    a file is html correctly - but is proper to use it.
-<HTML>   element contains all other HTML elements
-<head>   Contains page metadata such as the tile of the page, CSS
-	 scripts to link, and a description to give search engines. 
-         This isn't required to have information in it.
-         <title>Page Title</title> is often the bare minimum
-<body>   Contains the visible content of the page in the view window.
-
-+ <div> and <span> 
- <div> is a block element that may have arbitraty content.
-       In HTML5, usually <div>s are replaced with more descriptive 		Semantic elements
- <span> is an inline-block element by default
-
--- BLOCK elements by default take up 100% the width 
-         of their parent containing element.
--- INLINE-block elements stay in line with the text around it, 
-       by default taking up only as much space as the content inside
-
-
-+ Semantic Elements
-   Semantic elements are blocks to label the content and for styling purposes.
-	Examples:
-	<header> , <main> , <footer>
-	<section> , <article> , <summary>
-	<nav>
-
-+ Table-related Elements
-  Tables are formatted, generally, as follows:
-<table>
-   <tr>
-     <td> </td>
-     <td> </td>
-   </tr>
-   <tr>
-     <td> </td>
-     <td> </td>
-   </tr>
-</table>
-
-	<table> is the element declaring there will be a table.
-	<tr> signifies a table row
-	<td> signifies cell - table DATA - within the row from left to right.
-	<th> is a table head cell which formats a cell
-
-TRIVIA : Other table elements (probably youll never need):
-<thead> <tbody> <tfooter>  Sematic elements to organize a table.
-<caption> Place between the final </tr> and </table> to give it a 
-caption By default 
-
-====================================================================
-		   	II. CSS 
-====================================================================
-CSS = Cascading Style Sheet used to stylize HTML elements.
-+ Current/Newest version : CSS4
-    We have been using CSS3 (it is most popular now)
-
------ Vocabulary ---------
-Selector - The element within the HTML you are selecting to stylize
-         3 types of selectors:
-	  1. Tags
-	  2. Class
-	  3. ID
-Class - identify a group of elements on a page 
-	-- can be used mutiple times
-	Elements can have multiple classes.
-	In CSS you select by class with .ClassName
-ID  - Identifies a specific element 
-	- each ID should only be used once.
-	In CSS you select ids with #IdName
-** Classes/ IDs defined in the HTML.
-+ How to insert CSS?
- 1. Inline CSS - as a property to the HTML
-    <tag style="attribute:value;
- 2. Internal - usally placed in the <head>, but work anywhere.
-    - CSS Contained by <style> .. </style> tags
- 3. External stylesheets
-    Must use HTML tag link to include external stylesheet:
-<link href="./css.css" ref="stylesheet" type="text/css">
-
-  Note above is default order of priority for CSS styling.
-  You may also use !important to put a specific style to the top 
-     of the priority list. For example:
-	p {
-    	   color: red !important;
-	}
-
-+ Colors
-Main ways to identify colors:
-  1. name  -- IE red, black
-  2. Hexadecimal -- #RRGGBB
-      RR GG and BB are red, green, or blue values 
-      from 000000-ffffff (0-9 then a-f for each digit)
-      00-ff corresponds to an RGB value of 0 to 255.
-  3. RBG -- rgb(100, 100, 100)
-      Numbers are R G B values of 0 to 255.
-  4. RGBA -- rgba(100,100,100, .5)
-      First 3 are the same as RGB, but the third value is ALPHA
-      Alpha is an modified from 0 to 1 corresponding to % opacity
-
-+ The Box Model
- The box model describes layers of space around the content which
- can be stylized.
- _ _ _ _ _ _ _ _ __ _ _ __ _ _ _ _ 
-|_________________________ Margin|
-|| ________________ Border|      |
-||| _______ Padding|      |      |
-||||Content|       |      |      |
-||||_______|       |      |      |
-|||________________|      |      |
-||________________________|      |
-|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |
-
- - Margin 
-	-the outer layer
-	- it is the space between one element and the next.
-   	- vertically collapsable:
-	  >> two blocks with margins, one  directly above the other, 
-   	  will have the distance of the largest margin of the two 
-          between borders.
-- Borders is the layer between the margin and content,
-    usually the area what has a border, if specified.
-- Padding is the space between the content and the border.
-
-+ Box-sizing
-Typically, the width and height of a block are defined by the content.
-   Padding, border, and margin are added on top of that.
-The property box-sizing can specify if you want a height/width
-property to be a "content-box" or a "border-box"
-
-+ Selectors
-  HINT: the type of element closest to the braces 
-        is usually the one that will be stylized.
-
-[space] "descentant of the element to stylize"
-        .class p {};  will stylize all P anywhere in class even if
-		      they are further nested
-  >     "direct parent of the element to stylize"
-         nav > a {};   "nav, the parent of the element to stylize, a"
-                        so this will stylize all a that are direct 
-		   	children of nav
-  ,     "and"
-         div,span,header{};    will stylize div, span, and header.
-[no space]	Items to stylize is described with both
-	tag.class{}    will stylize tags with the class 'class'
-	tag#ID{}       will stylize tags with the ID 'ID'
- 
-+ Forms
-Basic Outline of forms:
-<form>         
-      <label for="input1">Input One </label>
-      <input name="input1" type="number" />
-      <label for="input2">Input Two </label>
-      <input name="input2" type="Text" />
-      <input type="submit" value="Go!">
-</form>
-
-	Form tag organizes groups and inputs. 
-  It tells the browser that the contained inputs and submit button 
-  are all related and should be set to the server at the same time.
-
-  Forms are blocks and can have attributes such as width, height, 
-  and background.
-
-  Elements that are typically in forms include:
-<button> <label> <input> <fieldset>
-
-+ Variables
-
-To use variables, right create them with the .root selector. 
-Variable names start with "--"
-   .root{
-	--text-color:blue;
-	--div-bg:yellow;
-   }
-
-To use them later, use var(--name)
-
-   div{
-	color: var(--text-color);
-	background-color:var(--div-bg);
-   }
-
-
+  Literal - (blue, red, ect)
+  hex - #RRGGBB with each character being 0-f representing 256 vals
+  rgb / rgba - (n,n,n{,0 <= a <= 1}) where n = [0,255]
+  hsl([0,255],%,%);
 ===================================================================
 			* Bootstrap
 ===================================================================
@@ -429,7 +211,7 @@ Modals - used a lot for ads (cover screen until it is taken care of)
   such as terms of conditions.
 
 ===================================================================
-===================== III. Javascript =============================
+======================= * Javascript ==============================
 ===================================================================
 Javascript History:
 	- Orignally created by in 1994 Bredan Eich for new browser
@@ -457,7 +239,9 @@ Javascript History:
 		- use \' or \" for quote character
 2. Number	- ONLY numberic datatype in JS
 		- Floating-point number
-3. Boolean	- true/false. Does NOT correspond to 0 or 1.
+3. Boolean	- true/false. true corresponds to 1, false 0
+			true == 1;//true
+			false == 0;//true
 4. Undefined	- Default
 5. Null		- Never assigned by JS
 6. Symbol	- Represents unique ID
@@ -468,7 +252,9 @@ Declaring functions:
 	function myFunc() { ... }
 	myFunc = function() { ... }
 	let myFunc = () => {...}
-
+Equality:
+	== <-- compares the value
+	=== <-- Compares the value and datatype
 ==> Scope
 1. Global Scope
 	- Anywhere in the document the variable can be used.
@@ -672,8 +458,17 @@ HOWEVER: Internet explorer doesn't support ES6 JS.
 Many forms... 
 In java: Overloading and Overriding.
 In JavaScript: 	
-	Overridding - You certainly can because the program looks through from you object up the protos. You can reassign what a keyword does, from function to field. 
-Overriding lworks like normal. Child object can define wheir own implementations for functionswith the same naame as the parent. Calling these functionswill use the child function, because its nearer in the protochain.
+	- We can't use parent class references and get child 
+implementations (no super()), but it is possible to override methods,
+ and it is possible to "overload" methods via clever programming.
+
+	Overridding - You certainly can because the program looks 
+through from you object up the protos. You can reassign what a 
+keyword does, from function to field. 
+Overriding works like normal. Child object can define their own
+implementations for functions with the same naame as the parent. 
+Calling these functions will use the child function, because its 
+ nearer in the protochain.
 
 	Overloading - Can be done with defaults. 
 1. Default parameter values
@@ -681,33 +476,44 @@ Overriding lworks like normal. Child object can define wheir own implementations
 
 	Functions in javascript don't care what you pass to them. We cannot assign two different functionsto the same object with the same name. Overloading like java in'st possible, but you can include internal logic to adapt to different parameters.
 
-su(2)(3) -> 5
+sum(2)(3) -> 5
 sum(2,3) -> 5
 
-let sum = function(x,y) {
+   let sum = function(x,y) {
 	if(y===undefined){
 		return (z) => x + z;
 	} else {
 		return x + y;
 	}
-}
+   }
 
-We can't have funtion owverloading in the same sense as Java, however we can adapt functionsto handle varying amounts of arguments internally.
+//OR, with a ternary operation:
+  let sum = (x,y) => y===0^y ? x+y : (z) => x+z;
 
-Use arrow functions in general. Easiest to see who calls the function that way. 
+-- We can't have funtion overloading in the same sense as Java,
+however we can adapt functions to handle varying amounts of arguments
+internally.
+ARROW functionsare a great way to return functions. 
 
--- Abstraction  : None in JavaScript.
+~~~~~~~~~~~~~~~~~~~~ Abstraction In JS ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+--There isn't any
+
+~~~~~~~~~~~~~~~~~~~~ Encapsulation In JS ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -- Encapsulation : "A black box"
-	Hiding Data.
-In java, encapsulation is created with access modifiers. Getters and setters allow access to restricted methods/fields.
+	For of/ way to hide data.
+--In Java, encapsulation is created with access modifiers. 
+  Getters and setters allow access to restricted methods/fields.
 
-- NO access modifiers in JavaScript
-	-this makes encasulation tricky.
+- NO access modifiers in JavaScript;this makes encasulation tricky.
 
-Generally, over the years, encapsulation is implemeted using closures. Closures are a language feature, which is defined as fields defined within a function accessible from an inner function being available after the outer function has returend.
+   Generally, over the years, encapsulation is implemeted using 
+closures. Closures are a language feature, which is defined as fields
+defined within a function accessible from an inner function being
+available after the outer function has returend.
 
-//JavaScript "Getters":
+//Example:
 let outer = function(){
 	let x = 10;
 	let inner = function() {
@@ -718,7 +524,7 @@ let outer = function(){
 let myX = outer(); 	//now myX is a function printing 10.
 let myX();		//Prints 10!
 
-//Javascript "Getters & Setters"
+//Javascript "getters" and "setters" in a closure
 let outer = function(){
 	let x = 10;
 	return {
@@ -731,77 +537,227 @@ let x = outer();
 x.set(10);
 x.get(); // returns 10.
 
-// This IS a JavaScript FEATURE.
-// It essentially holds onto the value placed into it. 
-// Practice the supplied answer -- be able to describe Closures
+// This IS a JavaScript FEATURE (see below)
+// It holds onto the value placed into it. 
 You are able to encapulate them or access them outside of the function in which they're defined. 
 
-Language feature ddefined as function which deifnes felds and returns a function which acessesthoas fields and the firleds stay alive becase they are acessible from a dlecalred function. You can' "hold on" to some values in memory..
+Language feature defined as function which defines fields and 
+returns an object with functions which accesses those fields and 
+the fields stay alive becase they are accessible from a declared 
+function. You can "hold on" to some values in memory.
+// JavaScript developers don't need encapsulation, really.
 
-// Jvascript developers don't need encapsulation, really.
-
-
-//Something is wrong with this ... Double check it ** 
 class MyObject {
-	// "Private" fields are started with underscores.
-	_myPrivateField;
+ //Note: "Private" fields are started with underscores.
+ //IE: _myPrivateField;
 
 	get myPrivateField(){
-		return _myPrivateField;
+		return this._myPrivateField;
 	}
 	set myPrivateField(f){
-		this._myPrivateField = f; 
+		this._myPrivateField = 5; 
 		//Functionally built into the langugage.
 	}
-
-	constructur(field){
-		this._myPrivateField;
+	constructor(field){
+		this._myPrivateField = field;
 	}
 }
 
-"this" keywords are build into the language. 
-Functions defined with the get and set keywords can be treated like fields:
+///////////Putting it all together:
+class MyObject {
+	get x() {return 10;} // x is private and cannot be set
+	get y() {return this._y;}
+	set y(z) {this._y = z}
+	constructor(y){
+		this._y=y;
+	}
+}
+
+"this", "get", and "set" keywords are build into the language. 
+Functions defined with the get keywords can be treated like
+fields:
 
 y = new MyObject(5);
-
 y.myPrivateField
 
-==> No abstract classes in JavaScript. No real use. No plymorphism.
-	We can't use parent class references and get child implementations. 
+==> Closures (2)
+https://www.w3schools.com/js/js_function_closures.asp
+ - Closures are created by defining a variable with a self-invoking 
+  function that returns another function.
+  function
+	let add = (() => {
+	    let counter = 0;
+	    return ()=> {counter += 1; return counter}
+	})();
+	   ^--The parenthesis here makes the function invoke itself
+When add is defined above, the following steps occur:
+    1. The outer function is run first
+    2. The counter is set to 0 and saved in memory.
+    3. The inner counting function is returned as variable add
+If you write "add;" into the console, it returns:
+	()=> {counter += 1; return counter}:
+The counter variable from the parent scope is still accessible to
+ the add variable, but it is protected in the scope of an anonymous
+ function (a function with no name) so it will only ever be
+ accessible by invoking the add function
 
+The above function can also be broken apart like this:
 
+	function initializeAdd() = {
+	    let counter = 0;
+	    return ()=> {counter += 1; return counter};
+	}
 
-======================================
-Functinos in JavaScript are "first-class citizens"
+	let add = initializeAdd();
+	
+===================================================================
+	       		* Functions
+===================================================================
+	Functinons in JavaScript are "first-class citizens"
 Meaning: 
-Functions in JS are treated like fields, with the ability to be 
-assigned and passed. Functions can be passed. They can be assigned,
- they can be reassigned, and they can be returned.
+- Functions in JS are treated like fields
+- Functionscan be:
+	- assigned
+	- reassigned (as functions or variables!)
+	- returned
+	- passed 
 
-Callback functions - a function being called by another function
+Recall Declaring functions:
+	function myFunc() { ... }
+	myFunc = function() { ... }
+	let myFunc = () => {...}
+
+==>Callback functions:
+- Callback functions are a function called by another function
 
 	const myFunction = function() {
 		console.log('Done!');
 	}
 	setTimeout(myFunction, 1000)
 
-Did we call the function?
-NO. We DEFINED myfunction and CALLED setTimeout
+Q: Did we call the console.log function?
+A: NO. We DEFINED myfunction and CALLED setTimeout
 
 Example of how a callback function might be utilized:
-
 	Const otherFunction = function(f) {
 		f();
 	}
 
 otherFunction(myFunction);
 
-========> ENHANCED FOR LOOP IN JS
+==> Default parameters
+Functions can be given default parameters if the user doens't 
+supply all the arguments.
+	function someFunction(x,y=0) {
+		x+y
+	}
+When calling this function, if only 1 argument is included, 
+the second argument will be set at 0 as a default. 
+You can, of course, do this with any number of parameters.
+	function log(x="You didn't supply anything to log") {
+		console.log(x);
+	}
 
-for(let e of myArr) {
-	..
-}
-============
+===================================================================
+	       		* Enhanced For Loop
+===================================================================
+=> Iterate through an array:
+ 	for(let e of myArr) {
+	//code
+	}
+
+=> Iterate through an object
+	for(let key in myArr) {
+	// code
+	}
+ - When iterating through an object, the key becomes a string for
+ each key within the object. 
+	SEE: https://www.w3schools.com/jsref/jsref_forin.asp
+
+===================================================================
+	       		* Events
+===================================================================
+- An event in JavaScript is a reaction when triggered by the HTML
+- HTML events:
+	- Page loads, click, mouseover, input field changed, ect
+- JavaScript allows you to execute code on events for elements.
+
+Ways to bind a function to events:
+1. In the HTML - use  a property (ie: <button onclick="jsFunc()">
+	onclick
+	onload
+	onmouseover
+	onchange
+	onkeydown
+2. In JS, addEventListener to that element 
+	document.getElementById("some-id")
+		.addEventListener('click',jsFunc);
+
+==> addEventListener(event,function,useCapture);
+- event is the event in HTML (without the on- prefix)
+- function is the js function
+- useCapture is an optional parameter, by default set to false.
+- Note the function doesn't have parenthesis in this one because
+  it is a callback function.
+
+==> Bubbling/Capturing
+- Reffers to the order in which JS handles events.
+Example:
+  <div onclick="someFunction()">
+	<button onclick="otherFunction()">
+	</button>
+  </div>
+- Q: When the button is clicked within this div, which even happens first?
+-A: The div's someFunction() happens first; capture is default
+
+- Capturing is when the JS orders the events from the top node(html)
+  down to the element
+- Bubbling runs the event from the innermost element to the top node
+- You can stop bubbline/capturing all together with stopPropogation
+	document.getElementById("some-id")
+		.addEventListener('click',jsFunc)
+			.stopPropogation();
+===================================================================
+	       	* Working with the DOM
+===================================================================
+  document.getElementsByTagName()
+  document.getElementsByClassName()
+  document.getElementById()
+
+-> child elements:
+  let elem = document.getElementById('some-id');
+  elem.children[n] //Gets the nth child (HTML Element only!)
+  elem.fistElementChild; //Same as children[0];
+
+  elem.childNodes[n] // gets the entire node and it's contents
+  elem.firstChild[0] // same as childNotes[0]
+
+-> Parent element:
+  elem.parentNode
+-> Sibling Element:
+  elem.parentNode.childNode[n];
+  elem.nextSibling
+
+- Modify an element's class
+ classList.add('class')
+ classList.remove('class')
+ classList.toggle('class')
+
+- innerText VS innerHTML
+ --innerText encodes the string so that characters such as "<" and
+ ">" actually show up on the page rather than become tags.
+ --innerHTML does not encode the string, allowing HTML to be inserted
+  directly from JavaScript
+  
+
+-> Get by CSS Selector syntax:
+Allows you to get elements the same way they're selected in CSS
+  document.querySelectorAll() //Gets all matching items
+  document.querySelector("div p") //Gets first element matching
+
+===================================================================
+	       		* Fetch
+===================================================================
 
 ==>API and fetch: 
 
@@ -824,25 +780,57 @@ const getData = async function() {
     }
 }
 
-==> XHR - AJAX (Asynchronous JavaScript and XML)
-*****************************************************
-Know how to use XHR (or at least talk about fetch)
-*****************************************************
+===================================================================
+	     	  	* AJAX
+===================================================================
+XHR (XmlHttpRequest)- AJAX (Asynchronous JavaScript and XML)
 
-  XmlHttpRequest
- 
- Asynchronous JavaScript and XML
+- Predates the fetch API and was the way we made HTTP requests 
+  prior to fetch, and still is in wide use today.
 
-Predates the fetch API and was the way we made HTTP requests prior 
-to fetch, and still is in wide use today.
+REST - Representational State Transfer, or RESTful web service is
+an architecture style for developing web services.
+Commonly used with HTTP to transfer web resources in the form of 
+test representations. 
+HTTP methods in a proper REST should follow CRUD acronym
+ (Create, Read, Update, Delete) 
+HTTP methods: POST, GET, PUT, DELETE
 
+- JSON - JavaScript Object Notation -  lightweight data interchange 
+format. It is easily human-readable/writable, easy to parse.
+JavaScript generally uses JSON-format obects in AJAX requests
 
-Restful (?) means your response sends a link to where 
-you can get more information
+==> xhr XMLHTTPRequest
+- xhr does not necessarily use XML.
+- Stages of XMLHttpRequest:
+	0. Uponened 		(new, no method or URL)
+	1. Opened 		(method and URL input)
+	2. HEADER_RECIEVED 	(request sent)
+	3. LOADING 		(loading reply)
+	4. DONE 		(done)
+- Basic steps:
+ 1. Create request 
+		const xhr = new XMLHTttpRequest
 
+ 2. Open the request:
+	xhr.open('get','http://api.url.here/');
+
+ 3.(optional) Add event listener for changes in state 
+	xhr.addEventListener('readystatechange',stateFunc);
+
+ 4. Add event listener for when response finishes loading
+	xhr.addEventListener('loadend',endFunc);
+ 5. In the end function, parse the data:
+	function endFunc() = {
+		console.log(JSON.parse(xhr.response))
+	};
+ 6. Send the request
+	xhr.send();
+
+Example:
+____________________________________
 const xhrExample = function() {
     const url= 'https://www.anapioficeandfire.com/api/characters/148';
-
     const xhr = new XMLHttpRequest();
 
     console.log(xhr.readyState); //0. unopened
@@ -875,30 +863,37 @@ const xhrExample = function() {
 
 xhrExample();
 
+~~~~~~~ Other Types of files beside JSON
+==> XML
+XML files are an entire HTML page rather than a JSON object.
+- XML still works on a dom. Use a dom parser.
 
-=================================================================
-XML in Java
-ML still works on a dom. use a dom parser.
-** Know the difference, you dont have to know HOW to do it in code **
+- XML DOM requires us to remember the entire DOM tree 
+	- nice but has a lot of overhead.
+- DOM maintains entire DOM obj ect in memory at once. 
+	- May not be possible for sufficiently large XML documents.
 
-DOM requires us to remember the entire DOM tree 
-nice but has a lot of overhead.
-DOM maintains entire DOM obj ect in memory at once. This may not be possible for sufficiently large XML documents.
-
-
-SAX is event-based. SAX parses the XML and raises events upon encountering elments. SAX is faster than DOM, but utilization is somewhat more complicated, and the DOM itself isnt persisted in memory.
+==> SAX is event-based. SAX parses the XML and raises events upon encountering elments. SAX is faster than DOM, but utilization is somewhat more complicated, and the DOM itself isnt persisted in memory.
 The structure is'nt kept. You just are able to react to events.
 Benefit - you dont have to keep the whole thing in memoy. 
 It can work on very large XMLs 
 --Implementation is "more complicated" than XML, but not too bad.
 
-JAXB - java architecture for xml binding. meant to be higher level. we marshal the xml (take it and convert ot java object.) 
-Then we can work with in a more normal fashion. Essentially represent java object state in xml in the same way serialization worked.
+==>JAXB - java architecture for xml binding.
+- meant to be higher level. 
+-we marshal the xml (take it and convert ot java object.) 
+Then we can work with in a more normal fashion. 
+Essentially represent java object state in xml in the same way
+ serialization worked.
 - data format like JSON for recieving and parsing data from an API. 
 Converts object state to data in this way.
 
+====================================================================
+		   * Java & Front End
+====================================================================
+== > See Week 4 for more polished/complete notes.
 =================================================================
-Singleton
+		   * Singleton
 =================================================================
 SIngleton design pattern - tool we use when we have some object and class where we only need one instance of it. Never will need more.
 Singleton -> class where only 1 object will ever be necessary.
@@ -1041,35 +1036,3 @@ The lifecycle of a servlet has 2 steps:
 1. init - Initializing the servlet - Called once
 2. service - handling a request - once per request
 3. destroy - end of servlet lifecycle(shut down) - called once/never
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
