@@ -1,5 +1,5 @@
-==========================================                        -Clay Andrews
------------- APIs ------------------------------------------------------------>
+==========================================                        
+		 APIs 
 ==========================================
 + + What Is it? + +
 API stands for Application Programming Interface. An API is a set of functions, protocols, procedures, and tools for building software. They are essentially databases that an external program can access for information and functions.
