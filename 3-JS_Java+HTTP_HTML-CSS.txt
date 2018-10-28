@@ -1,29 +1,38 @@
+Contents:
+I. HTML/CSS Quick Review
+II. HTML
+III. CSS
+* Bootstrap
+IV. Javascript
+V. Java & Connecting
 ====================================================================
-				HTML
+		   I. HTML / CSS Quick Review
 ====================================================================
-- HTML stands for HyperText Markup Language 
-- HTML5 (newest versiaon) maintained by W3C WorldWideWeb Consortium.
-HTML is a symantic language used to describe content.
-HTML is for browsers.
-Tag is a structure.
-Element is the actual representation of the tag and content.
-Structure of HTML Document:
-<!DOCTYPE html>
-<html>
- <head></head>
- <body> </body> 
-</html>
-Rules : 
-- Tags should be void, self-closing, or closed. 
-- If tag is opened within another tag, it must be closed before another tag closes.
+--------------------------------HTML--------------------------------
+- stands for HyperText Markup Language 
+- HTML5 (newest version) maintained by W3C WorldWideWeb Consortium.
+- Purpose: a symantic language used to describe content.
+	- Is interpreted by browsers.
+	- is structured by tags
+- An element is the documents' representation of the tag and content
+- Structure of HTML Document:
+	<!DOCTYPE html>
+	<html>
+	  <head></head>
+	  <body></body> 
+	</html>
+- Rules : 
+	- Tags should be void, self-closing, or closed. 
+	- If tag is opened within another tag, it must be 
+	  closed before another tag closes.
 
-Attributes - Details about the tag and value.
-Examples: 
-src = "url" Loads external resource
-type, class, id, width, height, href
+- Attributes: Details about the tag and value.
+	Examples: 
+		src = "url" Loads external resource
+		type, class, id, width, height, href
 
-DOM - Document Object Model
-Tree Structure
+- DOM - Document Object Model
+	- Tree Structure representing the document
 
 			html
 			 |
@@ -33,82 +42,97 @@ Tree Structure
   |          	.---------------------------------------.
  meta		|			|		|
               header          	     article          footer 
+         .-----'-.          .-----------|----------.      \
+        h1      nav       header     section     section   div 
+                          |        / |  |  \ \ \ 
+                         ol       h2 p1 h3 p p p 
+                        / | \
+                      li li li
 
-        h1      nav       header  section    section div
-                        ol       h2 p1   h3 p p p  
-                   li li li
- 
-CSS also operations on this tree structure. This is how it knows which elements to select as children.
-body nav {} //searches the body for navs underneath it to affect.
+ --CSS also operations on this tree structure. 
+	- This is how it knows which elements to select as children
+ body nav {} //searches the body for navs underneath it to affect.
 
-=> Text
-h1 : header is a primary element used to describe main header regardless of HOW we want it displayed.
-h2-h6 are subheadings
-p : paragrpah
-strong : increase weight of line
-em : italics
-=>Lists
-ol : ordered (numbered) lists
-ul : unorderd list
-	li : list item (nested within list)
-dl : dictionary list
+==> Common Tags
+> Text
+   h1 : header is a primary element used to describe main header 
+	regardless of HOW we want it displayed.
+   h2-h6 are subheadings
+   p : paragrpah
+   strong : increase weight of line
+   em : italics
+>Lists
+  ol : ordered (numbered) lists
+  ul : unorderd list
+     li : list item (nested within list)
+  dl : dictionary list
 	dt: definition text
-=> Table
-table
+> Table
+    table
 	thead (semantic)
 	tbody (semantic)
 	tr
-		th
-		td
-=> a (anchor)	<a href="url">Link </a>
-=> img (image)	<img src="url">
-=> script (javascript) 
+	  th
+	  td
+> External resource
+   a (anchor)	<a href="url">Link </a>
+   img (image)	<img src="url">
+   script (javascript) 
 	<script src="url"></script> or <script>JS</script>
-=> link <link href="css sheet" ref="stylesheet">
-=>Arbitrary structures (No semantic meaning)
+   link <link href="css sheet" ref="stylesheet">
+>Arbitrary structures (No semantic meaning)
 	- Only use if you have no better way to describe the content
 	- IE if structure is only for visual reasons.
-div : Block
-span : Inline block
-=> head
+  div : Block
+  span : Inline block
+> head
 	Link
 	meta
 	title
-=> Input
-form Group of inputs that would be sent together.
+> Input
+form (Group of inputs that would be sent together.)
 	<form method="" >--"get" or "post"
-<fieldset>
+ <fieldset>
 	<input type = "..." >
-types : text, button, color, number, check, radio, select, datepicker, password, hidden,
+ types : text, button, color, number, check, radio, select, 
+         datepicker, password, hidden
 
-CSS:
-Cascading Stylesheet
-Can provide styling rules inline, in style tag, or in a link(extenal)
-Best to use as external
-Selector{ property:value;}
-	a {  
-		 color : blue; 
-	}
+--------------------------------CSS--------------------------------
+CSS stands for Cascading Stylesheet
+- Provides styling rules 
+	inline, in style tag, or in a link(extenal)
+- Best to use as external
+ Form: 			Selector{ property:value;}
+ Application:	a {  
+		   color : blue; 
+		}
 
+==>Types of identifiers:
 1. Tag -> h1 {}
 2. Class -> .someClass{}
 3. Id -> #someId{} 
 
 
-Selector : 
-.class1 .class2{}  selects all class2 in any class1
-.class2,class1{} both class1 and 2
-.class1 > class 2{} direct descentant
-.class1.class2{} selects only elements with BOTH classes
+==> Selector : 
+.class1 .class2{} -- "descentant of the element to stylize"
+ 		  -- selects all class2 in any class1
+.class2,class1{}  -- "and" 
+		  -- selects both class1 and 2
+.class1 > class2{}-- "direct parent of the element to stylize"
+		  -- Selects class2 that is a direct child of class1
+.class1.class2{}  -- selects only elements with BOTH classes
+h2#id		  -- Selects h2 element with the ID my-header
 
-==>display
-block: by default fills width, creating block on its own line
-inline: diplays on a baseline by default only large enoug ht ofill contents. Can be chained together(potentially changing the baseline)
-flex: Used to align items/show them in particular ways. 
- inline flex, inline-block
+==> Display
+block:   by default fills width, creating block on its own line
+inline:  diplays on a baseline by default only large enough to
+	 fill contents. Can be chained together(potentially 
+	 changing the baseline)
+flex:    Used to align items/show them in particular ways. 
+inline flex, inline-block bombine features
 
-Box model
- _ _ _ _ _ _ _ _ __ _ _ __ _ _ _ _ 
+==> Box model
+ _ _ _ _ _ _ _ _ __ _ _ __ _ _ _  
 |_________________________ Margin|
 || ________________ Border|      |
 ||| _______ Padding|      |      |
@@ -118,16 +142,18 @@ Box model
 ||________________________|      |
 |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |
 
-Units of size:
+- Units of size:
 %, px, em, rem, vh, vw, vmin, vmax
 
-Colors:
+- Colors:
 Literal - (blue, red, ect)
 hex - #RRGGBB with each character being 0-f representing 256 vals
 rgb / rgba - (n,n,n{,0 <= a <= 1}) where n = [0,255]
 hsl([0,255],%,%);
 
-
+====================================================================
+			   II. HTML
+====================================================================
 ------- Vocabulary -------
 Tag - keyword used as syntax to organize and label types of content
       on a page
@@ -172,18 +198,19 @@ Server - centralized computer which manages website or application
 </html>
 
 +DOCTYPE tells the browser it is getting an HTML page.
-         This is not required always - a browser will "guess" usually that 
-          a file is html correctly - but is proper to use it.
+    This is not required always - a browser will "guess" usually that 
+    a file is html correctly - but is proper to use it.
 <HTML>   element contains all other HTML elements
-<head>   Contains page metadata such as the tile of the page, CSS scripts to link,          and somtimes a description to give search engines. 
+<head>   Contains page metadata such as the tile of the page, CSS
+	 scripts to link, and a description to give search engines. 
          This isn't required to have information in it.
-         <title>Page Title</title> is USUALLY the bare minimum, but isn't required.
+         <title>Page Title</title> is often the bare minimum
 <body>   Contains the visible content of the page in the view window.
 
 + <div> and <span> 
  <div> is a block element that may have arbitraty content.
-       In HTML5, usually <div>s are replaced with more descriptive Semantic elements
-  <span> is an inline-block element by default
+       In HTML5, usually <div>s are replaced with more descriptive 		Semantic elements
+ <span> is an inline-block element by default
 
 -- BLOCK elements by default take up 100% the width 
          of their parent containing element.
@@ -218,12 +245,12 @@ Server - centralized computer which manages website or application
 
 TRIVIA : Other table elements (probably youll never need):
 <thead> <tbody> <tfooter>  Sematic elements to organize a table.
-<caption> Place between the final </tr> and </table> to give it a caption
-          By default 
+<caption> Place between the final </tr> and </table> to give it a 
+caption By default 
 
-==========================
-         CSS
-==========================
+====================================================================
+		   	II. CSS 
+====================================================================
 CSS = Cascading Style Sheet used to stylize HTML elements.
 + Current/Newest version : CSS4
     We have been using CSS3 (it is most popular now)
@@ -234,12 +261,14 @@ Selector - The element within the HTML you are selecting to stylize
 	  1. Tags
 	  2. Class
 	  3. ID
-Class - identify a group of elements on a page -- can be used mutiple times
+Class - identify a group of elements on a page 
+	-- can be used mutiple times
 	Elements can have multiple classes.
 	In CSS you select by class with .ClassName
-ID  - Identifies a specific element - each ID should only be used once.
+ID  - Identifies a specific element 
+	- each ID should only be used once.
 	In CSS you select ids with #IdName
-** You tell an element which class and or ID it has (if any) in the HTML.
+** Classes/ IDs defined in the HTML.
 + How to insert CSS?
  1. Inline CSS - as a property to the HTML
     <tag style="attribute:value;
@@ -267,10 +296,11 @@ Main ways to identify colors:
       Numbers are R G B values of 0 to 255.
   4. RGBA -- rgba(100,100,100, .5)
       First 3 are the same as RGB, but the third value is ALPHA
-      Alpha is an modified from 0 to 1 corresponding to a percent of opacity
+      Alpha is an modified from 0 to 1 corresponding to % opacity
 
 + The Box Model
- The box model describes layers of space around the content which can be stylized.
+ The box model describes layers of space around the content which
+ can be stylized.
  _ _ _ _ _ _ _ _ __ _ _ __ _ _ _ _ 
 |_________________________ Margin|
 || ________________ Border|      |
@@ -281,39 +311,39 @@ Main ways to identify colors:
 ||________________________|      |
 |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |
 
-Margin is the outer layer, it is the space between one element and the next.
-    Margins are vertically collapsable, meaning two blocks with margins, 
-    one  directly above the other, 
-    will have the distance of the largest margin of the two between borders.
-Borders is the layer between the margin and content,
+ - Margin 
+	-the outer layer
+	- it is the space between one element and the next.
+   	- vertically collapsable:
+	  >> two blocks with margins, one  directly above the other, 
+   	  will have the distance of the largest margin of the two 
+          between borders.
+- Borders is the layer between the margin and content,
     usually the area what has a border, if specified.
-Padding is the space between the content and the border.
+- Padding is the space between the content and the border.
 
 + Box-sizing
 Typically, the width and height of a block are defined by the content.
    Padding, border, and margin are added on top of that.
-The property box-sizing can specify if you want a height/width property
-to be a "content-box" or a "border-box"
+The property box-sizing can specify if you want a height/width
+property to be a "content-box" or a "border-box"
 
 + Selectors
   HINT: the type of element closest to the braces 
         is usually the one that will be stylized.
 
 [space] "descentant of the element to stylize"
-         .class p {};    will stylize all P that are in blocks with class .class
-                      even if they are further nested in other blocks inside 
-		      a main block with class .class
-
-
+        .class p {};  will stylize all P anywhere in class even if
+		      they are further nested
   >     "direct parent of the element to stylize"
-         nav > a {};    is "nav, the parent of the element to stylize, a"
-                   so this will stylize all a that are direct children of nav
-
+         nav > a {};   "nav, the parent of the element to stylize, a"
+                        so this will stylize all a that are direct 
+		   	children of nav
   ,     "and"
          div,span,header{};    will stylize div, span, and header.
-
-tag.class{}    will stylize tags with the class 'class'
-tag#ID{}       will stylize tags with the ID 'ID'
+[no space]	Items to stylize is described with both
+	tag.class{}    will stylize tags with the class 'class'
+	tag#ID{}       will stylize tags with the ID 'ID'
  
 + Forms
 Basic Outline of forms:
@@ -329,7 +359,9 @@ Basic Outline of forms:
   It tells the browser that the contained inputs and submit button 
   are all related and should be set to the server at the same time.
 
-  Forms are blocks and can have attributes such as width, height, and background.
+  Forms are blocks and can have attributes such as width, height, 
+  and background.
+
   Elements that are typically in forms include:
 <button> <label> <input> <fieldset>
 
@@ -337,30 +369,32 @@ Basic Outline of forms:
 
 To use variables, right create them with the .root selector. 
 Variable names start with "--"
-.root{
+   .root{
 	--text-color:blue;
 	--div-bg:yellow;
-}
+   }
 
 To use them later, use var(--name)
 
-div{
+   div{
 	color: var(--text-color);
 	background-color:var(--div-bg);
-}
+   }
 
 
 ===================================================================
-Bootstrap
+			* Bootstrap
 ===================================================================
 Getting started: 
 http://getbootstrap.com/docs/4.1/getting-started/introduction/
 
-Components : Little things you can use by using their code samples.
+Components : Pre-styled code blocks for a feature
+=>Types of Components
 Alerts : Text that you can have pop up with optional close buttons.
-Carousel : Slide images or things, may includes arrows to switch left/right, captions, different fades.
+Carousel : Slide images or things, may includes arrows to switch
+	 left/right, captions, different fades.
 Buttons : Generally nices looking for buttons.
-Navbar : Basic with dropdowns
+Navbar : Basic with or without dropdowns
 Cards : Very common tool (image with text)
 
 Layout >> Grid:
@@ -388,40 +422,115 @@ In flexbox, page is gridded in 12ths.
         </div>
     </div>
 
-Bootstrap Forms are quite common now... Most modern websites user bootstrap or Google Material Design.
+Bootstrap Forms are quite common now
+- Most modern websites user bootstrap or Google Material Design.
 
-Modals - used a lot for ads (cover streen until it is taken care of)  such as terms of conditions.
-
-** QC Will ask about the grid in Bootstrap.
-
-
-
+Modals - used a lot for ads (cover screen until it is taken care of)
+  such as terms of conditions.
 
 ===================================================================
-			* Javascript
+===================== III. Javascript =============================
 ===================================================================
- ~~~~~~~~~~~~~~~~~~~~~~~~ Truthy-falsey ~~~~~~~~~~~~~~~~~~~~~~~~~~
-values in Javascript is the idea that every value can be evaluated for truthiness. This means nay value of any time can be utilized in an if statement, a logical argument, ect.
-- Most values are considered "truthy", but certain values are falsy.
+Javascript History:
+	- Orignally created by in 1994 Bredan Eich for new browser
+	- Named to piggyback on Java's success
+	- Maintained now by ECMA 
+	- Purpose : Accessible tool to connect HTML to components
+	- Dynamic, weak-typed, prototype-based
+	- Can be used like java for applications beside websites
 
+===================================================================
+		    * Variables
+===================================================================
+==> Declaring a variable:
+	There are 3 ways to declare a variable:
+  1. let myVar;		-Block scope, reassignable variable
+  2. const myVar;	-Block-scope, constant (can't be reassigned)
+  3. var myVar;		-Hoists variable, reassignable
+  4. myVar;		-Creates global variable
+==> JS Types
+- Weakly Typed : JavaScript variables can be declared without first
+	determining the type. They can be reassigned any other type
+	without casting issues.
+- JavaScript Types
+1. String 	- 'single' or "double" quotes work.
+		- use \' or \" for quote character
+2. Number	- ONLY numberic datatype in JS
+		- Floating-point number
+3. Boolean	- true/false. Does NOT correspond to 0 or 1.
+4. Undefined	- Default
+5. Null		- Never assigned by JS
+6. Symbol	- Represents unique ID
+7. Object	- Holds key/value pair (like Java map)
+8. Function (NOT a datatype, but a type)
+
+Declaring functions:
+	function myFunc() { ... }
+	myFunc = function() { ... }
+	let myFunc = () => {...}
+
+==> Scope
+1. Global Scope
+	- Anywhere in the document the variable can be used.
+	- Variables defined without let/var/const become global
+	 --they can be used anywhere, even if defined in a function
+2. Local Scope / Block Scope
+	- Scope within control-flow statement or {}
+	- let and const are block-scope
+2.5. Function Scope
+	- Functions create their own local scope:
+	- variables defined with let,var,or const inside a function
+	  are not available outside the function
+   Example:
+	function func() {
+		let a = 1;
+		const b = 2;
+		var c = 3;
+		d = 4;
+	}
+	func();
+	a; //error, a is not defined
+	b; //error, b is not defined
+	c; //error, c is not defined
+	d; //4
+
+- Hoisting 
+	Hoisting lifts the variable declaration to the top of it's
+ scope. This occurs when variables are defined with var&no keyword.
+ Example:
+	{ {var x = 5} }
+	x; //5
+===================================================================
+		    * Truthy-Falsey
+===================================================================
+- In Javascript  every value can be evaluated for truthiness. 
+- Any value of any time can be utilized in an if statement, a 
+  logical argument, ect.
+- Most values are considered "truthy", but certain values are falsy
 Falsy:
 	"" (empty string), 0, null, NaN, undefined
 
 - We can utilize these conditional statements in assignment.
-The variable will assign the VALUE that made the difference in the result. 
+- The variable will be assigned the VALUE that made the difference 
+  in the result. 
 
 const y = 0 || x;
-		 y = x; << result
+		 result >> y = x
 const z = NaN && x; 
-		z = NaN; << result
+		 result >> z = NaN
 
->> Becomes the final value it checks. 
->> Useful to resolve if something might be null.
+- Useful to resolve if something might be null.
 
--- Boolean expressions in JavaScript don't necessarily evaluate to a true or false value, but instead evaluate to the value in the expression that made the difference in the resulting logical result. The logic of this follows short circuit logic closely.
+-- Boolean expressions in JavaScript don't necessarily evaluate to a
+ true or false value, but instead evaluate to the value in the 
+ expression that made the difference in the resulting logical result.
+- The logic of this follows short circuit logic closely.
 
-==> Template Literals
-ES6 Feature of JavaScript. They are used for formatting strins, and are often used in place of situations where you might be tempted to concatenate complicated strings or otherwise utilize complicated string literals.
+===================================================================
+		    * Template Literals
+===================================================================
+- ES6 Feature of JavaScript. 
+- Used for formatting strings, often in place of contatenation
 
 const person = {
 	firstName : 'Abby',
@@ -430,93 +539,107 @@ const person = {
 };
 
 //We want to print out "my name is Abby adams and I'm 22 years old.
+////Concatenation method: 
 const str = "My name is " + person.firstName + " " + person.lastName + " and I am " + person.age + " years old";
 console.log(str);
 
-OR USE template literals. Allow for simpler varialbe injection without breaking the string.
-let template = `` //<< NOT SINGLE QUOTES, theyre backticks
-template = `My name is ${person.firstName} 
+// Template literals allow for simpler variable injection.
+//////Tamplate literals method
+let template = `My name is ${person.firstName} 
 ${person.lastName} and I'm ${person.age}
  years old.`
 
-// Template literals ALLOW YOU to throw line breaks in there.
-// Break provides ACTUAL linebreak. You can escale that with a single backslash where the lines are:
+//` is a backtick, not a single quote 
+//Template literals allow you to throw line breaks in there.
+// Break provides actual linebreak. 
+//You can escape that with a single backslash where the lines are:
+
 template = `My name is ${person.firstName} \
 ${person.lastName} and I'm ${person.age}\
  years old.`
 
-==> 
-Arays are actually type of objects. 
+==> Arrays
+- Can be variable in size and hold any datatype.
+- Type of Object, can act like an object as well.
 
 x = [1,2,3];
-x[-2] = 'cat';
-^ Is totally OK declaration.
-
-returns: 
-x > returns >  [1,2,3, -2: cat];
+x[-2] = 'cat';	//<--------------Acceptable declaration!
+x; // returns >  [1,2,3, -2: cat];
 
 also:
 x['chicken'] = 'cluck';
-x.chicken > returns >  'cluck';
+x.chicken // returns   'cluck';
 
-=======================================================
-Object oriented programming
+===================================================================
+	       * Object-Oriented Programming in JS
+===================================================================
+- Recall pillars of OOP
+	Absraction
+	Polymorphism
+	Inheritence
+	Encapsulation.
 
-Abrstaction
-P{olymorphism
-Inheritence
-Encapsulation.
+~~~~~~~~~~~~~~~ Inheritance in JavaScript ~~~~~~~~~~~~~~~~~~~~~~~~~
+ -- Inheritance can't work like Java. There are no classes.
+Java features classical inheritance. Javascript does not have
+classes, so it cannot use classical inheritence. Javascript, instead,
+uses prototypal inheritance. 
+ -- Prototypal inheritence is objects inheriting from other objects. 
 
-Inheritance in JavaScript
-Inheritance can't work like Java. There are no calsses .java features classical inheritance. Javascript does not have classes, so it cannot use classical inheritence. Javascript, instead, uses prototypal inheritance. Prototypal is the principle of objects inheriting from other objects. 
+-- Objects have a prototype reference to the parent object, generally
+with the __PROTO__ field. When we try to access any member that is
+not defined on the current object, it attempts to recursively find 
+it in the _PROTO__ chain. 
 
-objects have a prototype reference to the parent object, generally with the __PROTO__ field. when we try to access any member that is not defined on the current object, it attempts to recursively find in it the _PROTO__ chain. 
+-- The __PROTO__ field is exposed to us so we can easily see it and
+ modify it.
+-- The old way of extending an object would be to use object.create()
 
-The __PROTO__ field is exposed to us so we can easily see it and modify it.
-The oldschool was of extended an object would be to use object.create()
-
-const Person = {
+  const Person = {
 	firstName: '',
 	lastName: '',
 	printName: function() {
 		console.log(`${this.firstName}  ${this.lastName}`)
 	}
-}
-const Abby = object.create(Person);
+  }
+  const Abby = object.create(Person);
 
-abby.__proto__ === Person << true;
+  abby.__proto__ === Person << true;
 
 
-abby.firstName >returns> ''
-<<If it doesnt find the first name on Abby, it goes to the Proto and giver her that name.
+  abby.firstName //returns: ''
+(If browser doesnt find the first name on Abby, it goes to the 
+Proto and giver her that name.)
 
-Person.firstName = 'nameless'
-abby.firstName >returns> 'nameless' //the proto liked to updated person
+  Person.firstName = 'nameless'
+  abby.firstName //returns 'nameless' 
+ 		//the proto linked to updated person
 
-==> You can change objects however by changing the __proto__
+-- You can change objects however by changing the __proto__
 	const Dog = {
 		firstName = 'Spot',
 		speak: function() {console.log('bark')}
 	}
 	abby.__proto__ = Dog
 
-
-==> You can have objects extend other objects as well.
+-- You can have objects extend other objects as well.
 	let otherAbby = object.create(abby);
 
-==> Can't have cyclic inheritence.
-	a.__proto__.__proto__ = a; //<< would not work, you can have constructors
+-- Can't have cyclic inheritence.
+	a.__proto__.__proto__ = a; 
+	//would not work
 
+==> Can have constructors 
 
-const Dog = function(name, speak) {
+  const Dog = function(name, speak) {
 	this.name = name;
 	this.speak = speak;
-}
-let fido = new Dog('fido',() =>console.log('bark'));
+  }
+  let fido = new Dog('fido',() =>console.log('bark'));
 
 
-//ES6 'classes', really just an organized constructor function.
-class Chicken{
+//ES6 'classes' are really just an organized constructor function.
+    class Chicken{
 	speak(){
 		console.log('bawk');
 	}
@@ -525,22 +648,27 @@ class Chicken{
 		this.feathers = feathers;
 		this.eggs = eggs
 	}
-}
-==> NEW keyword 
-const cluck = new Chicken(1000,2);
-cluck.speak();
+    }
+    const cluck = new Chicken(1000,2);
+    cluck.speak();
 
-Java: calssical inheritence
-JavaScript uses Prototypal inheritence, objects extend other objects, NOT classes.
-the "class" in javascript is actually just a constructor function. Know what a constructor function is. You just need to assign stuff with this. Pretty basic. 
+// NOTE the constructor() method is a special keyword to actually
+// create a constructor for that object!!
 
-JavaScript Object system is based on prototypes, not classes. 
+==> Review:
+- Java: classical inheritence (class based)
+- JavaScript: prototypal inheritence (prototype based)
+	-- objects extend other objects, NOT classes.
+-- "class" in javascript is actually just a constructor function.
+ Know what a constructor function is.
 
+
+==>NOTE:
 ES6 stands for ECMA-SCRIPT6 and has a preffered way to do things:
 http://es6-features.org/#DefaultParameterValues
 HOWEVER: Internet explorer doesn't support ES6 JS.
 
-==> Polymorphism. 
+~~~~~~~~~~~~~~~~~~~~ Polymorphism In JS ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Many forms... 
 In java: Overloading and Overriding.
 In JavaScript: 	
