@@ -1,0 +1,576 @@
+====================================================================
+Servlets (get from last document)
+====================================================================
+
+====================================================================
+Front Controller Design Pattern
+====================================================================
+
+====================================================================
+Request Body
+====================================================================
+When using the POST method, the Http request may contain a BODY.
+Unlike the get method where the actual request url contains the parameters and the values, the POST body is sent in the HTTP request without a url-concatenation.
+====================================================================
+Path Variables(Query params)
+====================================================================
+
+====================================================================
+form data
+====================================================================
+
+
+====================================================================
+forwards / redirects
+====================================================================
+
+
+====================================================================
+* Status Codes
+====================================================================
+	100s info
+	200s - Success
+		201 - Created
+	300s Redirect
+	400 - Client0side errors
+		404- resources not found
+		403- forbidden
+		01 unaurhotized.
+	500 - server-side error
+====================================================================
+* Cookies
+====================================================================
+Cookie- Packet of data saved locally that is automatically sent 
+	with future requests. 
+-- In get method : 
+
+	Cookie[] cookies = request.getCookies();
+	Cookie cookie = new Cookie("my-cookie","test-value");
+	response.addCookie(cookie);
+-- Note cookies are created with key/value pairs
+
+-- Can set expiration date on cookies 
+
+-- By default, server selects oldest cookie of one name and sending a cookie of the same nae wont 
+
+==> Already a built in function for tokens called "Server Sessions"
+-- Sessions are tracked by cookies
+Session is intended to identify a user who is sending a request.
+Sessionscollect key-value pairs which can then be accessed between request This allows us to store information about a user throughout the lifetime of the session.
+
+How it works : 
+Java produces a cookie called the JSESSIONID that contains a unique token.
+This token is then provided on future requests which identifies which value map should be provided for the session.
+Limitations : 
+1. Session information is stored in memory. This means when the application (server) shuts down, the session and all session data are lost.
+2. Also due to information being stored in memory, this makes our application stateful. 
+The application must store data for individual users in memory. In consequence, the memory requirements of the application will grow iwht the number of users. The results in an application that WILL NOT scale well... ( Can work maybe into the 100,000s, but not 1mil+. )
+	=> State should be the domain of the database. Should NOT be a backend thing. However, we will use 
+
+(Stateless application ways :
+1. Most straightforward version is to store the token on the DB instead of the server. 
+2. Other way : use JSON jwt -- json stores info which gets decrypted. )
+
+request.getSession() with no arguments will return the session or create a new one.
+request.getSession(true) will always get a session - new or old
+request.getSession(false) will will get the session or return null.
+
+In get: Applying session obj
+_____
+HttpSession session = request.getSession();
+session.setAttribute("name","clay");
+__
+in post, getting session info:
+___
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("name");
+		System.out.println("Message from " + name);
+
+====================================================================
+* Maven Jackson
+====================================================================
+Jackson Will NOT work if you don't have getters, setters, and an empty constructor 
+
+Jackson is an automatic parses/ deparser with ObjectMapper.
+
+GET : 
+ObjectMapper mapper = new ObjectMapper();		
+		if(param == null) {
+			mapper.writeValue(response.getWriter(), candies);
+		} else {
+			int id = Integer.parseInt(param);
+			mapper.writeValue(response.getWriter(),  candies.get(id));
+		}
+
+POST :
+	ObjectMapper mapper = new ObjectMapper();
+	Candy candy = mapper.readValue(request.getReader(), Candy.class);
+	candies.add(candy);
+	
+
+==> Note : bigdecimal "probably" has a way to handle converting integers into a decimal or whatever.
+
+==> Can use JSON ignore annotation in your class so that that particular piece of data wont be written on the JSON that the users can see.
+(use this for user_role_id, password)
+JsonIgnore will prevent sending the particular field to the JSON that the user can directly access.
+
+
+====================================================================
+
+====================================================================
+- cors error on client-side is actually caused by a SERVER-side problem.
+- When a browser sends a request via javascript, it has to validate that the request is utilized properly... Function implemented by web browsers for safety/ responsible use of JS.
+>> So on the server-side you have to override the service method in the controller to allow the access.
+
+
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin","*");
+		super.service(request, response);
+		
+	}
+
+**************
+IN js:
+Use JSON.stringify(object) to put your object into a string to be sent to the API
+
+
+
+====================================================================
+
+====================================================================
+
+CREATE TYPE costume_genre AS ENUM ('ironic','movie','pop','creature','fantasy');
+
+CREATE TABLE costumes (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(25),
+	genre costume_genre,
+	scariness INTEGER CHECK(scariness > 0 AND scariness < 11),
+	cuteness INTEGER CHECK (cuteness > 0 AND cuteness < 11)
+);
+--CREATE ROLE jdbc LOGIN PASSWORD 'p4ssw0rd';
+GRANT ALL PRIVILEGES ON TABLE costumes TO jdbc;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jdbc;
+
+
+INSERT INTO costumes (name, genre, scariness, cuteness) VALUES
+	('cat','creature',2,7),
+	('assassin','fantasy',6,3),
+	('ghost','creature',8,1);
+
+================================
+Classifications of Java Objects:
+===============================
+Java Bean : 
+ Class that meets certain requirements:
+	1. getters/setters
+	2. no-args constructor
+	3. must be serializable (usually)
+
+POJO - Plain Ol' Java Object
+
+
+
+============
+NPM - Node package manager 
+	- Like a maven, but Node instead.
+	- NPM is a command line tool  used to set up dependencies
+
+TypeScript - A superset of JavaScript
+- All current JS files can be typescript if you change the extension.
+- Major feature : Static typing.
+	=> Types that cannot be changed (more like java)
+	=> Enforces strong typing.
+- Access to newer JS features before borad support is offered
+
+====================
+>>>>>>>>clear session 
+session.invalidate();
+
+
+***************
+Add to project 1 notes we need to add usename to our cookei
+
+
+
+
+
+
+========================================================
+Servlet Scope
+========================================================
+Scope is a section of code or location of execution in which data is valid and accessible.
+
+Servlet scopes have to do with how data is acceepbiel within a JavaEE application.
+
+1. Request Scope : Things in the request object are created for each request, and this data disappears after the request is completed. IE: Form data, request-url, request-body, etc.
+2. Session scope - things in a session will survive between requests but are scoped to individual users through the JSESIONID cookie. This data is not persisted between application runs. (When the server restarts, this goes away)
+3. Servlet Scope - A parameter that is defined and accessible only within a single servlet. Defined in web.xml document. Key/value pairs.
+4. Application Scope - a parameter that is defined and accessible from any servlet. Defined in the web.xml document. key/value pairs.
+
+
+  <display-name>Archetype Created Web Application</display-name>
+  <context-param>
+  	<param-name>animal</param-name>
+  	<param-value>dog</param-value>
+  	<description>Application scope variable, accessible within any servlet.</description>
+  </context-param>
+  <servlet>
+ 	 <servlet-name>hello</servlet-name>
+  	<servlet-class>com.revature.servlets.HelloWorldServlet</servlet-class>
+  	<init-param>
+  		<param-name>name</param-name>
+  		<param-value>Ted</param-value>
+  		<description>This is a servlet-scoped variable, only visible to the hello servlet.</description>
+  	</init-param>
+  </servlet>
+  
+  
+in SERVLET: 
+		// Gets param in servlet scope:
+		System.out.println(getInitParameter("name"));
+		
+		//gets parameter in application scope : 
+		System.out.println(getServletContext().getInitParameter("animal"));
+
+==> session:
+		request.getAttribute("key");
+
+-------------------------
+Web.xml can be used for error handling.
+[..........]
+  <error-page>
+  	<error-code>404</error-code>
+  	<location>/404.html</location>
+  </error-page>
+  
+</web-app>
+-------------------------
+XML PAGE CAPABILITIES (there are more, this is a small list)
+
+1. Creating and mapping Servlets
+2. Configuring how servlets start up. 
+3. Map Error codes and exceptions to error pages.
+4. Set application are servlet scoped variables. 
+
+
+
+=================================
+Servlet Architecture Review 
+=================================
+Request Travel path: 
+
+req. = localhost:8080/application3/login
+
+	req.	 ____server_____
+[User] -------->|-.			|
+		| |  [application1]	|
+		| |  [application2]	|
+		| '->[application3]	|
+		|_______________________|
+   _servlet3____________________________________________________
+  | req.|	  						|
+  |	V	   .->[loginCtrlr]-->[helloService]-->[helloDao]|
+  | [frontServlet]-'  [otherCtrlr]   [otherService]   [otherDao]|
+  |_____________________________________________________________|
+
+1. From user to server
+2. In server, server determines which app to send the request to be server configuration. (tomcat default is the application name)
+3. Server reads web.xml to determine which servlet to send it to.
+	-Note: frontServlet is the only servlet in this visual,
+	  meaning all application3/* requests go to it, but 
+	  there can be multiple servlets in an application.
+4. Servlet parses and sends request to the proper controller
+5. Controller gets logic(rules of application) from Service
+6. Service gets data from Dao.
+7. Controller writes response based on service methods
+8. Response is sent back to the user
+
+
+===================
+Angular
+====================
+==> TypeScript:
+- Superset of Javascript
+- Types cannot be cahnges
+- Allows access to newer features that browsers may not all support.
+- Must be transpiled before used by browser.
+- Compile/transpiles code => Converts it all to es5 (or desired format)
+- Compiler minifies JS and CSS files into one pack w/ smallest size:
+	- turns variables into 1 letter(or as small as possible)
+	- removes lines breaks
+	- minifed code NOT intended to be human-readable
+
+==> Benefits:
+	- Security of static typing w/ access to new features
+
+~~~~~~~~~~~~~~~~~~~~ * Installing Angular ~~~~~~~~~~~~~~~~~~~~~~
+ 1.) Download node.js
+	- Node.js gives access to npm commands in cmd
+	- npm : Node Package Manager for Node JavaScript platform
+ 2.) npm install -g @angular/cli
+	- cli = angular command line interface
+	- gives access to ng (aNGular) commands in cmd
+ 3.) Create a project:
+	- cd into directory for your project
+	- ng new project-name
+ 4.) cd project-name (go into the new folder)
+	-> npm start
+	- You can see your new project on your browser at 
+		localhost:4200
+
+~~~~~~~~~~~~~~~~~~~~~~~ * Main Files ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tslint.json
+	- Generated by new angular project
+	- used to enforce standards of coding
+	==> In VS code, click Extensions icon on the left toolbar
+		- download TS Lint to use this
+tsconfig
+	- has line:
+		target: "es5"
+	- Means typescript will be transpiled into javascript es5
+package.json
+	- holds dependencies
+	- holds command line stuff in script:
+		scripts: {
+		"ng":"ng"
+			...
+		 "start" : "ng serve"
+	- cmd "npm start" and "ng serve" do the same thing
+src>>app folder
+  tsconfig.spec - testing
+  styles.css - global styles
+  polyfills.ts - converts newer features to old ones
+  app.component.html - html page of localhost:4200
+	- Template for a component of an HTML page.
+	- Gets injected into part of the HTML.
+  app.componenets.ts:
+	@Component ({ //decorator
+		selector: 'app-root' //use <app-root></app-root>
+		templateUrl: '..' //location of html doc to inject
+
+===================================================================
+			 * Components 
+===================================================================
+- Angular works on a system of COMPONENTS. 
+	Components Modularize the HTML and CSS.
+	- they create reusable HTML with rules (js) for HTML sections
+	- components can be nested
+- General components of components
+	.ts file (logic)
+	.html file (template)
+	.css file (style/view)
+
+- Components are especially useful for Single Page Applications
+  >> SPA - Single Page Applications - have only 1 HTML page.
+	- NO change of state.
+	- Elements change using JS only
+	- Benefit : Give a browser-site a desktop applicaiton feel
+	- Made with components and JS logic to contorl what is shown
+	- Angular BINDS components together on a page
+
+==> New component - can be done by hand or generated with:
+	ng g c components/name
+	- If done by hand, be sure your component is imported and
+	 declared in the declarations: section in 
+		src>>app>>app.module.ts file
+	- new component should be within folder:
+		src>>app>components>>name
+	  where you have access to the .ts, .html, and .css files
+
+==> Javascript for components: 
+- Methods and variables are stored in name.component.ts within the   NameComponent class. IE:
+	export class UploadReceiptComponent implements OnInit {
+	    myTitle = "MY TITLE!";   //component variable
+	    constructor() { }
+	    myFunction() { 	     //component method
+	    }
+	    ngOnInit() {
+	    }
+	}
+
+==> Binding HTML
+Data Binding - to JS variable = Interpolation 
+	{{ variable }} injects component variable into template 
+Event Binding - to Javascript function
+  Set action as an attribute within an HTML element ie:
+	<button (click)="myFunction()">Go!</button>
+Property binding - to CSS class, style, or attribute
+	<span [class.myClass]="booleanFunction()">Words</span>
+-- This span will have the class myClass while booleanFunction() 
+   returns true
+-- Can be used for specific properties as well
+	<button [disabled]="overOneHundred()">Click</button>
+
+************* Forms Module Allows the use of ngModel *************
+2-way Data Binding allows js to interact with forms.
+	<input [(ngModel)]="varName" type="text">
+- Binds with onchange event, and only works for input values.
+
+
+===================================================================
+			* Routes
+===================================================================
+- Changing routes changes the rul, but does not make it a multi-page application becasue it is actually all javascript moving around one big page!
+
+===================================================================
+			* Angular
+===================================================================
+Services - another part of angular, acti differently fro mcomponents.
+Components have their own state, data, template, and styles.
+Service, however, is (generally) a singleton that has no visual components and is essentially the glue between components.
+
+Useful to have components talk to eachother and track how data moves around the info.
+Services are containers of data used to comminicate iwht ocmponents. 
+Create services that allow us to comminicate wiht serviecs and another to commincate with the API.
+
+first component/ second component / service "communication"
+
+in first.component.ts : 
+//Include this import for the service:
+import { CommunicationService } from 'src/app/services/communication.service';
+
+// Dependency injection:
+	// Change the constructor:
+	constructor(private communicationService: CommunicationService) { }
+** It must be private in order to be injected
+
+
+==> In app.module : 
+-add CommunicationService as a provider
+-add FormsModule import in order to have 2-way data binding with the forms
+	import { FormsModule } from '@angular/forms';
+
+
+==> communicationService is an object in which we can inject variables now and pass them around the page.
+In Communication.service.ts, create a method to get each value:
+  submitNewValue(value: string) {
+    console.log(value);
+  }
+
+and on the component, send the value to that function: 
+  submit() {
+    if (!this.inputValue) {
+    return;
+    }
+    this.communicationService.submitNewValue(this.inputValue);
+  }
+
+
+======
+Reactive JavaScript: (notes -g means global)npm install --save rxjs
+
+	npm install -g rxjs
+
+-- Using --save will install that tool on the application we're using. (npm install --save rxjs) and the dependency will be added to your package.json file
+
+========
+
+Comminication serice cann't run methods of any of the components it is connected to. 
+But with rxjs (reactive javascript)  the comminication service can get data from one place then send it off somewhere else.
+	- can be sent multiple places.
+	- So updates can effect all ocmponents what need the updateso long as the components subscripbe to teh updates.
+	- components that subscribe to the updates will update themselves when updates come in.
+
+Observable = something that's happening. 
+             v--- the actual data being updated
+subscribe((data)=>{
+	//logic
+}
+
+   - subscription can be set up to be recieved at time intervals or at updates ect. 
+	- by "Subscribing" to communication service, the method will be invoked every time the data is updated.
+
+
+Steps:
+1. component1 invoked method ON connection service:
+	communicationService.addSomeData(myInputValue)
+2. communicationService updates value
+3. reactive angular runs the update
+
+Observable represents an array of items that haven't been resoled yet.
+- In our case, only sending 1 thing at a time. 
+ - standard observable is ore like asyne
+
+Subject - Something that can be SEEN. 
+
+....
+- Data access pipelines are customarily rep'd by starting with $
+
+Inside of CommunicationService:
+
+$listItem = new Subject<string>();
+(Recall Subject was the like pipeline thing. "Subject" object has a convenient .next. method to add things to it. Observable objects don't have that)
+
+import { Subject } from 'rxjs';
+...
+export class CommunicationService {
+
+  $listItem = new Subject<string>();
+
+  constructor() { }
+
+  submitNewValue(value: string) {
+    this.$listItem.next(value);
+  }
+}
+~~~~~/~~~~~/~~
+
+
+import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { CommunicationService } from 'src/app/services/communication.service';
+
+...
+
+export class SecondComponent implements OnInit {
+  listItemSubscription: Subscription;
+  items = new Array<string>();
+  constructor(
+    private communicationService: CommunicationService) { }
+  ngOnInit() {
+    this.listItemSubscription = this.communicationService
+      .$listItem.subscribe( (value) => {
+        this.items.push(value);
+      });
+  }
+
+}
+
+- have a plan to unsubscribe for when component is destoyred! Otherwise there will be multiple copies of the methods and whatnot and your lists will spit out the subscribed-to values multiple times.
+
+Example API key: d563c8ee  (for amdbapi.com a movies API)
+http://www.omdbapi.com/?i=tt3896198&apikey=d563c8ee 
+
+ng g s servies services/movie 
+
+
+'http://www.omdbapi.com/?t=' + movieName + '&apikey=d563c8ee'
+
+?syntax only available in components. It protects us from errors related to null/undefined ojects
+{{movie?.Title}}
+
+
+
+
+
+
+
+
+
+
+
+-- COMPONENTS are declatred,
+imports are modules (mod are import)
+
+
+
+
+
+
+
+
+
+
+
+

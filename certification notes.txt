@@ -169,6 +169,45 @@ You can't functional instantiate interfaces without implementing the abastract m
 - .equals() checks it 2 objects are the same class IE new Long(1).equals(new Integer(1)) will be FALSE.
 
 
+===================================================
+att 3: 64
+
+"dangling else clause"
+
+==> Inheritence
+interface Moveable{
+int location = 0;
+public move(int distance);
+}
+class Donkey implements Moveable{
+int location = 200;
+public move(int distance) {location +=distance}
+main {
+Moveable m = new Donkey();
+m.move(100)
+.out.print(location); // Prints 0 becaue it refers to Moveable's location.
+
+
+
+rules for interfaces / defining interface methods
+
+
+Number is a class. Integer, Long, ect extend Number.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
