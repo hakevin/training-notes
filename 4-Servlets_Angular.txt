@@ -789,6 +789,8 @@ Target User	- Developers		- Designers
 	Components Modularize the HTML and CSS.
 	- they create reusable HTML with rules (js) for HTML sections
 	- components can be nested
+
+- Components have their own state, data, template, and styles.
 - General components of components
 	.ts file (logic)
 	.html file (template)
