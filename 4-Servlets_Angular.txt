@@ -781,6 +781,16 @@ Target User	- Developers		- Designers
 	ng g c path/name
 => Generate Service
 	ng g s path/name
+=> Many component blueprints can be generated:
+	Use:
+	ng g blueprint path/name
+	And replance blueprint with one of the following:
+	class, directive, enum, guard, interface,
+	module, pipe, service
+
+===================================================================
+			 * ngModule
+===================================================================
 
 ===================================================================
 			 * Components 
