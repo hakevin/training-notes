@@ -1,0 +1,22 @@
+====================================================================
+	* Class Example SQL
+====================================================================
+
+CREATE TYPE costume_genre AS ENUM ('ironic','movie','pop','creature','fantasy');
+
+CREATE TABLE costumes (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(25),
+	genre costume_genre,
+	scariness INTEGER CHECK(scariness > 0 AND scariness < 11),
+	cuteness INTEGER CHECK (cuteness > 0 AND cuteness < 11)
+);
+--CREATE ROLE jdbc LOGIN PASSWORD 'p4ssw0rd';
+GRANT ALL PRIVILEGES ON TABLE costumes TO jdbc;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jdbc;
+
+
+INSERT INTO costumes (name, genre, scariness, cuteness) VALUES
+	('cat','creature',2,7),
+	('assassin','fantasy',6,3),
+	('ghost','creature',8,1);

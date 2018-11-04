@@ -1,3 +1,19 @@
+I. Servlets
+	* Request Path
+	* Singleton
+	* Getting Started - Servlets in Java
+	* Servlet Architecture
+	* Using Servlets
+	* Getting Request Information 
+	* Status Codes
+	* Cookies 
+	* Maven Jackson
+	* Servlet Scope
+	* Depolyment Descriptor
+	* CORS Error in JavaScript
+	* Classification of Java Objects
+II. Angular
+
 ====================================================================
 ========================== I. Servlets =============================
 ====================================================================
@@ -264,16 +280,17 @@ mapper.writeValue(response.getWriter(), Object obj)
 	- this receives requests from the client and sends them to 
 	any resource by wrapping around a server resource located at
 	a particular path.
-RequestDispatcher rd = getServletContext().getNamedDispatcher("default");
-HttpServletRequest wrapped = new HttpServletRequestWrapper(request){
+ RequestDispatcher rd = getServletContext()
+	.getNamedDispatcher   ("default");
+ HttpServletRequest wrapped = new HttpServletRequestWrapper(request){
 	public String getServletPath() {return "";}
-};
+ };
 rd.forward(wrapped,response);
 
-NOTE: ^^ Above implements an object with a specific instnace method.
-This can be done in classes or whatever. 
-It overrides that method for that INSTANCE only.
-This is useful when instantiating interfaces:
+ NOTE: ^^ Above implements an object with a specific instance method.
+	- This can be done in classes or whatever. 
+	- It overrides that method for that INSTANCE only.
+	- This is useful when instantiating interfaces:
   ////some file:
   public interface TestInterface { public void myMethod(); } 
   /// in main of another file:
@@ -288,44 +305,70 @@ This is useful when instantiating interfaces:
 		test.myMethod();
 
 -> Reading Request:
-		request.getQueryString();
-		request.getParameter("parameter_name");
+	request.getQueryString();
+	request.getParameter("parameter_name");
    - With Jackson:
      static ObjectMapper mapper = new ObjectMapper();
      Object obj = mapper.readValue(request.getReader ),Object.class);
 
+-> Forwarding will send the request to another servlet.
+	- The user will have no knowledge of this, it is all internal
+ 	RequestDispatcher dispatcher = getServletContext()
+		.getRequestDispatcher("/otherServlet");
+	dispatcher.forward(request,response);
 
-How can I get the body of a request?
-How can I get values from a form post?
-What is the difference between a forward and a redirect?
-How can I forward a request?
-How can I redirect a request?
-How can I specify the status code for a response?
-What is a cookie?  How can I set a cookie?
-What is a session? What are the different ways to get a session?
-What is a JSESSIONID? What is it used for?
+-> Redirecting sends the user a response with a new location
+	- The browser then takes request and sends it redirect link
+	response.sendRedirect("http://google.com");
+
+-> Status code:
+	response.setStatus(404);
+
+-> A cookie is a bit of data stored on a user's computer. 
+ The data is in the form of a key/value pair.
+ It is created by the server and sent in the response.
+ To set a cookie:
+	Cookie someCookie = new Cookie("cookie_name","value");
+	response.addCookie(someCookie);
+-> A session is a stored unit on the server. It can hold objects.
+	- Creating & getting a session: 
+		HttpSession = request.getSession();
+	-request.getSession(false) won't create a session, it will
+	 return null if there is no session sent.
+	- session.setMaxIntactiveInterval(long seconds) will auto-
+	invalidate a session if it isn't used in that time period
+
+-> JSESSIONID is the number associated with the session.
+ It is used to retrieve information on the server associated with it.
+ Creating a session sends a cookie with the key JSESSIONID to user
 
 ====================================================================
-* Request Body
+		* Getting Request Information
 ====================================================================
+==> Path Variables
+	- When using GET, the url path contains path variables
+	- PATH variables are paramaters/values after the ? IE
+   localhost:8080/Example/search?type=3&name=tom
+
+	- The query above is type=3&name=tom
+	- The parameters are "type" and "name"
+	- The query parameters are "3" and "tom"
+Reading Query Parameters:
+	request.getQueryString(); // type=3&name=tom
+	request.getParameter("name"); //tom
+
+==> Request Body 
 When using the POST method, the Http request may contain a BODY.
-Unlike the get method where the actual request url contains the parameters and the values, the POST body is sent in the HTTP request without a url-concatenation.
-====================================================================
-Path Variables(Query params)
-====================================================================
+the POST body is sent in the HTTP request
+without a url-concatenation.
+
+POST:
+   - With Jackson:
+     static ObjectMapper mapper = new ObjectMapper();
+     Object obj = mapper.readValue(request.getReader ),Object.class);
 
 ====================================================================
-form data
-====================================================================
-
-
-====================================================================
-forwards / redirects
-====================================================================
-
-
-====================================================================
-* Status Codes
+			* Status Codes
 ====================================================================
 	100s info
 	200s - Success
@@ -337,7 +380,7 @@ forwards / redirects
 		01 unaurhotized.
 	500 - server-side error
 ====================================================================
-* Cookies
+			* Cookies
 ====================================================================
 Cookie- Packet of data saved locally that is automatically sent 
 	with future requests. 
@@ -346,194 +389,166 @@ Cookie- Packet of data saved locally that is automatically sent
 	Cookie[] cookies = request.getCookies();
 	Cookie cookie = new Cookie("my-cookie","test-value");
 	response.addCookie(cookie);
--- Note cookies are created with key/value pairs
-
+-- Cookies are created with key/value pairs
 -- Can set expiration date on cookies 
+-- By default, server selects oldest cookie of one name and sending 
+   a cookie of the same name wont always work
 
--- By default, server selects oldest cookie of one name and sending a cookie of the same nae wont 
+==> Server Sessions
+- Simplify the cookie system, and saves temporary data on the server
+- Sessions are tracked by cookies
+- Session is intended to identify a user who is sending a request.
 
-==> Already a built in function for tokens called "Server Sessions"
--- Sessions are tracked by cookies
-Session is intended to identify a user who is sending a request.
-Sessionscollect key-value pairs which can then be accessed between request This allows us to store information about a user throughout the lifetime of the session.
+Sessions collect key-value pairs which can then be accessed between 
+request. This allows us to store information about a user throughout
+ the lifetime of the session.
 
-How it works : 
-Java produces a cookie called the JSESSIONID that contains a unique token.
-This token is then provided on future requests which identifies which value map should be provided for the session.
-Limitations : 
-1. Session information is stored in memory. This means when the application (server) shuts down, the session and all session data are lost.
-2. Also due to information being stored in memory, this makes our application stateful. 
-The application must store data for individual users in memory. In consequence, the memory requirements of the application will grow iwht the number of users. The results in an application that WILL NOT scale well... ( Can work maybe into the 100,000s, but not 1mil+. )
-	=> State should be the domain of the database. Should NOT be a backend thing. However, we will use 
+-- How it works : 
+	- Java produces a cookie called the JSESSIONID that contains
+	 a unique token.
+	-This token is then provided on future requests identify 	which value map should be provided for the session.
 
-(Stateless application ways :
-1. Most straightforward version is to store the token on the DB instead of the server. 
-2. Other way : use JSON jwt -- json stores info which gets decrypted. )
+-- Limitations : 
+   1. Session information is stored in memory. This means when the
+	 application (server) shuts down, the session and all session
+	 data are lost.
+   2. Also due to information being stored in memory, this makes our
+	 application stateful. 
 
-request.getSession() with no arguments will return the session or create a new one.
-request.getSession(true) will always get a session - new or old
-request.getSession(false) will will get the session or return null.
+The application must store data for individual users in memory. In
+ consequence, the memory requirements of the application will grow
+ wiht the number of users. 
+ -The results in an application that WILL NOT scale well... 
+	(Can work maybe into the 100,000s, but not 1mil+)
 
-In get: Applying session obj
-_____
-HttpSession session = request.getSession();
-session.setAttribute("name","clay");
-__
-in post, getting session info:
-___
-		HttpSession session = request.getSession();
-		String name = (String) session.getAttribute("name");
-		System.out.println("Message from " + name);
+ ** State should be the domain of the database. 
+	Should NOT be a backend thing. 
+
+-- Methods to keep application statemess :: 
+  1. Most straightforward version is to store the token in the DB
+   instead of the server. 
+  2. Other way : use JSON jwt; json stores info which gets decrypted
+
+
+==> Creating session:
+request.getSession() 
+	with no arguments returns the session or create a new one.
+request.getSession(true)
+	will always get a session - new or old, same as above
+request.getSession(false) 
+	will get the session or return null.
+
+==> Applying session obj
+ _Initiate____
+	HttpSession session = request.getSession();
+	session.setAttribute("name","clay");
+ _In use______
+	HttpSession session = request.getSession();
+	String name = (String) session.getAttribute("name");
+	System.out.println("Message from " + name);
 
 ====================================================================
-* Maven Jackson
+			* Maven Jackson
 ====================================================================
-Jackson Will NOT work if you don't have getters, setters, and an empty constructor 
+Maven Jackson - Dependency which maps requests into objects
+-- Jackson will NOT work if you don't have getters, setters, and 
+	an empty constructor for you object.
+-- Jackson is an automatic parses/ deparser with ObjectMapper.
 
-Jackson is an automatic parses/ deparser with ObjectMapper.
+SENDING a response (deparse object to JSON) : 
+  ObjectMapper mapper = new ObjectMapper();		
+       if(param == null) {
+	   mapper.writeValue(response.getWriter(), candies);
+	} else {
+	   int id = Integer.parseInt(param);
+	   mapper.writeValue(response.getWriter(),  candies.get(id));		}
 
-GET : 
-ObjectMapper mapper = new ObjectMapper();		
-		if(param == null) {
-			mapper.writeValue(response.getWriter(), candies);
-		} else {
-			int id = Integer.parseInt(param);
-			mapper.writeValue(response.getWriter(),  candies.get(id));
-		}
-
-POST :
-	ObjectMapper mapper = new ObjectMapper();
-	Candy candy = mapper.readValue(request.getReader(), Candy.class);
-	candies.add(candy);
+PARSING response (post body to Object) :
+  ObjectMapper mapper = new ObjectMapper();
+  Candy candy = mapper.readValue(request.getReader(), Candy.class);
+  candies.add(candy);
 	
-
 ==> Note : bigdecimal "probably" has a way to handle converting integers into a decimal or whatever.
 
-==> Can use JSON ignore annotation in your class so that that particular piece of data wont be written on the JSON that the users can see.
-(use this for user_role_id, password)
-JsonIgnore will prevent sending the particular field to the JSON that the user can directly access.
+==> Can use JsonIgnore annotation in your class so that a particular
+ piece of data wont be written on the JSON that the users can see.
+				(use this for user_role_id, password)
+ -@JsonIgnore will prevent sending the particular field to the JSON that the user can directly access.
 
+===================================================================
+			* Servlet Scope
+===================================================================
+- Scope is a section of code or location of execution in which data
+ is valid and accessible.
 
-====================================================================
+- Servlet scopes have to do with how data is accessible within a
+  JavaEE application.
 
-====================================================================
-- cors error on client-side is actually caused by a SERVER-side problem.
-- When a browser sends a request via javascript, it has to validate that the request is utilized properly... Function implemented by web browsers for safety/ responsible use of JS.
->> So on the server-side you have to override the service method in the controller to allow the access.
+  1. Request Scope : Things in the request object are created for
+ 	each request, and this data disappears after the request is 
+	completed. 
+	- IE: Form data, request-url, request-body, etc.
+  2. Session scope - things in a session will survive between
+	 requests but are scoped to individual users through the
+	 JSESIONID cookie. This data is not persisted between
+	 application runs. (When the server restarts, this goes away)
+  3. Servlet Scope - A parameter that is defined and accessible only
+	 within a single servlet. Defined in web.xml document.
+	 Key/value pairs.
+  4. Application Scope - a parameter that is defined and accessible 	from any servlet. Defined in the web.xml document. 
+	Key/value pairs.
 
+===================================================================
+		* Deployment Descriptor
+===================================================================
+==> Deployment Descriptor is a configuration file for application 
+    that is used by the server and specifies to how it get deployed. 
+** web.xml is the depolyment descriptor for Java web applications ** 
+--Determines how URLs map to the servlets.
+--<web-app> is the root element of the .xml file
 
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.addHeader("Access-Control-Allow-Origin","*");
-		super.service(request, response);
-		
-	}
+XML Page Capabilities: (Basic list)
+1. Creating and mapping Servlets
+2. Configuring how servlets start up. 
+3. Map Error codes and exceptions to error pages.
+4. Set application or servlet scoped variables. 
+++ More
+ 
 
-**************
-IN js:
-Use JSON.stringify(object) to put your object into a string to be sent to the API
-
-
-
-====================================================================
-
-====================================================================
-
-CREATE TYPE costume_genre AS ENUM ('ironic','movie','pop','creature','fantasy');
-
-CREATE TABLE costumes (
-	id SERIAL PRIMARY KEY,
-	name VARCHAR(25),
-	genre costume_genre,
-	scariness INTEGER CHECK(scariness > 0 AND scariness < 11),
-	cuteness INTEGER CHECK (cuteness > 0 AND cuteness < 11)
-);
---CREATE ROLE jdbc LOGIN PASSWORD 'p4ssw0rd';
-GRANT ALL PRIVILEGES ON TABLE costumes TO jdbc;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jdbc;
-
-
-INSERT INTO costumes (name, genre, scariness, cuteness) VALUES
-	('cat','creature',2,7),
-	('assassin','fantasy',6,3),
-	('ghost','creature',8,1);
-
-================================
-Classifications of Java Objects:
-===============================
-Java Bean : 
- Class that meets certain requirements:
-	1. getters/setters
-	2. no-args constructor
-	3. must be serializable (usually)
-
-POJO - Plain Ol' Java Object
-
-
-
-============
-NPM - Node package manager 
-	- Like a maven, but Node instead.
-	- NPM is a command line tool  used to set up dependencies
-
-TypeScript - A superset of JavaScript
-- All current JS files can be typescript if you change the extension.
-- Major feature : Static typing.
-	=> Types that cannot be changed (more like java)
-	=> Enforces strong typing.
-- Access to newer JS features before borad support is offered
-
-====================
->>>>>>>>clear session 
-session.invalidate();
-
-
-***************
-Add to project 1 notes we need to add usename to our cookei
-
-
-
-
-
-
-========================================================
-Servlet Scope
-========================================================
-Scope is a section of code or location of execution in which data is valid and accessible.
-
-Servlet scopes have to do with how data is acceepbiel within a JavaEE application.
-
-1. Request Scope : Things in the request object are created for each request, and this data disappears after the request is completed. IE: Form data, request-url, request-body, etc.
-2. Session scope - things in a session will survive between requests but are scoped to individual users through the JSESIONID cookie. This data is not persisted between application runs. (When the server restarts, this goes away)
-3. Servlet Scope - A parameter that is defined and accessible only within a single servlet. Defined in web.xml document. Key/value pairs.
-4. Application Scope - a parameter that is defined and accessible from any servlet. Defined in the web.xml document. key/value pairs.
-
-
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>Name Used By Admin Tools</display-name>
+<!--    Application-Scope Variables -->
   <context-param>
   	<param-name>animal</param-name>
   	<param-value>dog</param-value>
   	<description>Application scope variable, accessible within any servlet.</description>
   </context-param>
+
+
   <servlet>
  	 <servlet-name>hello</servlet-name>
-  	<servlet-class>com.revature.servlets.HelloWorldServlet</servlet-class>
+  	<servlet-class> 		com.revature.servlets.HelloWorldServlet
+	</servlet-class>
+<!-- Servlet-Scope Variables -->
   	<init-param>
   		<param-name>name</param-name>
   		<param-value>Ted</param-value>
-  		<description>This is a servlet-scoped variable, only visible to the hello servlet.</description>
+  		<description>
+			This is a servlet-scoped variable, 
+			only visible to the hello servlet.
+		</description>
   	</init-param>
   </servlet>
   
   
 in SERVLET: 
-		// Gets param in servlet scope:
-		System.out.println(getInitParameter("name"));
+==> Gets param in servlet scope:
+	System.out.println(getInitParameter("name"));
 		
-		//gets parameter in application scope : 
+==>/gets parameter in application scope : 
 		System.out.println(getServletContext().getInitParameter("animal"));
 
-==> session:
-		request.getAttribute("key");
+==> Session-Parameter:
+	request.getAttribute("key");
 
 -------------------------
 Web.xml can be used for error handling.
@@ -545,33 +560,119 @@ Web.xml can be used for error handling.
   
 </web-app>
 -------------------------
-XML PAGE CAPABILITIES (there are more, this is a small list)
-
-1. Creating and mapping Servlets
-2. Configuring how servlets start up. 
-3. Map Error codes and exceptions to error pages.
-4. Set application are servlet scoped variables. 
 
 
+====================================================================
+		* CORS error in JavaScript
+====================================================================
+- CORS error client-side is actually caused by SERVER-side problem.
+- When a browser sends a request via javascript, it has to validate 
+ that the request is utilized properly. This is a feature implemented
+ by web browsers for safety/ responsible use of JS.]
 
-===================
-Angular
-====================
-==> TypeScript:
-- Superset of Javascript
-- Types cannot be cahnges
+==> Solution: On the server-side you have to override the service 
+	method in the controller to allow the access.
+
+protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	response.addHeader("Access-Control-Allow-Origin","*");
+	super.service(request, response);
+	}
+
+==> The above should allow the JS to get/post, but it might not 
+actually allow credentials to be sent. You may have to be more 
+specific about your added Headers, as it does not always like the "*"
+and instead insists on specific permission:
+
+response
+.addHeader("Access-Control-Allow Origin","http://localhost:4200");
+response.addHeader("Access-Control-Allow-Credentials","true");		response.addHeader("Access-Control-Allow-Headers","Content-Type, Accept, X-Requested-With");
+response.addHeader("Access-Control-Allow-Methods","GET, POST, DELETE, PUT, OPTIONS, HEAD");
+
+==> NOTE: In javaScript:
+	Use JSON.stringify(object) to put your object into a string
+	to be sent to the API
+
+====================================================================
+		* Classifications of Java Objects
+====================================================================
+
+Java Bean - Class that meets certain requirements:
+	1. All properties private (use getters/setters)
+	2. no-args constructor
+	3. must be serializable (usually)
+
+POJO - Plain Ol' Java Object not bound by restrictions other than
+	those forced by the Java language
+	Should not have to:
+	> Extend pre-specified class
+	> Implement prespecified intergace
+	> Contain prespecified annotations
+
+
+====================================================================
+========================== II. Angular =============================
+====================================================================
+- Runs on typescript
+- Allows custom HTML components
+- Compiles all the code into one big document and shows individual
+ pieces as requested
+====================================================================
+		 * NPM - Node Package Manager
+====================================================================
+NPM - Node package manager 
+	- Like a Maven, but Node instead.
+	- NPM is a command line tool  used to set up dependencies
+
+- To create a new project, cd into the desired folder, then:
+	npm init
+		-- This creates package.json
+- To install new dependencies, the command:
+	npm install PACKAGENAME
+  -- To install them globally:
+	npm install -g PACKAGENAME
+  -- Or to install the package directly onto your package.json
+	npm install PACKAGENAME --save
+- To compile your code and get it running use:
+	npm start
+
+==> Webpack (open-source JS bundler tool)
+- Node.js is required for installing Webpack
+- Webpack is a JavaScript module bundler which puts JS files together
+for use in a browser. 
+- It takes dependencies and generates elements representing those 
+modules.
+
+====================================================================
+			* TypeScript:
+====================================================================
+TypeScript - A superset of JavaScript
+- All current JS files can be typescript if you change the extension.
+- Major feature : Static typing.
+	=> Types that cannot be changed (more like java)
+	=> Enforces strong typing.
+	=> Access to newer features via transpiling
 - Allows access to newer features that browsers may not all support.
 - Must be transpiled before used by browser.
-- Compile/transpiles code => Converts it all to es5 (or desired format)
+- Compile/transpiles code => Converts it all to es5 
+				(or desired format)
 - Compiler minifies JS and CSS files into one pack w/ smallest size:
 	- turns variables into 1 letter(or as small as possible)
 	- removes lines breaks
 	- minifed code NOT intended to be human-readable
+- Developed and maintained by Microsoft
 
 ==> Benefits:
 	- Security of static typing w/ access to new features
 
-~~~~~~~~~~~~~~~~~~~~ * Installing Angular ~~~~~~~~~~~~~~~~~~~~~~
+==> Node.js and Visual Studio both can transcribe TypeScript into JS
+==> Decorators 
+- A decorator function intercepts the creation of a service, 
+allowing it to override or modify the behavior of the service.
+- In Angular, decorators are used to modify an instance of a class
+ without modifying the original source code.
+====================================================================
+		 * Getting Started
+====================================================================
  1.) Download node.js
 	- Node.js gives access to npm commands in cmd
 	- npm : Node Package Manager for Node JavaScript platform
@@ -597,6 +698,7 @@ tsconfig
 		target: "es5"
 	- Means typescript will be transpiled into javascript es5
 package.json
+	- Generated by npm
 	- holds dependencies
 	- holds command line stuff in script:
 		scripts: {
@@ -615,6 +717,70 @@ src>>app folder
 	@Component ({ //decorator
 		selector: 'app-root' //use <app-root></app-root>
 		templateUrl: '..' //location of html doc to inject
+
+===================================================================
+			* Angular 4
+===================================================================
+Angular is a framework of code in HTML and JavaScript.
+It utilizes HTML as a template language, and extends HTML attributes
+ with directives and binding. 
+- Directives shape the DOM by manipulating/adding/removing elements
+- Binding synchronizes data between the model and the view
+- Dependencies allow for developer to specify the location of a 
+component instead of hardcoding each and every service into the 
+application. Dependency injection is allows for a component to use
+a service without creating it's won copy of it.
+- A service is a function/object usd to shate data/behavior accross
+different sections of the cod. A service is treated a singleton.
+
+==> Angular vs. AngularJs.
+ - AngularJS is the first version of Angular. 
+	- Based on MVC (model-view-controller) design
+	- Model = logic, view = front-end, controller = input/output
+	- MVC ought to be called MCV because the controller is the 
+	  intermediary between the model and view.
+ 	- Was completely re-written for the Angular 2 update.
+	- Written in JavaScript
+	- Binding requires specific ng directives
+ - Angular 2 and 4 are very similar, and are called "Angular"
+	- Angular 4 is backwards compatible with angular 2
+	- Uses components and directives
+	- Mainly written in Typescript
+	- Syntax uses () for event binding & [] for property binding
+	- Implements dependency injection
+	- Faster loading, better performing
+
+List of differences:
+		    AngularJS		   Angular
+Architecture	- components/directives	- MVC
+Language	- Typescript		- JavaScript
+Expression	- (event) [property]	- specific ng directives
+Mobile Support	- Yes			- No
+Routing		@RouteConfig{(..)}	-$route.provider.when()
+Target User	- Developers		- Designers
+===================================================================
+			 * Angular CLI 
+===================================================================
+- Angular CLI (command line interface)
+- Commands begin with ng.
+=> Create Angular project:
+	ng new project-name 
+	-- The build process creates all files necessary for an
+	   angular project
+	-- Including package.json (as it uses node)
+	-- Includes main component HTML/ CSS/ and TS files
+	-- Initializes git
+=> Install package directly to angular project:
+	ng install package-name
+=> Start your program (does the same as npm start)
+	ng serve
+		-- This transpiles the code and puts it all together
+		-- Also, it will listen for changes in the code,
+		  and automatically update upon saves.
+=> Generating Components
+	ng g c path/name
+=> Generate Service
+	ng g s path/name
 
 ===================================================================
 			 * Components 
@@ -683,7 +849,7 @@ Property binding - to CSS class, style, or attribute
 ===================================================================
 			* Angular
 ===================================================================
-Services - another part of angular, acti differently fro mcomponents.
+- Services - another part of angular, acti differently fro mcomponents.
 Components have their own state, data, template, and styles.
 Service, however, is (generally) a singleton that has no visual components and is essentially the glue between components.
 
