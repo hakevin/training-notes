@@ -1,13 +1,312 @@
 ====================================================================
-Servlets (get from last document)
+========================== I. Servlets =============================
 ====================================================================
 
-====================================================================
-Front Controller Design Pattern
-====================================================================
+- A servlet is a component that extends the capabilities of a server
+- Servlets run inside applications to handle requests. 
 
 ====================================================================
-Request Body
+		* Request Path
+====================================================================
+
+- The request from the front end to/through the server typically
+  follows a particular path.
+- The server may hold many application. 
+- The application may hold many servlets. In a front Servlet 
+design, all requests to that application are parsed/handled/directed
+from one controller to separate ones. This controls the flow of 
+the requests. 
+- The controllers act as individual servlets, even though they 
+technically are just called from the front servlet. The controllers
+read and write requsts.
+- The service class handles the logic and rules of the application.
+and asks the Dao for information from the database.
+- the Dao gets information from the database. 
+
+Condensed path: 
+Front end >> server >> application >> servlet >> controller >> 
+service >> dao >> datbase
+
+Request req. = localhost:8080/application3/login
+
+	req.	 ____server_____________
+[User] -------->|-.			|
+		| |  [application1]	|
+		| |  [application2]	|
+		| '->[application3]	|
+		|_______________________|
+   _servlet3____________________________________________________
+  | req.|	  						|
+  |	V	   .->[loginCtrlr]-->[helloService]-->[helloDao]|
+  | [frontServlet]-'  [otherCtrlr]   [otherService]   [otherDao]|
+  |_____________________________________________________________|
+
+1. From user to server
+2. In server, server determines which app to send the request to be server configuration. (tomcat default is the application name)
+3. Server reads web.xml to determine which servlet to send it to.
+	-Note: frontServlet is the only servlet in this visual,
+	  meaning all application3/* requests go to it, but 
+	  there can be multiple servlets in an application.
+4. Servlet parses and sends request to the proper controller
+5. Controller gets logic(rules of application) from Service
+6. Service gets data from Dao.
+7. Controller writes response based on service methods
+8. Response is sent back to the user
+
+==> FrontController vs Page Controller
+  Front controller:
+	- Simplifies centralization of requests
+	- (web.xml only needs to direct to one place)
+	- Higher security due to coordinated implementation
+	- Needs logic to handle all requests
+	- Complex path
+  Page Controller: 
+	- web.xml grows with the development of application
+	- Objects may react inconsistently; lower security
+	- Handles requests directly
+	- Simple path - request to result
+  
+=================================================================
+		   * Singleton
+=================================================================
+Singleton design pattern - tool we use when we have some object and
+ class where we only need one instance of it. 
+
+Singleton -> class where only 1 object will ever be necessary.
+IE: utilitarian things or singular things. 
+	-->Scanner or database connection typically singletons
+
+Good if you need something more object-based.
+ Good for database managing objects/external resources
+ - Especially multi-threading
+
+class Singleton {
+	private static Singleton = new Singleton();
+	private Singleton(){
+		//Instantiaets object
+ 	}
+	public getSingleton(){
+		return singleton;
+	}
+}
+ 
+==================================================================
+		* Getting Started - Servlets in Java
+==================================================================
+>> signifies the path of links or menu items.
+
+==> Initilize Server
+-> Be in Java EE mode:
+	Eclipse >> Window >> Show Perspective >> other >> Java EE
+
+-> Show your problems tab (window > show view > other > problems)
+-> Link to a server:
+	Server tab >> new server
+		Server type = tomcat9
+-> Once loaded, right click the Server > Start.
+	(Note: tomcat just has console text in red.)
+-> Test in browser : localhost:8080
+	Now you can see local server is up and running.
+
+
+==> Creating the project
+-> New Maven Project
+	--> NOT a simple project
+->On next page: choose webapp option 
+	Group :com.revature
+	ID: project name
+-> App starts with problem, need to configure this. 
+	- Right click the project >> Properties
+	- Project Facets (on the side)
+-> Check dynamic web modules,
+	-> Runtimes tab, Check apche tomcat
+
+==> Set up Folders/Servlet
+	Now, we need a file that tells the server where to look in the project for the servlets (classes)
+
+--> Set up folder structure (Java folder not included by default)
+	- In project tab >> normal main folder (not the java one)
+	- Create a java folder (a folder named java)
+
+--> Create class in java for your first Servlet
+package com.revature.servlets;
+
+Class MyClass extends DefaultServlet {
+
+//Override method: (See next chapter for what this method IS)
+@Override
+ service(httpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {}
+
+//NOTE : that service throws ServiceException and IOException
+}
+
+==> Set up path for server
+-> Find web.xml file in folders:
+	main >> webapp >> web-inf >> web.xml
+-> Go to source tab ( ignore design stuff/GUI )
+ ***** If you make ANY mistake in the XML, it wont run at all *****
+-> within the <web-app> tag, add your servlet
+  <servlet>
+ 	<servlet-name>hello</servlet-name>
+  	<servlet-class>
+		com.revature.servlets.HelloWorldServlet
+	</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>hello</servlet-name>
+  	<url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+ 
+-> Right click server tab >> Add and Remove.
+	- Put the servlet you want in the configured side.
+	- This gives the project to Tomcat.
+
+-> Double click server to get overview.
+	->Go to modules tab to see mapping for project.
+
+==> Start server (see if it starts)
+
+localhost:8080/ServletExample/hello
+
+--> If you get an error, look in your console in eclipse!
+
+==> Moving forward:
+- In the XML file, you can change the URL pattern to:
+  	<url-pattern>/hello/*</url-pattern>
+and it'll send all requests for /myApplication/hello/textHere
+to that servlet
+
+
+====================================================================
+		* Servlet Architecture
+====================================================================
+--> Internal Servlet Hierarchy:
+Starts with interface:	Servlet		//interface, no methods
+Implemented by:		GenericServlet	//handles responses/request
+Extended by:		HttpServlet	//imp. by oracle (javacorelib)
+Extended by:		DefaultServlet	//apache tomcat specific
+Extended by:		You
+
+--> Inside the servlet
+ Service (in an HttpServlet) is a method used to delegate requests to
+ an appropriate handler method based on the HTTP method utilized to
+ make the request.
+ - All requests first go though the Service() method. Afterwards,
+ they are typically sent out to the propper HTTP mehod.
+
+	HTTP Method    Handler Method   Crud Operation   SQL
+	GET 	->	 doGet		read		SELECT
+	POST	->	 doPost		create		CREATE
+	PUT 	->	 doPut		update		UPDATE
+	DELETE	-> 	 doDelete	delete		DELETE
+
+- Overriding the service() method can be useful to take control
+ where the requests are sent, but typically, you'll want to use:
+	super.service(request,response);
+ after setting up any initial Headers or code you need to run every
+ time the servlet gets a request.
+- If you don't override service, you can still handle requests with 
+ a doGet override. However, if you override service and don't call
+ the super, your doGet won't automatically come up. 
+- Service method is overloaded:
+public void service(ServletRequest req, ServletResponse res)
+protected " service(HttpServletRequest req, HttpServletResponse resp)
+	- the public method dispatches the client request to the 
+protected one 
+	- Both throw v IOException and ServletException
+
+==> Servlet Lifecycle
+The lifecycle of a servlet has 3 steps:
+1. init - Initializing the servlet - Called once
+	- Called typically when the FIRST user requests the URL
+	  after the server has been initialized.
+	- Can be ser to run /when/ the server initializes.
+2. service - handling a request - once per request
+	- Every time a request is sent in, this is called.
+3. destroy - end of servlet lifecycle(shut down) - called once/never
+	- Used to clean up lose ends/close resources.
+
+==> Review : DefaultServlet has these methods for Overriding:
+Internal handling:
+  service	init		destroy		getServletInfo
+HTTP request handling:
+  doPut		doGet		doPost		doDelete
+	
+Method signatures (All for overriding) 
+protected void doGet(HttpServletRequest req,
+                     HttpServletResponse resp)
+              throws ServletException,
+                     java.io.IOException
+
+==> Request/Response objects
+-  HttpServletRequest -> Interface extends ServletRequest
+	- Can access (GET) info about the request
+	- Passed to service then doGet/Post/ect 
+	- Can be used to get cookies, headers, path info, ect
+-  HttpServletResponse -> Mirror image of request
+	- Used to write into about data to send back
+	- Used to SET properties to return 
+====================================================================
+		* Using Servlets 
+====================================================================
+How can I get the URL of a request?
+request.getRequestURL()
+How can I write a response to the client?
+response.getWriter().write(s);
+or with jackson:
+ObjectMapper mapper = new ObjectMapper
+mapper.writeValue(response.getWriter(), Object obj)
+
+-> Return Static file from servlet :
+- Create RequestDispatcher object 
+	- this receives requests from the client and sends them to 
+	any resource by wrapping around a server resource located at
+	a particular path.
+RequestDispatcher rd = getServletContext().getNamedDispatcher("default");
+HttpServletRequest wrapped = new HttpServletRequestWrapper(request){
+	public String getServletPath() {return "";}
+};
+rd.forward(wrapped,response);
+
+NOTE: ^^ Above implements an object with a specific instnace method.
+This can be done in classes or whatever. 
+It overrides that method for that INSTANCE only.
+This is useful when instantiating interfaces:
+  ////some file:
+  public interface TestInterface { public void myMethod(); } 
+  /// in main of another file:
+  TestInterface test = new TestInterface() {
+	public void myMethod() {
+		System.out.println("Instantiated Interface!");
+	}
+  };
+  //If it's a funcitonal interface, you can use the lambda function	  TestInterface test = () -> {	
+	System.out.println("Instantiated Interface!");
+  };
+		test.myMethod();
+
+-> Reading Request:
+		request.getQueryString();
+		request.getParameter("parameter_name");
+   - With Jackson:
+     static ObjectMapper mapper = new ObjectMapper();
+     Object obj = mapper.readValue(request.getReader ),Object.class);
+
+
+How can I get the body of a request?
+How can I get values from a form post?
+What is the difference between a forward and a redirect?
+How can I forward a request?
+How can I redirect a request?
+How can I specify the status code for a response?
+What is a cookie?  How can I set a cookie?
+What is a session? What are the different ways to get a session?
+What is a JSESSIONID? What is it used for?
+
+====================================================================
+* Request Body
 ====================================================================
 When using the POST method, the Http request may contain a BODY.
 Unlike the get method where the actual request url contains the parameters and the values, the POST body is sent in the HTTP request without a url-concatenation.
@@ -253,38 +552,6 @@ XML PAGE CAPABILITIES (there are more, this is a small list)
 3. Map Error codes and exceptions to error pages.
 4. Set application are servlet scoped variables. 
 
-
-
-=================================
-Servlet Architecture Review 
-=================================
-Request Travel path: 
-
-req. = localhost:8080/application3/login
-
-	req.	 ____server_____
-[User] -------->|-.			|
-		| |  [application1]	|
-		| |  [application2]	|
-		| '->[application3]	|
-		|_______________________|
-   _servlet3____________________________________________________
-  | req.|	  						|
-  |	V	   .->[loginCtrlr]-->[helloService]-->[helloDao]|
-  | [frontServlet]-'  [otherCtrlr]   [otherService]   [otherDao]|
-  |_____________________________________________________________|
-
-1. From user to server
-2. In server, server determines which app to send the request to be server configuration. (tomcat default is the application name)
-3. Server reads web.xml to determine which servlet to send it to.
-	-Note: frontServlet is the only servlet in this visual,
-	  meaning all application3/* requests go to it, but 
-	  there can be multiple servlets in an application.
-4. Servlet parses and sends request to the proper controller
-5. Controller gets logic(rules of application) from Service
-6. Service gets data from Dao.
-7. Controller writes response based on service methods
-8. Response is sent back to the user
 
 
 ===================
