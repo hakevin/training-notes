@@ -70,7 +70,8 @@ Request req. = localhost:8080/application3/login
   |_____________________________________________________________|
 
 1. From user to server
-2. In server, server determines which app to send the request to be server configuration. (tomcat default is the application name)
+2. In server, server determines which app to send the request to be
+   server configuration. (tomcat default is the application name)
 3. Server reads web.xml to determine which servlet to send it to.
 	-Note: frontServlet is the only servlet in this visual,
 	  meaning all application3/* requests go to it, but 
@@ -150,7 +151,8 @@ class Singleton {
 	-> Runtimes tab, Check apche tomcat
 
 ==> Set up Folders/Servlet
-	Now, we need a file that tells the server where to look in the project for the servlets (classes)
+	Now, we need a file that tells the server where to look in
+ the project for the servlets (classes)
 
 --> Set up folder structure (Java folder not included by default)
 	- In project tab >> normal main folder (not the java one)
@@ -311,7 +313,8 @@ rd.forward(wrapped,response);
 		System.out.println("Instantiated Interface!");
 	}
   };
-  //If it's a funcitonal interface, you can use the lambda function	  TestInterface test = () -> {	
+  //If it's a funcitonal interface, you can use the lambda function
+  TestInterface test = () -> {	
 	System.out.println("Instantiated Interface!");
   };
 		test.myMethod();
@@ -418,7 +421,8 @@ request. This allows us to store information about a user throughout
 -- How it works : 
 	- Java produces a cookie called the JSESSIONID that contains
 	 a unique token.
-	-This token is then provided on future requests identify 	which value map should be provided for the session.
+	-This token is then provided on future requests identify
+	which value map should be provided for the session.
 
 -- Limitations : 
    1. Session information is stored in memory. This means when the
@@ -473,7 +477,8 @@ SENDING a response (deparse object to JSON) :
 	   mapper.writeValue(response.getWriter(), candies);
 	} else {
 	   int id = Integer.parseInt(param);
-	   mapper.writeValue(response.getWriter(),  candies.get(id));		}
+	   mapper.writeValue(response.getWriter(),  candies.get(id));
+	}
 
 PARSING response (post body to Object) :
   ObjectMapper mapper = new ObjectMapper();
@@ -507,7 +512,8 @@ PARSING response (post body to Object) :
   3. Servlet Scope - A parameter that is defined and accessible only
 	 within a single servlet. Defined in web.xml document.
 	 Key/value pairs.
-  4. Application Scope - a parameter that is defined and accessible 	from any servlet. Defined in the web.xml document. 
+  4. Application Scope - a parameter that is defined and accessible
+ 	from any servlet. Defined in the web.xml document. 
 	Key/value pairs.
 
 ===================================================================
@@ -538,7 +544,8 @@ XML Page Capabilities: (Basic list)
 
   <servlet>
  	 <servlet-name>hello</servlet-name>
-  	<servlet-class> 		com.revature.servlets.HelloWorldServlet
+  	<servlet-class>
+		com.revature.servlets.HelloWorldServlet
 	</servlet-class>
 <!-- Servlet-Scope Variables -->
   	<init-param>
@@ -597,7 +604,8 @@ and instead insists on specific permission:
 
 response
 .addHeader("Access-Control-Allow Origin","http://localhost:4200");
-response.addHeader("Access-Control-Allow-Credentials","true");		response.addHeader("Access-Control-Allow-Headers","Content-Type, Accept, X-Requested-With");
+response.addHeader("Access-Control-Allow-Credentials","true");
+response.addHeader("Access-Control-Allow-Headers","Content-Type, Accept, X-Requested-With");
 response.addHeader("Access-Control-Allow-Methods","GET, POST, DELETE, PUT, OPTIONS, HEAD");
 
 ==> NOTE: In javaScript:
@@ -888,7 +896,8 @@ example:
 	  where you have access to the .ts, .html, and .css files
 
 ==> Javascript for components: 
-- Methods and variables are stored in name.component.ts within the   NameComponent class. IE:
+- Methods and variables are stored in name.component.ts within the
+   NameComponent class. IE:
 	export class UploadReceiptComponent implements OnInit {
 	    myTitle = "MY TITLE!";   //component variable
 	    constructor() { }
@@ -997,7 +1006,8 @@ In route config, each route can have the following components:
 - A service is generally a singleton that has no visual components
  and is essentially the glue between components.
 
-- Use to have components talk to eachother and track how data moves ==> Services are data containers used to comminicate w/components
+- Use to have components talk to eachother and track how data moves
+ ==> Services are data containers used to comminicate w/components
 
 ===================================================================
 			* HttpClient
@@ -1079,7 +1089,8 @@ With credentials:
 	- Updates can effect all components with subscriptions
 	- Changes alert component to update themselves
 -- Subscription:
-   - Can be set up to be recieved at time intervals or at updates 	   - Subscribing invokes the set method upon each update
+   - Can be set up to be recieved at time intervals or at updates 
+   - Subscribing invokes the set method upon each update
 
 -- The .next() method on Subjects and Observers will update the data.
 	-- Imagine I have this object:
@@ -1139,14 +1150,19 @@ Reactive JavaScript: (notes -g means global)npm install --save rxjs
 
 	npm install -g rxjs
 
--- Using --save will install that tool on the application we're using. (npm install --save rxjs) and the dependency will be added to your package.json file
+-- Using --save will install that tool on the application we're
+ using. (npm install --save rxjs) and the dependency will be added to 
+your package.json file
 ==> Reactive JavaScript rxjs allows a system of subscriptions
 ========
 
-Comminication serice cann't run methods of any of the components it is connected to. 
-But with rxjs (reactive javascript)  the comminication service can get data from one place then send it off somewhere else.
+Comminication serice cann't run methods of any of the components it 
+is connected to. 
+But with rxjs (reactive javascript)  the comminication service can 
+get data from one place then send it off somewhere else.
 	- can be sent multiple places.
-	- So updates can effect all ocmponents what need the updateso long as the components subscripbe to teh updates.
+	- So updates can effect all ocmponents what need the updateso 
+long as the components subscripbe to teh updates.
 	- components that subscribe to the updates will update themselves when updates come in.
 
 Observable = something that's happening. 
@@ -1155,7 +1171,8 @@ subscribe((data)=>{
 	//logic
 }
 
-   - subscription can be set up to be recieved at time intervals or at updates ect. 
+   - subscription can be set up to be recieved at time intervals or 
+at updates ect. 
 	- by "Subscribing" to communication service, the method will be invoked every time the data is updated.
 
 
@@ -1177,7 +1194,9 @@ Subject - Something that can be SEEN.
 Inside of CommunicationService:
 
 $listItem = new Subject<string>();
-(Recall Subject was the like pipeline thing. "Subject" object has a convenient .next. method to add things to it. Observable objects don't have that)
+(Recall Subject was the like pipeline thing. "Subject" object has a 
+convenient .next. method to add things to it. Observable objects 
+don't have that)
 
 import { Subject } from 'rxjs';
 ...
