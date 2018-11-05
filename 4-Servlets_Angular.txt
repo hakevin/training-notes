@@ -13,6 +13,18 @@ I. Servlets
 	* CORS Error in JavaScript
 	* Classification of Java Objects
 II. Angular
+	* NPM - Node Package Manager
+	* Typescript
+	* Getting Started
+		* Main Files
+	* Angular 4
+	* Angular CLI
+	* ngModel
+	* Components
+	* Routes
+	* Services
+	* HttpClient
+
 
 ====================================================================
 ========================== I. Servlets =============================
@@ -791,21 +803,73 @@ Target User	- Developers		- Designers
 ===================================================================
 			 * ngModule
 ===================================================================
+- ngModule is a decorator used typically in the root module that
+  houses project imports - imports and directives in the ngModule
+  will be shared to all components in the project. 
+- The top of the file has a list of imports:
+	import { name } from 'location';
+  and these imports will be used in the @ngModel module.
+- The declaration section is for components. Here, you decare each
+  component for the project. 
+- The imports section is for modules. 
+- Providers house services for logic
+- Bootstrap section is for the main component that is to be loaded 
+  in main.ts
 
-===================================================================
+Vocab:
+-> Components control views (HTML) 
+	- they communicate with other components/services 
+	- Create application funcitonality.
+-> Modules consist of 1 or more components, and don't control HTML
+	- Modules declare which components can be used by components
+	  belonging to other modules, which calsses will be injected
+	  by depencency injector, and which components get loaded
+	- Modules manager components
+-> Directives shape/manipulate the DOM and house logic for such
+    --Types of directives:
+	1. Attribute directive
+		- Change the appearance/behavior of elements
+	2. Structural directive
+		- Change DOM by adding/removing elements
+	3. Components
+		- Directives that have a template (HTML)
+		- Use a simpler interface to hide defaults
+-> Pipes - takes data as input, transforms to desired output.
+	- A way to display data as you'd like.
+		{{ name | uppercase }} display uppercase name string
+	- Built-in Examples:
+		-uppercase
+		- lowercase
+		- date:'fullDate'/ date:'shortDate'
+==> BrowserModule
+ Place the BroswerModule here as an import to gain access to these
+ directives. Internally exports CommonModule and ApplicationModule
+ Structural Directives:
+-- *ngIf="expression" : removes element if expression is falsy
+	- Actually removes element from DOM rather than only hide it
+-- *ngFor="iterable" : add/remove elements for each iterable size
+ Attribute Directives: 
+-- [attribute]="expression" : applies attribute expression is truthy
+example:
+	<button [disabled]="name == 'tom'"> 
+	Button will be disabled when the component variable 'name'
+	is not 'tom'
+====================================================================
 			 * Components 
-===================================================================
+====================================================================
 - Angular works on a system of COMPONENTS. 
 	Components Modularize the HTML and CSS.
 	- they create reusable HTML with rules (js) for HTML sections
 	- components can be nested
+- Components are special directives that use simple configuration
+  and have their own templates.
 
 - Components have their own state, data, template, and styles.
 - General components of components
 	.ts file (logic)
 	.html file (template)
 	.css file (style/view)
-
+- Component selectors are the names used as tags in the HTML.
 - Components are especially useful for Single Page Applications
   >> SPA - Single Page Applications - have only 1 HTML page.
 	- NO change of state.
@@ -847,45 +911,214 @@ Property binding - to CSS class, style, or attribute
 -- Can be used for specific properties as well
 	<button [disabled]="overOneHundred()">Click</button>
 
-************* Forms Module Allows the use of ngModel *************
+************* FormsModule Allows the use of ngModel *************
 2-way Data Binding allows js to interact with forms.
 	<input [(ngModel)]="varName" type="text">
 - Binds with onchange event, and only works for input values.
 
 
+==> Lifecycle of Components
+"Angular creates it, renders it, creates and renders it’s children,
+checks it when it’s data-bound properties change, and destroys it
+before removing it from the DOM."
+https://angular.io/guide/lifecycle-hooks
+- Sequence of events that happen in an components life on the DOM
+  ngOnChanges() -For components with input,called when input changes
+  ngOnInit()	- Used to initialize data in componnt
+		- Called after input vals are set 
+		- Called only once
+  ngDoCheck()	- Called during all change detection runs
+  ngAfterContentInit()  - Called after first ngDoCheck() only
+  ngAfterContentChecked()- Called after every ngDoCheck()
+  			- 1st run is after ngAfterContentInit()
+  ngAfterViewInit() 	- Run after init of componet/child content
+  ngAfterViewChecked()	- Called after all content init & checked
+			- 1st call after ngAfterViewInit()
+			- Called after every ngAfterContentChecked()
+  ngOnDestroy()		- Called to clean up when component removed
+			- Use to unsubscribe from services
+
+MAIN HOOKS:
+	- ngOnChanges() >> Form changes
+	- ngOnInit()	>> Initialize component
+	- ngAfterViewInit()  >> All content has been initialized
+	- ngOnDestroy()	>> When component leaves DOM
+
+
+==> Binding variables to a child component:
+- In the child component, inport @Input.
+	- Within the class, add:
+	@Input() passedVar: string;
+- In the parent element, when it calls the child, specify:
+	<app-child-component [passedVar]=componentVariable>
+	</app-child-component>
+
 ===================================================================
 			* Routes
 ===================================================================
-- Changing routes changes the rul, but does not make it a multi-page application becasue it is actually all javascript moving around one big page!
+- Routes are used as different "pages" within an application while
+  still keeping it all a single-page applicaiton
+- The Angular Router activates all required angular components when
+ a user navigates to a certain URL. 
+- The user can navigate from one page to another without a page 
+reload, while still updating browser history so a user can use the
+back and forward buttons.
+==> Vocabulary
+- router service - global Angular router service
+- router configuration - definition of all possible route states
+	- located in app-routing.module.ts
+- router state - the state of the router
+- activated route snapshot - access to the URL, parameters, and data
+ for a router state node
+- guard - script that fetches data before the requested page is 
+	deactivated
+- router outlet - location in the DOM where angular Router can place
+	active components
+
+Features:
+-- Application can have nested router-outlets
+-- Routes can have nested routes (children)
+-- <router-outlet></router-outlet> specified location of route 
+   component
+
+In route config, each route can have the following components:
+- path: String path to match URL
+- pathMatch - how to match URL: default prefix, or full
+- component - class reference component to activate
+- retirectTo - stringURL to redirect
+- data - static date to assign to route
+- resolve - dynamic data to revolve/merge w/ data when resolved
+- children - child routes
 
 ===================================================================
-			* Angular
+			* Services
 ===================================================================
-- Services - another part of angular, acti differently fro mcomponents.
-Components have their own state, data, template, and styles.
-Service, however, is (generally) a singleton that has no visual components and is essentially the glue between components.
+- Services act differently from components.
+- A service is generally a singleton that has no visual components
+ and is essentially the glue between components.
 
-Useful to have components talk to eachother and track how data moves around the info.
-Services are containers of data used to comminicate iwht ocmponents. 
-Create services that allow us to comminicate wiht serviecs and another to commincate with the API.
+- Use to have components talk to eachother and track how data moves ==> Services are data containers used to comminicate w/components
 
-first component/ second component / service "communication"
+===================================================================
+			* HttpClient
+===================================================================
+- HttpClient is an injectable class with methods for HTTP requests
+==> Methods (general, most have many overflow methods)
+ The options section may contain headers, withCredentials: boolean,
+ and other information to send with the request. 
+  Options is always an optional parameter
+	-- request()
+	-- delete()
+	-- get()
+	-- head() 
+	-- jsonp
+	-- patch()
+	-- post()
+	-- put()
 
-in first.component.ts : 
-//Include this import for the service:
-import { CommunicationService } from 'src/app/services/communication.service';
 
-// Dependency injection:
-	// Change the constructor:
-	constructor(private communicationService: CommunicationService) { }
-** It must be private in order to be injected
+~~~~~~~~ How to use:
+For GET
+1. Create Service and start by importing and injecting HttpClient.
+	--In the constructor create a private httpClient: HttpClient
+2. In ngOnInit (this can be placed anywhere, but for this example,
+   ngOnInit will work)
+	const url = 'your api url'
+	this.httpClient.get('url')
+	   .subscribe( data = > console.log(data));
+
+For POST:
+	const url = 'your api url'
+	payload = {
+		// Request body here
+	}
+	this.httpClient.post(url,payload);
+	   .subscribe( data = > console.log(data));
+
+With credentials: 
+(This is required if your api tracks cookies or sessions)
+	const url = 'your api url'
+	payload = {
+		// Request body here
+	}
+	this.httpClient.post(url,payload,{withCredentials:true});
+	   .subscribe( data = > console.log(data));
 
 
-==> In app.module : 
+===================================================================
+			* RxJS
+===================================================================
+- RxJS is Reactive JavaScript.
+- Allow application to be built to react to events. 
+- RxJS allows for asynchronous action in components
+- Main Objects:
+	- Observer : Allows you to "push" new data into an observable
+		sequence. Observers can only add data. "Write-only"
+	- Observable : Used to listen to (subscribe) to changes in 		the observer. "Read-Only"
+	- Subject - A combination of Observer and Observable.
+		You can push new values and subscribe to it.
+		"Read and Write"
+	- Operators - allow you perform operations
+		Way to manipulate data from Subject (or Observer)
+
+==> Application:
+-- Typically, data access pipelines are represented with $varName
+- To use, set up a Communication Service that will hold variables 
+ that are bound to change, and many different components need them to
+ operate.
+- Components can't easily talk to eachother, so all of them instead 
+ will "subscribe" to a variable in the communication service.
+- Also, the communication service itself can't run methods of any of 
+ the other components it is connected it. 
+
+-- With RxJS, the communicationService can be given data, and then
+ send it off to other subscribing components. Components can then
+ take that data and use it as they need.
+-- With this system, data:
+	- Can be sent to multiple places in the pipeline
+	- Updates can effect all components with subscriptions
+	- Changes alert component to update themselves
+-- Subscription:
+   - Can be set up to be recieved at time intervals or at updates 	   - Subscribing invokes the set method upon each update
+
+-- The .next() method on Subjects and Observers will update the data.
+	-- Imagine I have this object:
+		$newspaper = new Subject<string>();
+	-- and a method:
+		setCurrentNewspaper(paper: string) {
+			this.$newspaper.next(paper);
+		}
+	-- Components who subscribe to the newspaper get updates and 
+	  are delivered the new copy every time the .next() method
+	  is invoked within the setCurrentNewsPaper method.
+	-- With the new newspaper data, the components can do what
+	  they want with it: read it, change it, make a paper hat...
+	-- Components won't get it if they don't subscribe!
+
+
+===================================================================
+	Class Example with subscriptions (rxjs)
+===================================================================
+
+Class Example:
+- Goal : create services that allow us to communicate with other
+	 services and a second to commincate with the API.
+1. Generate components:
+first component, second component, 
+service communication, service movies
+
+2. Import communication to first.component.ts:
+	import { CommunicationService } from 		'src/app/services/communication.service';
+
+// Dependency injection - ad the service to the constructor:
+	constructor(private communicationService: 				CommunicationService) { }
+//** It must be private in order to be injected
+
+
+3. In app.module : 
 -add CommunicationService as a provider
 -add FormsModule import in order to have 2-way data binding with the forms
 	import { FormsModule } from '@angular/forms';
-
 
 ==> communicationService is an object in which we can inject variables now and pass them around the page.
 In Communication.service.ts, create a method to get each value:
@@ -901,14 +1134,13 @@ and on the component, send the value to that function:
     this.communicationService.submitNewValue(this.inputValue);
   }
 
-
 ======
 Reactive JavaScript: (notes -g means global)npm install --save rxjs
 
 	npm install -g rxjs
 
 -- Using --save will install that tool on the application we're using. (npm install --save rxjs) and the dependency will be added to your package.json file
-
+==> Reactive JavaScript rxjs allows a system of subscriptions
 ========
 
 Comminication serice cann't run methods of any of the components it is connected to. 
@@ -994,28 +1226,3 @@ ng g s servies services/movie
 
 ?syntax only available in components. It protects us from errors related to null/undefined ojects
 {{movie?.Title}}
-
-
-
-
-
-
-
-
-
-
-
--- COMPONENTS are declatred,
-imports are modules (mod are import)
-
-
-
-
-
-
-
-
-
-
-
-
