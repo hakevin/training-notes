@@ -1,0 +1,577 @@
+For other file : 
+==================================
+AWS Stuff ++
+=================================
+rout53 - DNS registry - can be used to map your domain registration
+ to the domain name.
+
+CodeCommit - git repo system (DevOps pipeline)
+
+ ===================================================================
+		* ORM - Object Relational Mapper
+ ===================================================================
+-----LINKS:-----
+
+https://www.mkyong.com/tutorials/hibernate-tutorials/
+www.mkyong.com/hibernate/how-to-generate-code-with-hibernate-tools/
+https://www.mkyong.com/hibernate/hibernate-cascade-example-save-update-delete-and-delete-orphan/
+
+
+== Problem :
+	Each class needs its own DAO that relates to the database
+== Possible Solution : 
+	Object-relational mapping
+- ORM is a programming technique for converting data between
+  incompatible type systems with OOP languages.
+- Creates, essentially, "virtual object database."
+- Useful because it handles translation of object to data tables
+	- Objects stored/retrieved said to be persistent / persisted
+- Challenge of ORM include Object-relational impedance mismatch:
+	- ORM may violate encapsulation by needing to expose 
+	content of object. 
+	-> IE Auto-generating public columns for private fields 
+--> The ORM Solution : 
+- The ORM manages the jdbc (the java to SQL interface)
+	- ORM interface will act in place of the DAO layer.
+- Using queries, it can map the entity-relational-diagram to the db
+
+
+==> The Java Persistence API Standard (JPA)
+- JPA - Specification for accessiong, persisting, and managing data 
+	between Jaba opbjects/classing & relational DBs
+	- Specification/guildeline/rules/minimum -> NOT a tool
+- Industry standard approach for ORM
+Specifications:
+    - POJOs to be persisted w/o class implementing interfaces/method
+    - ORM may be defined w/ XML or standard notation
+    - Runtime EnityManager API for processing queries/transaction
+    - Object-level query language (JPQL) to query obj to DB
+JPA Package: javax.persistence:
+  - Interfaces:
+	AttributeConverter<X,Y>, AttributeNode<T>, Cache, 
+	EntityGraph<T>, EntityManager, EntityManagerFactory,
+	EntityTransaction, Parameter<T>, PersistenceUtil,
+	Query, StoredProcedureQuery, Subgraph<T>, Tuple, 
+	TupleElement<X>, TypedQuery<X>
+  - Class:
+	Persistence
+  - Enum:
+	AccessType, CacheRetrieveMode, CacheStoreMode, CascadeType, 
+	ConstraintMode, DiscriminatorType, EnumType, FetchType,
+	FlushModeType, GenerationType,InheritanceType, LockModeType, 
+	ParameterMode, PersistenceContextType, PessimisticLockScope,	
+	SharedCache,SynchronizationType,TemporalType, ValidationMode
+  - Exceptions:
+	EntityExistsEx, EntityNotFoundEx, LockTimeoutEx, 
+	NonUniqueResultEx, NoResultEx, OptimisticLockEx, 
+	PersistenceEx, PessemiticLockEx, QueryTimeoutEx, RollbackEx,
+	TransactionRequiredEx
+  - Annotation types:
+	Access, Association Override, AssociationOverrides, 
+	AttributeOvverride(s), Basic, Cacheable, CollectionTable,
+	Column, ColumnResult, ConstructorResult, Convert(er)/(s),
+	DiscriminatorColumn, DiscriminatorValue, ElementCollection,
+	Embedd(able)/(ed), Embeddedld, Entity, EntityListeners
+	EntityResult, Enumerated, ExculdeDefaultListeners, 
+	ExcludeSuperclassListeners, FieldResult, ForeignKey,
+	GneratedValue, Id, IdClass, Index, Inheritance, 
+	JoinColumn(s), JoinTable, Lob, ManyToMany, ManyToOne,
+	MapKey, MapKeyClass, MapKeyColumn, MapKeyEnumerated,
+	MapKeyJoinColumn(s), MapKeyTemporal, MappedSuperclass,
+	MapsId, NamedAttributeNode, NamedEntityGraph(s)
+	Named(Native)Query(ies), NamedStoredProcedureQuery(ies)
+	NamedSubgraph, OneToMany, OneTOOne, OrderBy, OrderColumn,
+	PersistenceContext(s), PersistenceProperty/Unit(s),
+	PostLoad/Persist/Remove/Update, PrePersist/Remove/Update
+	PrimaryKeyJoinColumn(s), QueryHint, SecondaryTable(s),
+	SequenceGenerator, SqlResultsSetMapping(s),
+	StoredProcedureParameter, Table, TableGenerator, Temporal,
+	Transient, UniqueConstriant, Version
+
+
+
+ ===================================================================
+			* Hibernate
+ ===================================================================
+ Hibernate is an implementation of JPA (the tool)
+	- JPA = standard, hibernate = implementation of JPA
+	- Hibernate takes care of it java obj via reflection
+	(Reflection is a java API that allows java code to look at
+	 itself; class can see it's own fields/methods/annotations
+
+
+==> Hibernate : Java ORM tool
+	- Framework for mapping OO domain model to RDB
+	- Handles O/R impedance mismatch w/ reflection
+
+   ~~~~~~~~~~~~ * Getting Started with Hibernate  ~~~~~~~~~~~~~
+1. ) Set up log4J (Maven dependency log4j 1.2.17) 
+	- Create new file log4j.properties in java/resources
+	- For Hibernate to log : 
+
+  # Root logger options. Where do we want to log to?
+
+ log4j.rootLogger = trace, stdout, file
+
+# define stdout log messages
+
+ log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+
+ log4j.appender.stdout.Target=System.out
+ 
+ log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+  
+ log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %C{1}:%L - %m%n
+
+
+  # define file log messages
+ 
+ log4j.appender.file=org.apache.log4j.FileAppender
+  
+ log4j.appender.file.File=logs/log.txt
+  
+ log4j.appender.file.layout=org.apache.log4j.PatternLayout
+  
+ log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %C{1}:%L - %m%n
+
+
+Collapse 
+	
+
+2. ) Set up your objects
+-- Annotate class:
+  @Entity annotation to the top above class
+  @Table(name = "table_name") beneath entity
+-- Annotate variables:
+  @Id notations that this column should act as a primary key.
+  @GeneratedValue notates this field's value is generated, 
+	not generally inserted manually. In order for Hibernate or
+	our ORM to know how to do this, we need to provide a 
+	strategy. The IDENTITY strategy .. stipulates that it simply
+	allows the insert to take place and retrieve the generated 
+	value. 
+	   (The DB will assign that and return it after instert)
+
+  @Column() can configure params about the column(separate by comma)
+	IE: 	
+	@Column(name="bear_breed", unique=true)
+
+__________________
+  @Entity 		// REQUIRED to be read by hibernate
+  @Table(name="bears") 	//table in the DB
+  public class Bear {
+	@Id 		// Labels primary key
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+	private String color;
+	private String breed;
+	private double height;
+	private double weight;
+
+  }
+_________________
+ - Generate all typical, including construct from all fields and
+   from super (no-arg and all-args constructors)
+
+
+3.) Configure resource file. 
+	- In src/main/resources create a config file:
+__________________
+hibernate.cfg.xml
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+<!-- Add the dialiect (SQL language to use) -->
+	<property name="hibernate.dialect">
+		org.hibernate.dialect.PostgreSQLDialect
+	</property>
+<!-- Add driver class: -->
+	<property name="hibernate.connection.driver_class">
+		org.postgresql.Driver
+	</property>
+<!-- Optional - prints executed SQL statement to the console -->
+	<property name="show-sql">true</property>
+
+
+<!-- Connection Pooling -->
+	<property name="hibernate.connection.pool_size">10</property>
+
+<!-- Give hibernate the DDL permissions:
+     create (can create the table if it doesn't exist) 
+	*** create will create it every time. 
+     Update will create it if it doesn't exist. -->
+	<property name="hibernate.hbm2dll.auto">update</property>
+
+<!-- Conection is be created thru properties here -->
+   <!-- This can be done other ways, too, via setup method -->
+	<property name="hibername.connection.url">
+		jdbc:postgresql://[databaseURL]:5432/[dbName]
+	</property>
+	<property name="hibernate.connection.username">
+		jdbc
+	</property>
+	<property name="hibernate.connection.password">
+		top-secret
+	</property>
+	</session-factory>
+
+
+</hibernate-configuration>
+___________________
+XML Information in List form:
+	- Dialect
+	- Connection Driver (dependency)
+	- Show-SQL (optional)
+	- hbm2ddl.auto = update (optional)
+	- connection.url
+	- connection.username
+	- connection.password 
+Connection pooling - JDBC gets a connection object and generally 
+  when we're done, we relinquish that object. However, the act of 
+  getting a connection is expensive. In many instances, it makes
+  more sense to save that connection for later transactions rather
+  than relinquinshing it every time.
+Hibernate will pool a number of connections which will stay 
+  available until needed. 
+Session means temporarily taking connection object and then 
+  returning it to the pool. This can greatly improve performance
+  for some with constant DB connectivity
+
+4.) POM Dependancies : 
+<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.3.6.Final</version>
+</dependency>
+
+<!-- If you use JDK 10, add : --> 
+<dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.0</version>
+</dependency>
+<dependency>
+    <groupId>com.sun.xml.bind</groupId>
+    <artifactId>jaxb-impl</artifactId>
+    <version>2.3.0</version>
+</dependency>
+<dependency>
+    <groupId>com.sun.xml.bind</groupId>
+    <artifactId>jaxb-core</artifactId>
+    <version>2.3.0</version>
+</dependency>
+
+5.) In launcher, must set up way to connect to DB
+	==> create new db in your server
+	==> create role for it (also optional)
+CREATE ROLE hibernate_role LOGIN PASSWORD 'top-secret';
+	==> Create a new server with that role to view tables
+
+	==> When using hibernate, don't start with the ID 0!
+	    * Always start with 1 or let DB choose via SERIAL *
+
+	==> ** Note *** you must manually end the program,
+		 else it'll keep running to maintaine hibernate.
+- Vocab: "boiler plate" : Repetitive code for utility tasks.
+	Hibernate still some repetitive code req's.
+
+5.) Set up your connection : 
+	- NOTE this is how you set it up for annotations. If you are
+	  setting up Hibernate through XML, the configuration will
+	  be different
+__________
+  private static SessionFactory buildSessionFactory() {
+	Configuration configuration = new Configuration()
+	   .configure()
+  // ADD .addAnnotatedClass(__) for each class to be put in the DB
+	   .addAnnotatedClass(Stock.class); 
+
+	ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+		.applySettings(configuration.getProperties())
+		.build();
+	return configuration.buildSessionFactory(serviceRegistry);
+  }
+__________
+
+ - Ideally, the ORM should be a singleton.
+ - You should close the connection after using it each time. 
+
+
+6.)  Now it is possible to to add methods for CRUD operations. 
+CREATE : 
+    public Stock createStock(Stock stock) {
+        try (Session session = getSessionFactory().openSession()) {
+        	session.beginTransaction();
+        	session.save(stock);
+        	session.getTransaction().commit();   
+        	return stock;
+        }
+    }
+
+ ==================================================================
+			* Exceptions
+ ==================================================================
+ AnnotationException - Comes from issues with Annotations:
+  - No identifier specified for entity
+	--> @Id of @EmbeddedId must be specified for all classes
+ - Illegal attempt to map a non collection as a @OneToMany, 
+   @ManyToMany or @CollectionOfElements
+	--> Incorrectly joining columns
+ - LazyInitializationException: failed to lazily initialize a 
+   collection of role: [Object class],could not initialize proxy 
+   - no Session
+	-> Occurs when using the LOAD method, then trying to call 
+	 a method on the object or use the object in a method call
+	 outside of the session
+ 	-> Solution : Use GET instead 
+ - LazyInitializationException: failed to lazily initialize a 
+   collection of role: [Foreign Key], could not initialize proxy 
+   - no Session
+	- Solutions: 
+		- Cascading cascade type
+		- Complete all operations within the same session
+
+
+
+
+ ==================================================================
+		* CRUD Operations In Hibernate
+ ==================================================================
+
+==> CREATE
+save - CREATE new entity record, returns serializable ID
+persist - CREATE new entity record, returns void. Defined by JSR 220
+==> READ
+get - READ an entity record provided an ID, returns the object
+	- If there is no object with the provided ID, returns null.
+load - provides a proxy of an entity record, READs when accessed
+	-> Consequence: possible lazyinitializationexception
+		or ObjectNotFoundException
+	-> ObjectNotFoundException is exactly like a NullPointerExc;
+	       When you try to load it, you are immediatly trying to
+		run a method inside an object htat doesn't exist.
+		So you can't treat it like an object that exists.
+	-> loading must be done with care
+== UPDATE
+update - not JPA - Updates an instance with the provided entity ID.
+	Transitions detached object to persistent state. If the 
+	object was transient, then Hibernate will throw a 	
+	PersistenceException. PersistenceException
+merge - is JPA - Returns a persisten reference. the initial reference
+	 used to merge should be discarded.
+		NOT THIS -> session.merge(bear) 
+				//unless you don't use it again
+		THIS -> Bear persistentBear = session.merge(bear);
+		- merge creates a NEW persistent object. The one
+		input originally will still be detached.
+
+NOTE : Persist vs save : 
+	save is a hibernate thing
+	persist is more JPA - standard 
+	*Persist comes from JSR-220 
+	*Save is NOT JPA -- pure JPA won't have this.
+		- Has return type of serial ID
+	Persist saves w/o return
+
+
+
+
+
+https://vladmihalcea.com/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
+
+
+
+ ==================================================================
+			* Persistence
+ ==================================================================
+
+* Object States in Hibernate:
+
+1. Transient state - exists only in java, not rep'd in DB
+		- Up for garbage collection if object ref. not held
+2. Persistant - in the DB and being tracked by ongoing session
+		- sessions track changes automatically
+		- Has been either saved or loaded 
+		- object will auto-sync'd with DB
+3. Detached - in the database, not being tracked by a session
+		- The session has been closed, and the reference to 
+		the object is still valid
+		- Enables "application transactions" - unit of work 
+		 from the point of view of the user
+
+
+ ==================================================================
+			* Cache
+ ==================================================================
+cache - Usually in memory storage used to improve access time or 
+	resource eficiency in some way.
+________________
+ Bear bear = session.get(Bear.class, 3);
+/*
+*  The following queries are not actually executed because
+* the requested object is already in memory. This means that
+* they are in the persistend state and are in the L1 cache. b2 and b3
+* will the the exact same object as bear beacuase the session just 
+* gives us the object it has it its cache'
+*/
+ Bear b1 = session.get(Bear.class, 3);
+ Bear b2 = session.get(Bear.class, 3);
+_________________
+
+L1 Cache - First-level cache is session-scoped to ensure each entity
+	is only loaded once per persistent context.
+l2 Cache - SessionFactory-scoped
+	- Search works in teirs:
+		1. Look through L1 cache
+		2. Look through L2 cache
+		3. Load from DB
+ ==================================================================
+			* Exceptions
+ ==================================================================
+ AnnotationException - Comes from issues with Annotations:
+  - No identifier specified for entity
+	--> @Id of @EmbeddedId must be specified for all classes
+ - Illegal attempt to map a non collection as a @OneToMany, 
+   @ManyToMany or @CollectionOfElements
+	--> Incorrectly joining columns
+ - LazyInitializationException: failed to lazily initialize a 
+   collection of role: [Object class],could not initialize proxy 
+   - no Session
+	-- Occurs when using the LOAD method, then trying to call 
+	 a method on the object or use the object in a method call
+	 outside of the session
+ 	-> Possible Solution : Use GET instead 
+ - LazyInitializationException: failed to lazily initialize a 
+   collection of role: [Foreign Key], could not initialize proxy 
+   - no Session
+	-> Possible Solutions: 
+	1. Fetch Type = Eager 
+	2. Complete all operations within the same session
+	3. With fetchType lazy, force initialiation of collection:
+		Hibernate.initialize(obj.getCollection());
+
+ ==================================================================
+			* Enums
+ ==================================================================
+ Parameters in Hibernate often contain Enums. 
+       ~~~~~~~~~~~~~~~ * Generation Types ~~~~~~~~~~~~~~~
+
+         ~~~~~~~~~~~~~~~ * Cascade Types ~~~~~~~~~~~~~~~
+ALL - When objects have one-to-many or many-to-one relationships, 
+	any change that happens on the object with the cascade ALL
+	setting will cascade down to it's associated connections as
+	well. If you save the "one", all associated "manys" will also
+	be saved. If you delete the "one", all associated accouts 
+	will also be deleted.
+
+PERSIST - Cascades only save operations, but not delete ones
+MERGE - Related entities are merged when owning entity is merged
+REFRESH - refreshes all (?)
+DETACH - Detaches all related entities if "mutual detach" occurs
+REMOVE - Removes all related entities when owner is deleted
+
+- By default no operations cascade
+
+==> Hibernate operation Orphan Removal:
+	orphanRemoval = boolean;
+- Enforces referential integrity. If an object that should have an 
+  owner is left without one in the database, it will be removed.
+
+
+
+
+          ~~~~~~~~~~~~~~~ * Fetch Types ~~~~~~~~~~~~~~~
+LAZY
+EAGER
+
+
+
+
+
+
+
+
+
+
+=============================================
+Cirteria is an Object Oriented and type-safe querying API.
+Earlier version of Hibernate had a simpler Hibernate only implmentation, which is now deprecated, and Hibernate supports only the JPA Standard Criteria API
+
+==> Hibernate creating a query is a process 
+
+=========================================
+
+
+Native Query : 
+Sometimes Hibernate doesn't provide all the same tools we need for querying from our database. Or perhaps, sometimes our database offers more functionality that we would like to use that hibernate doesn't support.
+
+In these cases, we can use a native query - normal SQL.
+
+
+
+
+== Named Queries
+
+===================================
+L2 Cache - Works in the cacheing factory (?)
+L1 Caching
+
+===================================
+
+Transaction
+- Takes sevaral operations together and executes then as one option.
+- ACID:
+	Atomic - Can't be broken down more 
+		- Most be all or nothing
+	Consistency - Valid state of DB before & after transaction
+			-- All DB rules must be followed.
+	Isolation - not aware of other trasactions
+		- "In a vacuum" - other transactions occuring @ same 
+		time should be invisible from eachother
+	Durability - Saved perma after - can't go back after commit
+
+Isolation Levels : 
+Dirty Reads
+Non-reapeatable REad
+Phamton Read
+** QC Will ask about this Monday
+
+** CORE INTERFACES OF HIBERANTE
+Session
+SessionFactory
+Configuration
+Transaction
+
+Criteria (note not part of current standard)
+
+ORM : Object realtional mapper ** 
+	-> Interface(?) that talks to the DB
+	-> Abstracts away SQL queries
+	-> Benefit : Object-oriented programming
+		** You don't have to write query for every request
+		** Speeds up development
+		** Efficiency -- IE Caching
+	-> NOT more simple than jdbc terms
+	-> 
+
+
+
+
+
+https://howtoprogramwithjava.com/hibernate-eager-vs-lazy-fetch-type/
+================================================
+** QC WILL ACK ABOUT LaztInitializationException 
+What does it mean when you get a lazyinitializationexception and how would you resolve this exception?
+
+
+
+
+
+
+
+
+		
+						

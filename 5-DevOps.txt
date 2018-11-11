@@ -1,0 +1,589 @@
+===================================================================
+			* DevOps Culture 
+===================================================================
+- Developer - writes app, tests app
+- Operations - takes finish app and deploys application/ maintains life app/server
+- With DevOps, pushing a code immediatly makes it live.
+
+		~~==> Testing is very important <==~~
+
+- Code gets built, gets tested, and gets depolyed manually.
+
+===================================================================
+			* SDLC
+===================================================================
+- SDLC - Software development LifeCycle
+- Higher level way to develop software compared to what we had been doing previously
+
+===> The Waterfall Model
+ 1 Requirements/Analysis - every requirement should be thrurougly   analyzed and defined.
+ 2 System Design - Writing documentation only
+ 3 Implementation - You write teh code
+ 4 Testing - Write the testing
+ 5 Deployment
+ 6 Maintenents
+
+- If one step in the system doesn't work, you start completely over
+
+This model is:
+- Older (20 years ago, it was def. the way to do it)
+- More time consuming
+- Tends to produce more resillient products.
+-- Good method when there is liability related 
+	-- IE health related, safety, aero, autos, ect; life/death
+-- Not effective if the concept isn't solidified or for the modern
+	market or the change that requirements may change.
+	- Approach not adaptive to change at all.
+-- Not effective in fast-moving environment/market
+
+===> The Agile Model
+  CYCLIC
+ -> Requirements 
+	- Must ask a lot of questison
+	- Clarify everything with the client
+ -> Plans
+	- The client may not know what thye want.
+	- Plan the techniologies, make decisions.
+ -> Design
+ -> Develop
+ -> Release
+ -> Maintain
+
+	Feature-by-Feature adaptive model.
+
+===================================================================
+			* Scrum
+===================================================================
+>> part of the Agile model.
+-- Scrum 
+ Stand-ups (usually daily) 
+	- Each person "stands up" and tells team what they'd done,
+	  what they're working on now, and about any blockers.
+	- * Blocker is anything preventing progress
+		-- Related to code, not related to knowledge.
+-- Scrum Board (Sprints) Planning.
+	- User Stories (features) that are requirements
+	- Sprint Backlog rates them by difficulty
+	- In Progress
+
+
+   backlog 	 Sprint Backlog
+(requirements)			  In Progress    Testing   Complete
+-------------     ------------  --------------  --------- --------
+users signup  -------->       ---> name 1  ----> name  --> signup
+user can log in ------>       ---> name 2  -----> name --> login
+user can verify email->	      ---> name 3   ----> name
+  
+- Establishes/ promotes ownership of features by team members
+
+===================================================================
+
+===================================================================
+
+File Storage:
+Amazon S3 is an easy way to host static files.
+	- Uses an API to upload data
+	- Dropbox is literally charging for S3
+
+Glacier - tool for long-term storage. 
+	- Good for backups (IE: large raw photo backups.)
+	- Pretty inexpensive.
+	- Takes about a week to recover the data. 
+
+EFS - Elastic File Systems 
+	- Like buckets, but with an actual file system.
+
+Databases: 
+	RDS 
+	Dynamo DB - for noSQL
+
+Security : Cognito 
+
+======================
+======================
+-- in AWS, going to set up server 
+-- Important command line command group : ssh
+-- MUST be able to use ssh to connect to server. 
+
+GO TO AWS
+Click  EC2 - Elastic Cloud Compute 
+>> Launce Instance 
+- We will initialize servers that you ge to configure. 
+- Will use quick start -> 
+Amazon Linux 2  (Amazon Linux 2 AMI (HVM), SSD Volume Type - ami-)
+-> Use micro (free tier)
+NEXT: Configure instance details:
+	1 instance only
+	(acutally dont mess with this)
+Next: Add Storage
+	Temporary storage for a server-running session. (?)
+Next : Add tags - skip
+Next: Configure security groups 
+	type SSH, add your IP and description
+	this is IPs allowed to access the server
+>> Review & Launch
+	- Be sure free tier and stuff
+>> Click launch **
+	- IMPORTANT: Needs a key/pair to connect to ec2. YOU MUST save this, you only get 1 chance.
+Name  : closet-key (for class)
+	- DOWNLOAD PEM FILE
+	(See closet-key.PEM in 'D:/REVATURE/DevOps(NoGit)')
+>> Launch Instance. 
+
+>> Next step : getting key into organized place.
+** Don't ever put the key in a place where GIT would upload it. ** 
+ 
+FROM EC2 >> running Instances
+-Copy PUBLIC DNS (IPv4) 
+
+in cmd line, go to foler with the pem file.
+
+ssh -i closet-key.pem ec2-user@ec2-18-221-10-68.us-east-2.compute.amazonaws.com
+ssh -i [key location] [ec2@public DNS]
+
+Now you're on the command line of that server!! 
+>> can do "sudo yum update"  if you want
+
+- Always will take you to your user folder:
+	cd ~
+	cd home/ec2-user
+- Will take you to root dir
+	cd / 
+- can do cd .. to go to home if in user
+
+- Can use 'vim' and 'nano' to edit/create files.
+
+- disconnect with exit. 
+
+==> Moving files : 
+- Back in your computer, go to the folder you want (ideally use folder for your sever....)
+
+scp -i closet-key.pem bocho.gif ec2-user@ec2-18-221-10-68.us-east-2.compute.amazonaws.com:~/birdchar.gif
+
+==>  yum is a tool for installing packages on the server 
+Search java packaages : 
+yum search java
+yum search jdk
+
+install java : 
+sudo yum install java-1.8.0-openjdk.x86_64
+( Won't be writing applications on server, just running them. )
+install maven : 
+-- download the maven bin.tar.gz file from maven and move it to the server.
+
+
+ssh -i closet-key.pem ec2-user@ec2-18-221-10-68.us-east-2.compute.amazonaws.com
+
+scp -i closet-key.pem apache-maven-3.6.0-bin.tar.gz ec2-user@ec2-18-221-10-68.us-east-2.compute.amazonaws.com:~/
+
+-- Extract a .gz file
+tar -xzf [.gz name]
+
+
+===============================================================
+IaaS ==> Infrastructure as a service.
+	- server/hardware managed by provider 
+Paas ==> Platform as a service
+	- Provider handler everything except the application
+	- EC2
+Saas ==> Software as a service
+	- No coding to be done, here is an application.
+
+EC2 - AWS EC2 does Autoscaling & loadbalancing dynamically
+Autoscaling - the concept of an EC2 being able to dynaically allocate resources to itself besed on need.
+
+Load Balancing - the concept of na EC2 to dynamically replicate itself  to better handle increased traffic volumes.
+	- You can dynamically create new INSTANCES of the server to handle the new load. The server copies itself to handle increased loads. 
+	-When traffic volume falls, instances can be dynamically removed. 
+	- How this is useful: $$$! Utilizing resources costs MONEY so dynamically increasing/decreasing server sizes is beneficial. Most services don't spend 90% of their time at max utilization of their resoruces.
+
+
+
+==========================================================
+angular and java -> Build to web
+======================================
+===> ng build --prod 
+/ npm build will actually BUILD the project. 
+==> in java, add files to webapp folder
+
+==> Will need to make adjustments to have relative links to the server.
+==> Change environment variables that point to the server.
+
+(side note: sudo = super user do)
+IN JAVA, rihgt click project >> Maven > Build
+goals : clean package
+Will need to add maven dependencies:
+	javax.servlet
+	apache.tomcat (tomcat-servlet-api)
+	org.apache.catalina.servlets (tomcat catalina dependency)
+	
+Successful build gets a .war folder.
+-> Put that .war in the devOps folder and move it to the server.
+scp -i closet-key.pem [file.war] ec2-user@ec2-18-221-10-68.us-east-2.compute.amazonaws.com:~/
+scp -i closet-key.pem SimpleAPI.war ec2-user@ec2-18-221-10-68.us-east-2.compute.amazonaws.com:~/
+
+-> log in to server, install tomcat:
+	- MOVE THE TOMCAT.TAR.GZ folder over
+scp -i closet-key.pem apache-tomcat-9.0.12.tar.gz ec2-user@ec2-18-221-10-68.us-east-2.compute.amazonaws.com:~/
+	tar -xzf apache-tomcat-9.0.12.tar.gz
+
+cd to the bin folder of tomcat.
+START ./startup.sh
+SHUT DOWN : ./shutdown.sh
+
+cd to web apps
+mv SimpleApi.war apache-tomcat-9.0.12/webapps
+cd apache-tomcat-9.0.12
+cd bin
+./startup.sht
+
+==> Note the war file is exploded into a folder.
+
+====> To test: edit server: + security group
+type: All TCP, from my IP (Opens all HTTP requests from my IP)
+
+and to go to the server, type in 
+ec2-18-221-10-68.us-east-2.compute.amazonaws.com:8080/[war file name]/index.html
+
+===================================
+CI/CD to DevOps (Automation )
+** Be able to describe continuout Integration ********
+** Know CD vs CI ***
+DevOps = full
+Agile = just the start, writing code, no plan for official deployment/delivery as part of cycle. 
+(CI) Continuous Integration = taking our code and integrating it into the code base.
+(CD) Continuous Delivery - deliver produce to source, but not necesicarily live
+(CD) Continuous Deployment - deliver to live right away
+DevOps practices:
+
+
+
+=========================> FROM MITCHES DOC
+
+Concepts:
+CI (Continuous Integration)
+CD (Continuous Deployment)
+CD (Continuous Delivery)
+
+Continuous Integration (CI) Pipeline
+
+Part 1: preparing the system
+
+
+1. Overview 
+
+This portion of the document describes the infrastructure setup necessary for a CI pipeline with Jenkins as the build configuration tool. You will create an AWS EC2 instance, connect to it through secure shell (SSH), and install Java, Tomcat, Maven, Git, and Jenkins. Part 2 will deal with Jenkins configuration. 
+
+2. Environment 
+
+Git : sudo yum install git 
+
+Java: jdk-8u111-linux-x64.rpm (or later) 
+
+AWS EC2: Amazon Linux
+
+Web container: Tomcat 8.5.28 or 9.0.5 (9 looks stable now), get the tar.gz format https://tomcat.apache.org/download-80.cgi 
+
+Jenkins: v2.89, get the “generic Java package” 
+https://jenkins.io/download/ 
+lse
+
+https://maven.apache.org/download.cgi
+
+Version control: Git 64-bit
+
+Cloud repository: GitHub 
+
+For your convenience, put all of the following files somewhere you'll be able to easily find them (a directory under your C:/ drive called, “Pipeline_Setup,” or similar is not a bad idea). 
+
+Note: versioning changes often - DON’T PANIC. Most releases are backwards compatible, but don’t go any older than the versions shown above. Specifically, earlier releases of Tomcat and Jenkins are known to cause issues in this pipeline structure. 
+
+3. EC2 creation
+
+Elastic Cloud Compute (EC2) is a Virtual Machine (VM) on the Cloud, and is the basic building block for this CI pipeline. These are fully configurable with an Operating System (OS), RAM size, and security features.
+
+
+
+
+Go to Services in the upper left corner and choose EC2 to reach the EC2 dashboard. 
+Hit the “Launch Instance” button to begin configuration. 
+
+
+
+
+Choose Amazon Linux for the operating system (AMI type).
+
+Choose the size of the VM (nano, micro, small, or medium). The t2.micro designation, which is in the Free Tier, represents a single, shared core so performance is limited and dependent on the load from other users. 
+
+For the “configure instance details” step, simply keep the defaults then move on to the next step. 
+
+On the “add storage” step, keep the default settings to stay on the free tier. EBS is like the hard drive for your EC2 instance. 
+
+Give your instance a name with a tag called, “Name.” This is not strictly necessary, but tags can be used to organize instances across your AWS account. 
+
+Regarding security groups, leave your instance open to inbound and outbound traffic over HTTP on all ports inbound traffic over TCP on port 22, for all sources. 
+
+Finally, and this is very important, CREATE AND DOWNLOAD A NEW KEY PAIR. This is how you will access the instance via SSH. 
+
+4. Connect to EC2 via secure shell (SSH)
+
+There are a few ways to accomplish this. If you are running Windows and like GUIs, PuTTY is a good option (method 1). If you prefer PowerShell or are running a Unix system, ignore PuTTY and go to method 2. 
+
+Method 2 - Command-line SSH client
+
+No one says it better than AWS themselves: 
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html
+
+5. Set up directories in EC2
+
+Note, opening a PuTTY session automatically lands the user in the /ec2-user/home, or /~. Use sudo to create the following directories as you will not be able to login as root:
+For the JDK:         /usr/java
+Tomcat/Maven:     /usr/apache
+Maven repo:         /~/.m2
+Git:             /~/.git
+
+Example to create a new directory called java from inside the current directory:
+sudo mkdir java
+
+To give access to that directory:
+sudo chmod 777 /usr/java
+(see https://www.maketecheasier.com/file-permissions-what-does-chmod-777-means/ for reference)
+
+To check if the permission applied:
+ls -la
+The folder should have drwxrwxrwx next to it if its permissions were set to 777 properly.
+
+
+6. Transfer components to EC2
+
+Now that you've established an ssh connection and set up the internal structure, you can copy the software we gathered in section 2 over to the EC2. 
+
+Transfer the JDK, Tomcat, and Maven archives from the local Windows machine to the /tmp of the EC2 instance.
+
+
+Example to transfer the JDK archive to /tmp of the AWS EC2 instance:
+pscp -i C:\pipeline_tools\[filename].ppk C:\pipeline_tools\jdk-8u111-linux-x64.rpm ec2-user@[hostname]:/tmp/jdk-8u111-linux-x64.rpm
+
+7. Installation on EC2
+
+The files transferred in the last section aren't usable yet sitting in the tmp folder, they need to be installed. 
+
+7.1 Java 
+
+sudo yum install java-1.8.0-openjdk-devel.
+7.2 Git
+
+Go to /~/.git and install the Git tool with the following command which places git.exe there:
+
+sudo yum install java-1.8.0-openjdk-devel.x86_64
+
+7.3 Maven
+
+Unpack Maven in /tmp on the EC2 instance by running the following:
+Cd 
+tar xzf apache-maven-3.5.2-bin.tar.gz
+
+Move the Maven folder to the Maven directory with this:
+
+sudo mv apache-maven-3.5.2 /usr/apache
+sudo chmod 777 /usr/apache/apache-maven-3.5.2
+
+7.4 Tomcat
+
+Unpack Tomcat in /tmp on the EC2 instance by running the following:
+tar xvf apache-tomcat-8.5.28.tar.gz        
+Move the Tomcat folder to the Tomcat directory with this:
+sudo mv apache-tomcat-8.5.28 /usr/apache
+sudo chmod 777 /usr/apache/apache-tomcat-8.5.28
+
+The Tomcat installation location, called CATALINA_HOME will be set in the next section. Change the default CATALINA_HOME/conf/tomcat-u sers.xml to include two new passwords: one for the HTML login page at http://localhost:8080 to be used by the User and one for a text cd login to be used by Maven and Jenkins.
+These can also be stored with encryption as well which is not discussed here.
+((apache/apache-tomcat.../conf/tomcat-users.xml ))
+
+<role rolename="manager-gui"/>
+ <role rolename="manager-script"/>
+ <user username="manager-gui" password="tomcat" roles="manager-gui"/>
+ <user username="manager-script" password="script" roles="manager-script"/>
+** NOTE: CATALINA_HOME is the tomcat folder
+To relax the protection against CSRF, comment-out the <Valve className=”...”/> element in
+CATALINA_HOME/webapps/manager/META-INF/context.xml. This will allow Jenkins to log into
+Tomcat’s Manager Console from an IP address that is different than Tomcat’s. Strictly speaking this step is only necessary for more advanced pipelines that have multiple servers on different EC2 instances.
+
+Increase the file upload size from 50 MB to 134 MB by editing the multipart-config tags ind/.project
+CATALINA_HOME/webapps/manager/WEB-INF/web.xml. Change <max-file-size> and <max-request-size> to 134217728. This allows Jenkins to push a moderately sized .war file to the server.
+cd ~
+8. Environment variables
+
+Using the vi or nano editor, change .bashrc, a hidden file located in ~/, and add the following contents:
+
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk/
+export JAVA_HOME
+CATALINA_HOME=/usr/apache/apache-tomcat-9.0.12
+export CATALINA_HOME
+M2_HOME=/usr/apache/apache-maven-3.6.0
+export M2_HOME
+
+M2=$M2_HOME/bin
+export M2
+export PATH=$M2:$PATH
+
+This file will be invoked after a new session is created with PuTTY and an interactive Bash shell is used.
+
+Now, let’s check whether Tomcat has successfully installed. 
+(( CATALINA_HOME is your tomcat folder)
+Start Tomcat by navigating to CATALINA_HOME/bin and execute the following:
+./startup.sh
+
+Verify the server installation by pointing your browser to: http://<EC2 public DNS or public IP>:8080
+(Where DNS is the DNS of your EC2 instance.)
+
+You should see the following Tomcat homepage :
+
+
+Use the “manager-gui” credentials you set while configuring Tomcat to log in to the Manager App (see the button on the right-hand side of the homepage). You should see something like this:
+
+This page shows every deployed app in your web container, and gives you some GUI controls for interacting with them. You can also manually add a .war from here, but there’s a more elegant way to do that (see step 9). 
+
+If you’re not sure whether an app is deployed, check the Manager App and see if everything is where you expect it to be. 
+
+To stop Tomcat, go to CATALINA_HOME/bin and execute the following:
+./shutdown.sh
+
+
+
+9. Deploying Jenkins 
+
+Transfer jenkins.war to the /tmp folder of the EC2 instance using the same process as for Java, Maven, and Tomcat. Move jenkins.war to CATALINA_HOME/webapps with sudo mve. 
+
+The deployment scanner will automatically detect and unpack the war and deploy it within seconds.
+
+Verify the Jenkins installation by pointing your browser to: http://<EC2 public DNS or public
+IP>:8080/jenkins
+
+The Jenkins splash page shown below should be visible.
+
+Unlock Jenkins by supplying the initial administrator password from the hidden file location shown on the splash page: /home/ec2-user/.jenkins/secrets/initialAdminPassword
+
+On the next page choose the Install Suggested Plugins option, and create an admin user on the following page. (REMEMBER THESE CREDENTIALS!)
+
+Now start Jenkins and make sure you can see the dashboard. 
+
+Part 2: Configuring Jenkins
+
+1. Installing plugins 
+
+From your Jenkins dashboard, go to “Manage Jenkins” >> “Manage Plugins” and install the GitHub, Maven, Slack Notification, and Deploy to Container plugins. 
+
+
+2. Configure global tools 
+
+From your Jenkins dashboard, go to “Manage Jenkins” >> “Global Tool Configuration”. 
+
+For “Maven Configuration”, specify “Settings file in filesystem” as the “default settings provider” and give the file path to the /conf/settings.xml in your Maven installation (should be /usr/apache/apache-maven-3.5.2/conf/settings.xml). 
+
+For “JDK”, specify “java-8” as the name and “/usr/java/latest” as JAVA_HOME. 
+
+For “Maven,” specify “maven-352” as the name and “/usr/apache/apache-maven-3.5.2” as MAVEN_HOME. 
+
+3. Configure Git
+
+IN GITHUB:
+
+In your repository, go to "Settings" and choose "Integrations and Services" 
+Add the Jenkins (GitHub plugin) service, using  http://<your public DNS>:8080/jenkins/github-webhook/ as the Jenkins hook URL. 
+Make sure "active" is checked and install the service. 
+
+Click on your profile icon and go to, "settings" in the dropdown. 
+On the left side of the screen, select "Personal access tokens" from "Developer settings" 
+Choose to generate a new user access token, and give it a description (jenkins-1 or something), and assign it repo scope. 
+Click "generate token" and copy the alphanumeric string which is generated. 
+
+IN JENKINS: 
+
+Go to "Manage Jenkins" and choose "Global Tool configuration". 
+Make sure that under "Git" the "path the Git executable" is just "git".
+Hit "Apply". 
+
+Go back to "Manage Jenkins" and choose "Configure System". Under "Github", choose "Add GitHub Server". 
+the API URL should be, "https://api.github.com". In "Credentials", choose "Add/Jenkins" and choose "Kind" as "secret text". 
+Put the generated access token from GitHub into the "secret" field and give it some kind of descriptive ID. Then choose "Add". 
+Now, when you click "Test connection", you should see a message saying, "Credentials verified for user <your github name>... etc" 
+Hit "Apply". 
+
+In your project setup (not the global config), make sure that you choose "Git" under "Source Code Management".
+Specify the repository URL and which branch you want to have deployed on your server. 
+Choose "GitHub hook trigger for GITScm polling" under "Build Triggers".
+
+4. Configure Slack notifications 
+
+In the #jenkins channel in our organization, click the settings icon on the top panel and choose, “add an app.” This will bring you to your browser. Search for the “Jenkins CI” app and install it. Copy the integration token which will be generated. 
+
+Under “Global Slack Notifier Settings,” add “jan22java” (or whatever Slack team you’re trying to use) as the Team Subdomain and paste your integration token. Test your connection, and “success” should be displayed below the form. 
+
+5. Create a project 
+
+Choose “new item”, give the item a name matching your Maven project in your repo, and choose “Maven Project” as the item type.  
+
+Select “GitHub hook trigger for GitSCM polling” for the build trigger.
+
+In “Build”:
+-add the location of your project’s POM file under “Build/Root POM”
+-add “clean package” in “Goals and options” 
+-add your Maven version as specified in global tool settings
+-add “provided settings.xml” for “settings file”
+
+
+
+Add Slack notifications under “post-build actions” and go back to your project dashboard. Select “build now” to test whether it worked. 
+
+Go to “post-build actions” and choose, “add a post-build action.” Select “Deploy WAR/EAR to container,” and provide “**/*.war” as the “WAR/EAR files” field. Provide the context path you’d expect for local deployment (your project name prepended by a slash). 
+
+Add tomcat 8.x as a container. Provide the manager-script credentials and http://localhost:8080 as the tomcat url. Now attempt deployment by running another build. 
+
+Your app has been deployed to THIS EC2. If you wish to deploy to a different EC2, specify that url instead and make sure the credentials you provide are for THAT EC2’s Tomcat web container. 
+
+
+===========================================================
+
+** man command gives detailed description of a command
+man mv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

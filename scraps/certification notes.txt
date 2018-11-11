@@ -1,3 +1,9 @@
+3. 
+... main(String[] args) {}
+ags is never null; it is a string of length 0 if called from cmd w/o arguments
+
+If you throw an exception, you mst add try/catch or throws
+
 0. 50
 
 STRINGBUFFER ADN STRING BUILDER >>
