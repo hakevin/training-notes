@@ -2,7 +2,8 @@
 			* DevOps Culture 
 ===================================================================
 - Developer - writes app, tests app
-- Operations - takes finish app and deploys application/ maintains life app/server
+- Operations - takes finish app and deploys application/ maintains
+ life app/server
 - With DevOps, pushing a code immediatly makes it live.
 
 		~~==> Testing is very important <==~~
@@ -13,10 +14,12 @@
 			* SDLC
 ===================================================================
 - SDLC - Software development LifeCycle
-- Higher level way to develop software compared to what we had been doing previously
+- Higher level way to develop software compared to what we had been
+  doing previously
 
 ===> The Waterfall Model
- 1 Requirements/Analysis - every requirement should be thrurougly   analyzed and defined.
+ 1 Requirements/Analysis - every requirement should be thrurougly
+   analyzed and defined.
  2 System Design - Writing documentation only
  3 Implementation - You write teh code
  4 Testing - Write the testing
@@ -76,9 +79,9 @@ user can verify email->	      ---> name 3   ----> name
   
 - Establishes/ promotes ownership of features by team members
 
-===================================================================
+ ===================================================================
 
-===================================================================
+ ===================================================================
 
 File Storage:
 Amazon S3 is an easy way to host static files.

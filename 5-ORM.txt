@@ -1,11 +1,4 @@
-For other file : 
-==================================
-AWS Stuff ++
-=================================
-rout53 - DNS registry - can be used to map your domain registration
- to the domain name.
 
-CodeCommit - git repo system (DevOps pipeline)
 
  ===================================================================
 		* ORM - Object Relational Mapper
@@ -334,9 +327,6 @@ CREATE :
 		- Cascading cascade type
 		- Complete all operations within the same session
 
-
-
-
  ==================================================================
 		* CRUD Operations In Hibernate
  ==================================================================
@@ -457,8 +447,6 @@ l2 Cache - SessionFactory-scoped
 			* Enums
  ==================================================================
  Parameters in Hibernate often contain Enums. 
-       ~~~~~~~~~~~~~~~ * Generation Types ~~~~~~~~~~~~~~~
-
          ~~~~~~~~~~~~~~~ * Cascade Types ~~~~~~~~~~~~~~~
 ALL - When objects have one-to-many or many-to-one relationships, 
 	any change that happens on the object with the cascade ALL
@@ -480,25 +468,44 @@ REMOVE - Removes all related entities when owner is deleted
 - Enforces referential integrity. If an object that should have an 
   owner is left without one in the database, it will be removed.
 
-
-
-
           ~~~~~~~~~~~~~~~ * Fetch Types ~~~~~~~~~~~~~~~
 LAZY
 EAGER
 
+ ==================================================================
+		      * Main Interfaces
+ ==================================================================
+==> Session
+ - Used to get physical connection to database.
+ - Hibernate uses a "connection pool", keeping connections open.
+	- Session borrows a connection from the connection cool
+ - Not typically thread safe, thus should not be open too long
+ - Serializable IF its persistent classes are serializable
 
+==> SessionFactory
+ - Single session factory for whole application, manages init.
+ - Generates SQL statements/mapping metadata for use @ runtime
+ - Manages hibernate session lifecycle
 
+==> Configuration
+ - Configures/bootstraps hibernate. 
+ - Used to specify location of hibernate-specific mapping doc(xml)
+ --> XML Tags: 
+	- dialect, SQL-driver
+	- DB endpoint, username, password
+	- connection pool size
+	- hbm2ddl.auto = update < Sets how ot writes tables
 
+==> Transaction
+ - Optional interface.
 
-
-
-
-
+Query/ Criteria (note not part of current standard)
 
 =============================================
 Cirteria is an Object Oriented and type-safe querying API.
-Earlier version of Hibernate had a simpler Hibernate only implmentation, which is now deprecated, and Hibernate supports only the JPA Standard Criteria API
+Earlier version of Hibernate had a simpler Hibernate only 
+implmentation, which is now deprecated, and Hibernate supports only
+ the JPA Standard Criteria API
 
 ==> Hibernate creating a query is a process 
 
@@ -506,7 +513,10 @@ Earlier version of Hibernate had a simpler Hibernate only implmentation, which i
 
 
 Native Query : 
-Sometimes Hibernate doesn't provide all the same tools we need for querying from our database. Or perhaps, sometimes our database offers more functionality that we would like to use that hibernate doesn't support.
+Sometimes Hibernate doesn't provide all the same tools we need for
+ querying from our database. Or perhaps, sometimes our database 
+offers more functionality that we would like to use that hibernate 
+doesn't support.
 
 In these cases, we can use a native query - normal SQL.
 
