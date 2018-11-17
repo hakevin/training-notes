@@ -202,14 +202,15 @@ Load Balancing - the concept of na EC2 to dynamically replicate itself  to bette
 
 
 
-==========================================================
-angular and java -> Build to web
-======================================
+ ===================================================================
+		* angular and java -> Build to web
+ ===================================================================
 ===> ng build --prod 
 / npm build will actually BUILD the project. 
 ==> in java, add files to webapp folder
 
-==> Will need to make adjustments to have relative links to the server.
+==> Will need to make adjustments to have relative links to the
+    server.
 ==> Change environment variables that point to the server.
 
 (side note: sudo = super user do)
@@ -273,135 +274,134 @@ Continuous Integration (CI) Pipeline
 Part 1: preparing the system
 
 
-1. Overview 
+==> 1. Overview 
+This portion of the document describes the infrastructure setup 
+necessary for a CI pipeline with Jenkins as the build configuration 
+tool. You will create an AWS EC2 instance, connect to it through 
+secure shell (SSH), and install Java, Tomcat, Maven, Git, and 
+Jenkins. Part 2 will deal with Jenkins configuration. 
 
-This portion of the document describes the infrastructure setup necessary for a CI pipeline with Jenkins as the build configuration tool. You will create an AWS EC2 instance, connect to it through secure shell (SSH), and install Java, Tomcat, Maven, Git, and Jenkins. Part 2 will deal with Jenkins configuration. 
-
-2. Environment 
-
+==> 2. Environment 
 Git : sudo yum install git 
-
 Java: jdk-8u111-linux-x64.rpm (or later) 
-
 AWS EC2: Amazon Linux
-
-Web container: Tomcat 8.5.28 or 9.0.5 (9 looks stable now), get the tar.gz format https://tomcat.apache.org/download-80.cgi 
-
+Web container: Tomcat 8.5.28 or 9.0.5
+	 (9 looks stable now), get the tar.gz format 
+	https://tomcat.apache.org/download-80.cgi 
 Jenkins: v2.89, get the “generic Java package” 
 https://jenkins.io/download/ 
 lse
-
 https://maven.apache.org/download.cgi
 
 Version control: Git 64-bit
-
 Cloud repository: GitHub 
+For your convenience, put all of the following files somewhere  
+ you'll be able to easily find them (a directory under your C:/ 
+ drive called, “Pipeline_Setup,” or similar is not a bad idea). 
 
-For your convenience, put all of the following files somewhere you'll be able to easily find them (a directory under your C:/ drive called, “Pipeline_Setup,” or similar is not a bad idea). 
+Note: versioning changes often - DON’T PANIC. Most releases are 
+backwards compatible, but don’t go any older than the versions 
+shown above. Specifically, earlier releases of Tomcat and Jenkins 
+are known to cause issues in this pipeline structure. 
 
-Note: versioning changes often - DON’T PANIC. Most releases are backwards compatible, but don’t go any older than the versions shown above. Specifically, earlier releases of Tomcat and Jenkins are known to cause issues in this pipeline structure. 
+==> 3. EC2 creation
+Elastic Cloud Compute (EC2) is a Virtual Machine (VM) on the Cloud,
+ and is the basic building block for this CI pipeline.
+ These are fully configurable with an Operating System (OS),
+ RAM size, and security features.
 
-3. EC2 creation
-
-Elastic Cloud Compute (EC2) is a Virtual Machine (VM) on the Cloud, and is the basic building block for this CI pipeline. These are fully configurable with an Operating System (OS), RAM size, and security features.
-
-
-
-
-Go to Services in the upper left corner and choose EC2 to reach the EC2 dashboard. 
-Hit the “Launch Instance” button to begin configuration. 
-
-
-
+-- Go to Services in the upper left corner and choose EC2 to reach 
+   the EC2 dashboard. 
+-- Hit the “Launch Instance” button to begin configuration. 
 
 Choose Amazon Linux for the operating system (AMI type).
+Choose the size of the VM (nano, micro, small, or medium). 
+	The t2.micro designation, which is in the Free Tier, 
+	represents a single, shared core so performance is limited 
+	and dependent on the load from other users. 
+For the “configure instance details” step, simply keep the defaults
+	 then move on to the next step. 
+On the “add storage” step, keep the default settings to stay on the
+	 free tier. EBS is like the hard drive for your EC2 instance.
+Give your instance a name with a tag called, “Name.” This is not 
+	strictly necessary, but tags can be used to organize 
+	instances across your AWS account. 
+Regarding security groups, leave your instance open to inbound and 
+	outbound traffic over HTTP on all ports inbound traffic over 	
+	TCP on port 22, for all sources. 
+Finally, and this is very important, CREATE AND DOWNLOAD A NEW KEY 	
+	PAIR. This is how you will access the instance via SSH. 
 
-Choose the size of the VM (nano, micro, small, or medium). The t2.micro designation, which is in the Free Tier, represents a single, shared core so performance is limited and dependent on the load from other users. 
-
-For the “configure instance details” step, simply keep the defaults then move on to the next step. 
-
-On the “add storage” step, keep the default settings to stay on the free tier. EBS is like the hard drive for your EC2 instance. 
-
-Give your instance a name with a tag called, “Name.” This is not strictly necessary, but tags can be used to organize instances across your AWS account. 
-
-Regarding security groups, leave your instance open to inbound and outbound traffic over HTTP on all ports inbound traffic over TCP on port 22, for all sources. 
-
-Finally, and this is very important, CREATE AND DOWNLOAD A NEW KEY PAIR. This is how you will access the instance via SSH. 
-
-4. Connect to EC2 via secure shell (SSH)
-
-There are a few ways to accomplish this. If you are running Windows and like GUIs, PuTTY is a good option (method 1). If you prefer PowerShell or are running a Unix system, ignore PuTTY and go to method 2. 
-
-Method 2 - Command-line SSH client
+==> 4. Connect to EC2 via secure shell (SSH)
+- Use Command-line SSH client
 
 No one says it better than AWS themselves: 
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html
 
-5. Set up directories in EC2
+==> 5. Set up directories in EC2
+- Use sudo to create the following directories as you will not be able
+  to login as root:
+ For the JDK:         /usr/java
+ Tomcat/Maven:     /usr/apache
+ Maven repo:         /~/.m2
+ Git:             /~/.git
 
-Note, opening a PuTTY session automatically lands the user in the /ec2-user/home, or /~. Use sudo to create the following directories as you will not be able to login as root:
-For the JDK:         /usr/java
-Tomcat/Maven:     /usr/apache
-Maven repo:         /~/.m2
-Git:             /~/.git
-
-Example to create a new directory called java from inside the current directory:
-sudo mkdir java
-
-To give access to that directory:
-sudo chmod 777 /usr/java
+- Example to create a new directory called java from inside the 
+  current directory:
+		sudo mkdir java
+- To give access to that directory:
+	sudo chmod 777 /usr/java
 (see https://www.maketecheasier.com/file-permissions-what-does-chmod-777-means/ for reference)
+- To check if the permission applied:
+	ls -la
+ The folder should have drwxrwxrwx next to it if its permissions 
+ were set to 777 properly.
 
-To check if the permission applied:
-ls -la
-The folder should have drwxrwxrwx next to it if its permissions were set to 777 properly.
+==> 6. Transfer components to EC2
+- Now that you've established an ssh connection and set up the 
+internal structure, you can copy the software we gathered in section
+2 over to the EC2. 
 
-
-6. Transfer components to EC2
-
-Now that you've established an ssh connection and set up the internal structure, you can copy the software we gathered in section 2 over to the EC2. 
-
-Transfer the JDK, Tomcat, and Maven archives from the local Windows machine to the /tmp of the EC2 instance.
-
+Transfer the JDK, Tomcat, and Maven archives from the local Windows
+ machine to the /tmp of the EC2 instance.
 
 Example to transfer the JDK archive to /tmp of the AWS EC2 instance:
 pscp -i C:\pipeline_tools\[filename].ppk C:\pipeline_tools\jdk-8u111-linux-x64.rpm ec2-user@[hostname]:/tmp/jdk-8u111-linux-x64.rpm
 
-7. Installation on EC2
-
-The files transferred in the last section aren't usable yet sitting in the tmp folder, they need to be installed. 
+==> 7. Installation on EC2
+- The files transferred in the last section aren't usable yet 
+  sitting in the tmp folder, they need to be installed. 
 
 7.1 Java 
-
-sudo yum install java-1.8.0-openjdk-devel.
+	sudo yum install java-1.8.0-openjdk-devel.
 7.2 Git
-
-Go to /~/.git and install the Git tool with the following command which places git.exe there:
-
-sudo yum install java-1.8.0-openjdk-devel.x86_64
-
+  - Go to /~/.git and install the Git tool with the following
+    command which places git.exe there:
+	sudo yum install java-1.8.0-openjdk-devel.x86_64
 7.3 Maven
+ - Unpack Maven in /tmp on the EC2 instance by running the following:
+	cd 
+	tar xzf apache-maven-3.5.2-bin.tar.gz
 
-Unpack Maven in /tmp on the EC2 instance by running the following:
-Cd 
-tar xzf apache-maven-3.5.2-bin.tar.gz
-
-Move the Maven folder to the Maven directory with this:
-
-sudo mv apache-maven-3.5.2 /usr/apache
-sudo chmod 777 /usr/apache/apache-maven-3.5.2
+ - Move the Maven folder to the Maven directory with this:
+	sudo mv apache-maven-3.5.2 /usr/apache
+	sudo chmod 777 /usr/apache/apache-maven-3.5.2
 
 7.4 Tomcat
-
-Unpack Tomcat in /tmp on the EC2 instance by running the following:
-tar xvf apache-tomcat-8.5.28.tar.gz        
-Move the Tomcat folder to the Tomcat directory with this:
-sudo mv apache-tomcat-8.5.28 /usr/apache
-sudo chmod 777 /usr/apache/apache-tomcat-8.5.28
-
-The Tomcat installation location, called CATALINA_HOME will be set in the next section. Change the default CATALINA_HOME/conf/tomcat-u sers.xml to include two new passwords: one for the HTML login page at http://localhost:8080 to be used by the User and one for a text cd login to be used by Maven and Jenkins.
-These can also be stored with encryption as well which is not discussed here.
-((apache/apache-tomcat.../conf/tomcat-users.xml ))
+- Unpack Tomcat in /tmp on the EC2 instance by running the following:
+	tar xvf apache-tomcat-8.5.28.tar.gz        
+- Move the Tomcat folder to the Tomcat directory with this:
+	sudo mv apache-tomcat-8.5.28 /usr/apache
+	sudo chmod 777 /usr/apache/apache-tomcat-8.5.28
+- The Tomcat installation location, called CATALINA_HOME will be set
+  in the next section. 
+- Change the default CATALINA_HOME/conf/tomcat-u sers.xml to include
+  two new passwords: one for the HTML login page at
+  http://localhost:8080 to be used by the User and one for a text cd
+  login to be used by Maven and Jenkins.
+- These can also be stored with encryption as well which is not 
+  discussed here.
+	((apache/apache-tomcat.../conf/tomcat-users.xml))
 
 <role rolename="manager-gui"/>
  <role rolename="manager-script"/>
@@ -430,11 +430,13 @@ M2=$M2_HOME/bin
 export M2
 export PATH=$M2:$PATH
 
-This file will be invoked after a new session is created with PuTTY and an interactive Bash shell is used.
+This file will be invoked after a new session is created with PuTTY
+ and an interactive Bash shell is used.
 
 Now, let’s check whether Tomcat has successfully installed. 
 (( CATALINA_HOME is your tomcat folder)
-Start Tomcat by navigating to CATALINA_HOME/bin and execute the following:
+Start Tomcat by navigating to CATALINA_HOME/bin and execute the
+ following:
 ./startup.sh
 
 Verify the server installation by pointing your browser to: http://<EC2 public DNS or public IP>:8080
@@ -443,11 +445,17 @@ Verify the server installation by pointing your browser to: http://<EC2 public D
 You should see the following Tomcat homepage :
 
 
-Use the “manager-gui” credentials you set while configuring Tomcat to log in to the Manager App (see the button on the right-hand side of the homepage). You should see something like this:
+Use the “manager-gui” credentials you set while configuring Tomcat 
+to log in to the Manager App (see the button on the right-hand side 
+of the homepage). You should see something like this:
 
-This page shows every deployed app in your web container, and gives you some GUI controls for interacting with them. You can also manually add a .war from here, but there’s a more elegant way to do that (see step 9). 
+This page shows every deployed app in your web container, and gives 
+you some GUI controls for interacting with them. You can also 
+manually add a .war from here, but there’s a more elegant way to do 
+that (see step 9). 
 
-If you’re not sure whether an app is deployed, check the Manager App and see if everything is where you expect it to be. 
+If you’re not sure whether an app is deployed, check the Manager App 
+and see if everything is where you expect it to be. 
 
 To stop Tomcat, go to CATALINA_HOME/bin and execute the following:
 ./shutdown.sh
@@ -456,7 +464,9 @@ To stop Tomcat, go to CATALINA_HOME/bin and execute the following:
 
 9. Deploying Jenkins 
 
-Transfer jenkins.war to the /tmp folder of the EC2 instance using the same process as for Java, Maven, and Tomcat. Move jenkins.war to CATALINA_HOME/webapps with sudo mve. 
+Transfer jenkins.war to the /tmp folder of the EC2 instance using the
+ same process as for Java, Maven, and Tomcat. Move jenkins.war to 
+ CATALINA_HOME/webapps with sudo mve. 
 
 The deployment scanner will automatically detect and unpack the war and deploy it within seconds.
 

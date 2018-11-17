@@ -729,7 +729,7 @@ table are related to another table. Generally, this will be a foreign key.
 --- IE Can limit roles to specific actions (view, delete, add, ect.)
 
 
-CREATE ROLE jdbc WITH LOGIN PASSWORD 'p4ssw0rd' VALID UNTIL '2018-12-12'
+CREATE ROLE jdbc WITH LOGIN PASSWORD 'passw0rd' VALID UNTIL '2018-12-12'
 -- VALID UNTIL 'yyyy-mm-dd' lets password ect expire, not mandatory
 
 --If you want to test this, you can add a new server to you DB as new user

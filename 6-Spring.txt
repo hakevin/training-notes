@@ -1,0 +1,568 @@
+* Spring Core
+* Getting started (XML Configuration)
+* Getting started (Core config. Bean)
+* Getting Started (Annotations)	
+* Spring Bean Lifecycle
+
+ ==================================================================
+			 * Spring Core
+ ==================================================================
+
+Spring core:
+	- is a Dependency Injection (DI) Framework.
+	- Uses "Spring Beans" as basic building blocks
+
+Why use spring?
+-In the model we used previously:
+	Controller --> Service --> Dao
+- The classes tended to be tightly bound, as the service had a 
+singleton DAO, and the Controller a singleton Service.
+- This was difficult to test, and became complicated quickly.
+Changes in the controller tended to cascade.
+
+- Spring dependency injection framework dents to decouple these
+
+
+==> 3 ways to configure 
+1. XML
+2. Configuration class
+3. Annotation driven config.
+
+DI Container 
+- like how sessionfactory reps state of application
+- Class holds all beans and manages construction/config of beans
+- creats all connections
+- managers session state.
+-- Types: 
+	- BeanFactory - Lower level
+	- ApplicationContext - extends BeanFactory
+
+Advantages: 
+   - Can have different bean configurations without changing code.
+   - Can have different xml files for different definitions of objs.
+===================================
+		* Getting Started (XML)
+===================================
+- Create your classes
+* Configuration file
+- beans.xml
+- beans is the root tag.
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"
+    default-init-method="defaultInit"
+    default-destroy-method="defaultDestroy">
+
+    <bean id="Earnest" class="com.revature.beans.heroes.Warrior">
+    	<property name="name" value="Earnest"></property>
+    	<property name="strength" value="145"></property>
+    	<property name="potion" ref="health-potion"></property>
+    </bean>
+    
+    <bean id="health-potion" class="com.revature.beans.potions.HealingPotion">
+    	<property name="name" value="Healing Potion"></property>
+    	<property name="power" value="90"></property>
+    </bean>
+    
+
+</beans>
+
+
+NoUniqueBeanDefinitionException - Exception when multiple beans
+could qualify as the one you'd like.
+	- can set oen bean to be the primary in the case there are 
+	  multiple qualifiers.
+
+autoWire - will automatically "wire" the bean to the type if it needs
+	one. The one it "wires" to must be labelled as the primary.
+	- When a type isn't specified, it will automatically look for
+	object of that class and if one is labelled primary, it will
+	auto=wire it to that object.
+Default autowire="no"
+autowire="byName" 
+autowire="byType"
+autowire="constructor"<-doesn't use getters/setters, just constructor
+
+====================================================================
+	* Getting Started - Core Configuration Bean 
+====================================================================
+- uses annotations
+- don't name the configuration calss Configuration. 
+Call it ConfigBean or something - annotation doens't allow it to be
+called "Configuration"
+- ConfigBean class starts with @Configuration annotation above the 
+	class decalration.
+- @ Bean annotation above method:
+	@Bean
+	public MyObject myObject(){
+		return new MyObject("my object constructors");
+	}
+ the equiv. of creating an XML config:
+	with name attribute being plate, class being (yoru import)
+	and values specified in the returned constructor
+
+- Can add autowire in the call, and you can still use the method the 
+  same way. (comfigBean.waffles();)
+	@Bean
+	public  Waffles waffles(@Autowired Plate plate) {
+		return new Waffles("waffles", plate);
+	}
+	
+
+- @Bean annotation has options:
+@Bean(autowire:)
+
+
+=======
+Annotations
+===============
+@Component - stereytype annotation that defines a class as a 
+bean that spring can manage
+ApplicationContext context = new AnnotationConfigApplicationContext("com.revature.beans");
+
+-- config will scan the package looking for @Component annotation
+
+1--> Field injecting
+-- @Autowire above field
+	-- doign do directly assigned the value using reflection
+	- thei si not the preffered way ot autowire 
+	- it does not go thru the constructo fo the setter!
+	- it directly can access private fields
+
+2--> Setter Injection
+-- Can also attach autowired to a setter method
+	- Now it'll get the autowired at the setter method
+
+3--> Constructor Injection
+@Autowired
+public Jedi(@Value("Caleb") String name, SithLord enemy) {
+
+4--> Interface Injection
+	POSSIBLE, not not with Spring
+
+With annotation - we really can only get one bean per class.
+
+==> Dealing with conflicting multiple beans:
+1. Primary Bean
+2. Add qualifier to provide rule to determine 
+   bean you're looking for
+	Under @AutoWire add:
+	      @Qualfier()
+
+-> Simpler to have separate beans for different configurationsthan deal with those
+
+-> Beans system typically used for workflow, 
+   not so much for data holders
+	- Not for entities as much - more control/service/ect
+
+
+============================================================
+Bean Lifecycle
+============================================================
+Lifecycle of beans 
+==> Maybe memorize this one.
+
+public class MyBean implements BeanNameAware, BeanFactoryAware, ApplicationContextAware, 
+InitializingBean, DisposableBean, BeanPostProcessor {
+// Then generate all methods!
+}
+
+The order: 
+setBeanName
+setBeanFactory
+setApplicationContext
+afterPropertiesSet
+
+
+By default, beans initilize eagerly.
+Lazy initialization will only initialie the bean as they are requested. 
+
+To automatically inject dependencies, use AutoWired 
+Autowired is a SPRING annotation
+the Java annotation is Inject
+	However, Spring doesn't support that by default.
+Add depndancy: Javax.inject
+== > QC Question: Injection vs Autowired are the ythe same?
+	- Basically yes.
+	- The benefit of Inject is that it is more flexible with other frameworks. 
+	- In terms of behavior, internally they are slightly different, but look just about the same
+*Research this one*
+
+Calling destroy won't actually trigger the lifecycle stage.
+- Singleton bean is typically supposed to survive the lifecycle of the application.
+
+
+How to destroy Bean  :
+You have to very specifically destroy it:
+
+((DefaultListableBeanFactory)((annotationConfigApplicationContext)context).getBeanFactory()).destroySingleton("my-bean");
+
+===================================================================
+	 * Bean Factory vs application Factory
+===================================================================
+Bean factory is used for bean instantiation.wiring only
+
+Application context
+does same
+PLKUJS auto bean....
+** See stack overflow answer with the same name as topic * 
+i18n : internationalization : handles "mesh" of sorts to handle that.
+ApplicationEventPublication
+
+===================================================================
+			* Spring AOP
+===================================================================
+
+
+
+- Every time the code tries to use the method :
+
+getX{
+}
+We can add code before it, after it, or around it.
+
+AOP usually targets cross-cutting concerns
+Concern : a particular responsibility. 
+	- Classes should typically have a single responsiblilty.
+	- Methods also should have one responsibilty.
+
+Cross-cutting concerns are not isolated to one location.
+	- Hard to isolate these.
+Example use:
+	=> Creating and closing session using AROUND.
+	=> Spring already does this kind of thing!
+
+Using reflection, it checks every method for certain Predicates (conditions) and injects code where neded.
+
+
+** Important Jargon ** 
+CONCEPT:
+Aspect : A modularization of a cross cuttinc concern ( ex: LoggingAspect)
+IMPLEMENTATION:
+Advice - A logical implementation of the aspect
+
+Join point - Location in code where an aspect can weave code
+Point cut - a predicate expression used define which points will be targeted.
+Target - the method a point cut matches.
+
+
+==============================
+Aspects
+====================
+
+Types of advice
+ *  @Before  - Code is woven prior to joint-point method execution
+ *  @After - Code is woven floowing joint-point method execution
+ *  @AfterReturning - code is woven following the return of a joint-point method execution
+ *  @AfterThrowing - Code is woven following join point throwing unhandled exception
+ *  @Around - Code is woven before and after join point execution
+
+- All types other than around can accept a JoinPoint reference, which is an object referring to the JoinPoint (Method we are targeting)
+Around gets PreceedingJoinPoint object which is similar to a JoinPoint object, but allows the targeted method to be called.
+
+Stereotype annotations:
+Component,
+Controller
+Service
+Repository (repo. is a dao)
+
+
+====================================================
+
+==========================================================
+Review yesturday:
+
+AOP
+Weaving code
+Cross-cutting concerns
+	- Session management - Spring ORM
+	- Authorization - Spring Security
+	- logging 
+
+
+Aspect Oriented Programming Terms:
+Aspect - modularization of cross-cuttong concern
+	- Single aspect focuses on one concern.
+	- Modularize to single class to isolate code to 
+	single place.
+	-- One aspect does ONE thing
+	- IE for hibernate sessions or jsession stuff
+advice - 
+join point - 
+	- Place where it could be a target 
+	- Method execution is always a join point.
+	- Can only inject in method execution here 
+point cut - Predicate expression used to detering join joins
+	to be targeted for a particular advice
+	- Says what advice goes to what join point
+target - some method where the join point matches
+	- where advice will be injected
+
+Types of advice : 
+	- Before
+	- After
+	- Around
+		- Preceeding join point is the object
+		- PJP.proceed() actually calls it
+		- inject instnace of join point ot metho then
+		call .proceed 
+	- After returning
+	- After throwing
+ 
+MVC
+Model - View - Controller
+Model = object that contains data
+Controller = logic
+View = JSP (we don't use)
+
+Our layers - 
+- Controller(@Controller) OR (@RestController)
+	-> RestController is for REST api,
+	- Means there won't be any view
+	- for data that will be Marshalled (sent to JSON)
+	@RestController implies another annotation : @ResponseBody
+	-@ResponseBody is requiredfor lettign it know this is the 
+	stuff that needs to be marshalled and sent out
+- Service(@Service) 
+- DAO(@Repository)
+==================================================
+--> See that file in the mvc exanpmlke with the @GetMapping and stuff
+
+Transactional(propogation= )
+********** QC
+Transaction Propogation levels:
+MANDATORY - must have a current transaction, throws exception if none exists. - MUST be a part of a transaction
+NESTED - If transaction exists, pause transaction and create a new one. Else, create a transaction.  (Use ex: for logs)
+NEVER - Only works when there is not trnasactional context, throws exception if one exists.
+NOT_SUPPORTED - Pauses existing transactions and operates non-transactionally. Existing trasaction if any will continue afterwards. 
+REQUIRED - Creates a transactional context if none exists. Else, uses existing.
+REQUIRES_NEW - Always creates a new transactional context, pausing existing ones if they exist. 
+SUPPORTS - Uses a transaction if context exists, otherwise operates non-transactionally.
+
+-- can load in the proxy even after the original method completes this way. 
+
+-- Timeout, isolation, ect -- Transactions have a lof of possible configurations. 
+@Transaction(propogation = .. , plus others!)
+-- Must manage the sessions more abstractly.
+
+==================================================
+
+When app is bootstrapped, prodive beans to config app.
+Config file will get bootstrapped in.
+
+Hibernate configuration class.
+	- Session factory
+		- Data source <-- Has connection information
+	- Hibernate transaction manager 
+	  (Spring tool for managing transactions)
+	- 
+
+PM dep. needed:
+==> Needs hibernate dependencies in POM
+==> Spring ORM 
+==> Postgresdriver
+
+	<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>5.3.6.Final</version>
+		</dependency>
+		  <!--  Postgre -->
+	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>42.2.5</version>
+	</dependency>
+	
+Once properly configured, 
+In service may have method like : 
+@Transactional
+public void save(...) {}
+and it'll run like a transaction.
+
+In repository:
+
+==> GIT WITH TEAMS
+
+Nea branch : 
+git checkout -b new-branch
+
+git add . 
+git commit -m
+git push origin new-branch
+
+change branch:
+get checkout master;
+
+==============================
+@Autowired(Sessionfactory)
+insert(object S) {
+	sf.getCurrentSession.persist(S);
+}
+
+Session context will be provided by Transactional annotation
+
+=
+Spring Boot
+================================
+Opinionated Attitude Towards Configuration
+	-> for us:  Minimal configuration
+Procude .jar files as opposed to .war.
+	- Embedded server 
+- Has a main method
+- Simple implementation of Spring module
+- Restful access to runtime info via actuators.
+	- Can have server to check different information from.about the info such as errors, running, status, ect
+--> Springboot IS an embedded server! It has it's own tomcat!
+
+
+=============
+Look in to Spring Security
+============
+ Upon creating project, make sure it is a .jar file 
+	- can be set in the POM how it is built if you forgot
+
+Start:  Get propper dependencies/plugins
+
+In application(launcher) class: 2 STEPS:
+1. Add annotation
+		@SpringBootApplication
+2. In main method use:
+	SpringApplication.run(Application.class, args);
+
+
+@SpringBootApplication
+public class Application {
+	public static void main(String[] args) {		
+										// args to the main method
+	SpringApplication.run(Application.class, args);
+	// SAYS to a scan from THIS package DOWN
+	/// This is why app is typically in the package ABOvE all the rest.
+	// Args passed in incase they're important command line args.
+	// AND THAT's IT!
+	}
+}
+
+
+==> Now cerate a yml file to src/main/resources
+application.yml
+This can set the port number
+- Whitespace in yml file matters!
+YML : Yet-another Markup Language
+=> Whitespace : an indent is 2 spaces.
+	- File shall not start with a space.
+CONTENT:
+__________
+server: 
+  port: 8888
+__________
+==> If above doesn't work, you can use application.properties file
+	- Also would go in src/main/resources
+____________
+server.port=8888
+
+
+==== Seeing codes:
+ USE THE /actuator TO SEE SPRING BOOT THINGS
+GET to localhost:8888/acutator/health
+
+--> Can config more exposed things.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [beans, health, conditions, env, configprops, loggers]
+--> Can actually shut down application through HTTP POST.
+However, the endpoint must be explicitly enabled:
+
+
+  endpoint:
+    shutdown:
+      enabled: true
+
+Can add more things to include for this.
+
+
+--> WE generally WON'T do this manually, but it is important to know
+These endpoints are for applications to communicate with eachother!
+
+
+Note : Fully generic version of JpaRepository<Cat, Integer>
+
+=========================
+Spring boot + Jpa
+==========================
+Levels of repos:
+- Repository
+- CrudRepository - Basic CRUD behavior, similar to hibernate's
+- PagingAndSortingRepository - behavior related pagination and sorting of date
+- JpaRepository - Deeper JPA implementation, fluent language
+
+JpaRepository methods : Has quite a few
+Delete/datae all
+batch operations - persist/ CRUD ops on large groups of thigns
+dleets by id
+exists/exists by id
+find all
+find all that accepts example - 
+
+
+Example? (object)
+save entity works as save or update
+
+flush?
+
+Pageable: 
+Object that reps. the state of a page used in pagination
+Spring mvc have the funcionality to get pages automatically.
+Can createa page request which can then be passed on to the repo
+
+**************************
+JpaRepository : "fluent language"
+	- Parses the method NAMES and creates query from that!!
+SEE:
+docs.spring.io/spring-data/jpa/docs/current-SNAPSHO/reference/html
+
+
+
+java.lang.reflect.InvocationTargetException: null 
+IS OK!
+
+
+
+
+
+
+
+
+
+
+
+-> Look in to QueryParam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

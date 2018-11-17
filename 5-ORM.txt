@@ -499,39 +499,55 @@ EAGER
 ==> Transaction
  - Optional interface.
 
-Query/ Criteria (note not part of current standard)
+==> Query/ Criteria (note not part of current standard)
+ - Criteria is an Object Oriented and type-safe querying API.
+ - Earlier version of Hibernate had a simpler Hibernate only 
+   implmentation, which is now deprecated, and Hibernate supports
+   only the JPA Standard Criteria API
+ --> In hibernate creating a query is a process 
 
-=============================================
-Cirteria is an Object Oriented and type-safe querying API.
-Earlier version of Hibernate had a simpler Hibernate only 
-implmentation, which is now deprecated, and Hibernate supports only
- the JPA Standard Criteria API
+ ==================================================================
+			* Query Languages
+ ==================================================================
+==> HQL -  Hibernate Query Language
+- Object-oriented query language which works with persistent objects
+- HQL queries are translated into SQL.
+- keywords not case sensities, but object name/fieleds are
+- Requires alias for more queries with objects
+- Uses :varName in place of variables, the same way preparedstatement
+	used ? 
 
-==> Hibernate creating a query is a process 
+==> Named Queries
+-Can be created with annotations or in XML.
+- With annotations, add then to the top of the class upon which they
+  will operate:
+ @NamedQuerys(
+   {
+ 	@NamedQuery(
+	name = "findEmployeeByName"
+	query = "from Employee e where e.name = :name"
+	)
+   }, {
+ 	@NamedQuery(
+	name = "findEmployeeBySalary"
+	query = "from Employee e where e.salary => :salary"
+   }
+ )
+...
+[ the class here]
+- In use:
+    TypedQuery query = session.getNamedQuery("findEmployeeByName");    
 
-=========================================
-
-
-Native Query : 
-Sometimes Hibernate doesn't provide all the same tools we need for
+==> Native Query : 
+- Sometimes Hibernate doesn't provide all the same tools we need for
  querying from our database. Or perhaps, sometimes our database 
 offers more functionality that we would like to use that hibernate 
 doesn't support.
+- In these cases, we can use a native query - normal SQL.
 
-In these cases, we can use a native query - normal SQL.
-
-
-
-
-== Named Queries
-
-===================================
-L2 Cache - Works in the cacheing factory (?)
-L1 Caching
-
-===================================
-
-Transaction
+===================================================================
+			* Transaction
+===================================================================
 - Takes sevaral operations together and executes then as one option.
 - ACID:
 	Atomic - Can't be broken down more 
@@ -543,19 +559,11 @@ Transaction
 		time should be invisible from eachother
 	Durability - Saved perma after - can't go back after commit
 
-Isolation Levels : 
-Dirty Reads
-Non-reapeatable REad
-Phamton Read
-** QC Will ask about this Monday
+- Isolation Levels : 
+	Dirty Reads
+	Non-reapeatable REad
+	Phamton Read
 
-** CORE INTERFACES OF HIBERANTE
-Session
-SessionFactory
-Configuration
-Transaction
-
-Criteria (note not part of current standard)
 
 ORM : Object realtional mapper ** 
 	-> Interface(?) that talks to the DB
@@ -564,24 +572,4 @@ ORM : Object realtional mapper **
 		** You don't have to write query for every request
 		** Speeds up development
 		** Efficiency -- IE Caching
-	-> NOT more simple than jdbc terms
-	-> 
-
-
-
-
-
-https://howtoprogramwithjava.com/hibernate-eager-vs-lazy-fetch-type/
-================================================
-** QC WILL ACK ABOUT LaztInitializationException 
-What does it mean when you get a lazyinitializationexception and how would you resolve this exception?
-
-
-
-
-
-
-
-
-		
-						
+	-> NOT more simple than jdbc terms					

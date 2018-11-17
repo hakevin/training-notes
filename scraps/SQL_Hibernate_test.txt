@@ -1,0 +1,16 @@
+CREATE TYPE user_status AS ENUM (
+'banned',
+'suspended',
+'active',
+'moderator',
+'admin'
+);
+C
+
+
+* Can have a special table later on for user privleges; 
+Users with status moderator + get use of that.
+
+webxml "welcome page"
+
+need to make sure dipatcher servlet isn't catching htat URL
