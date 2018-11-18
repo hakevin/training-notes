@@ -1,3 +1,11 @@
+* DevOps Culture
+* SDLC
+* Scrum
+* AWS Tools
+* EC2 Setup
+* Linux Commands
+* Server Tools
+* IaaS/PaaS/SaaS
 ===================================================================
 			* DevOps Culture 
 ===================================================================
@@ -21,10 +29,10 @@
  1 Requirements/Analysis - every requirement should be thrurougly
    analyzed and defined.
  2 System Design - Writing documentation only
- 3 Implementation - You write teh code
+ 3 Implementation - You write the code
  4 Testing - Write the testing
  5 Deployment
- 6 Maintenents
+ 6 Maintanence
 
 - If one step in the system doesn't work, you start completely over
 
@@ -80,7 +88,7 @@ user can verify email->	      ---> name 3   ----> name
 - Establishes/ promotes ownership of features by team members
 
  ===================================================================
-
+			* AWS Tools
  ===================================================================
 
 File Storage:
@@ -102,8 +110,9 @@ Databases:
 
 Security : Cognito 
 
-======================
-======================
+ ===================================================================
+			* EC2 Setup
+ ===================================================================
 -- in AWS, going to set up server 
 -- Important command line command group : ssh
 -- MUST be able to use ssh to connect to server. 
@@ -182,8 +191,9 @@ scp -i closet-key.pem apache-maven-3.6.0-bin.tar.gz ec2-user@ec2-18-221-10-68.us
 -- Extract a .gz file
 tar -xzf [.gz name]
 
-
-===============================================================
+  ===============================================================
+		    * IaaS/PaaS/SaaS
+  ===============================================================
 IaaS ==> Infrastructure as a service.
 	- server/hardware managed by provider 
 Paas ==> Platform as a service
@@ -200,6 +210,69 @@ Load Balancing - the concept of na EC2 to dynamically replicate itself  to bette
 	-When traffic volume falls, instances can be dynamically removed. 
 	- How this is useful: $$$! Utilizing resources costs MONEY so dynamically increasing/decreasing server sizes is beneficial. Most services don't spend 90% of their time at max utilization of their resoruces.
 
+ ==================================================================
+			* Linux Commands
+ ==================================================================
+
+        man	Prints MANual of what the command can do
+		IE: man ssh
+        sudo	Super User DO
+		Super user access for the next command
+        chmod	Change access permission for file
+	ssh	secure shell. Used to gain access to server
+		ssh -l USER -v DESTINATION_ADDRESS
+		OR
+		ssh -i key-location.pem user@desination
+        scp 	Security Copy - copy files via ssh transfer
+		between remote hosts
+	cd	Change directory
+		"cd /" to go to root dir
+		"cd ~" Goes to user directory
+        ls	List files/directories in current directory
+        ps	Lists all processes currently running on system
+        cat 	cat FILE reads ontents of file to output
+        vim	Open VIM texteditor: Ex:  vim filename
+        mkdir 	Make directory
+        rmdir	Remove directory
+        touch	Create/change/modify timestamps of file
+		Can also be used to create a ew file
+		-a FILE : change access time.
+		-c FILE : if file does not exist, dont create it.
+		-d FILE : update access mod time only
+		-m FILE : change modification time only
+		-r FILE : use access & mod. files of a file
+		-f FILE : creates a file using a specified time
+        rm	Removes a file
+        mv	Move a file or directory
+        cp	Copy files and directories
+		copy [options] source destination
+ ssh-keygen  	Generate, manage, convert authentic keys for ssh
+       grep	Print lines that matches a pattern within a file
+		grep [options] PATTERN [file]
+		"grep -n wlan0 wireless" searches the file "wireless"
+		  for "wlan0" and includes the line number 
+        yum	Yellowdog Updater Modifies - tool for managing Red
+		Hat Enterprise Linux RPM software packages & other
+		third party repositories.
+        rpm	Red Hat Package Manger
+		 manage .rpm packages
+        tar	Tape Archive. Compress/decompress archive files
+ 
+ ===================================================================
+			* Server Tools
+ ===================================================================
+
+
+What is Maven?  What purpose does it serve in our devops pipeline?
+ 
+What is Jenkins? What purpose does it serve in our devops pipeline?
+ 
+What is tomcat? What purpose does it serve in our devops pipeline?
+ 
+How can we start a tomcat server from the command line?
+How can we stop a tomcat server from the command line?
+What does it mean for tomcat to ‘explode’ a war file?
+ 
 
 
  ===================================================================
