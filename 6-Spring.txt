@@ -13,8 +13,10 @@ Spring Table of Contents:
 	* Types of Advice
 * AOP Quick List
 * Spring MVC
-	* Getting Started with Annotations
-
+	* Getting Started with Annotations & MVC
+* Mapping HTTP Requests
+* Transactional Management
+* Spring Boot
  =================================================================
 		 * Spring Framework
  =================================================================
@@ -248,7 +250,8 @@ the Java annotation is Inject
 	different, but look just about the same
 
 Calling destroy won't actually trigger the lifecycle stage.
-- Singleton bean is typically supposed to survive the lifecycle of the application.
+- Singleton bean is typically supposed to survive the lifecycle of 
+the application.
 
 
 How to destroy Bean  :
@@ -261,7 +264,7 @@ You have to very specifically destroy it:
 ===================================================================
 - ApplicationContext extends BeanFactory
 
-==>Bean factory 
+==> Bean factory 
 	-used for bean instantiation/wiring only
 ==> Application Context
 	- More flexible
@@ -273,7 +276,7 @@ You have to very specifically destroy it:
 		(Beans can get updates on other bean's events)
 
 Application Context is a central interface for config info for app.
-	- Allows applicaiton to not use singletons
+	- Allows application to not use singletons
 	- Can load file resources generically
 	- Register/publish events (for communication between beans)
 	- Allows inheritence from parent context:
@@ -337,7 +340,7 @@ Around gets PreceedingJoinPoint object which is similar to a JoinPoint object, b
  ===================================================================
 AOP
 Weaving code
-Cross-cutting concerns
+Cross-cutting concerns (examples)
 	- Session management - Spring ORM
 	- Authorization - Spring Security
 	- logging 
@@ -441,7 +444,7 @@ Our layers -
 ===================================================================
 		* Mapping HTTP Requests
 ===================================================================
-The class for yoru controller shall be as follows:
+The class for your controller shall be as follows :
 1.) Package and imports
 2.) @RestController Annotation 
 	- If the @Controller annotation is used, you must include the
@@ -702,3 +705,11 @@ JpaRepository : "fluent language"
 	- Parses the method NAMES and creates query from that
 SEE:
 docs.spring.io/spring-data/jpa/docs/current-SNAPSHO/reference.html
+
+* JAXB Note:
+Jaxb errors will have something to do with XML!
+Look thru XML things if that's a problem you're getting!
+
+====================================================================
+====================================================================
+

@@ -1,0 +1,335 @@
+		* Dev Ops Example :
+
+See MovieApp's application.yml for how to use environment variables
+- Can provide environment variables through Amazon UI!
+
+PUT should be a FULL replacement of Data!!
+PATCH is supposed to be a partial replacement.
+	Original servlet API didn't support PATCH
+
+
+Code Pipeline : Combines AWS Services:
+	.-----------------------------------------------.
+	| Code	-->	Code Deploy -->	Elastic		|
+	| Build				Bean Stalk	|
+	'-----------------------------------------------'
+	  ^
+	  |
+  github -'
+
+This process is relatively simple; code build is going to take that jhar file and provide it to elastic bean stalk. 
+EBS is essentially a higher level service for managing an application wrapped around a nEC2.
+EBS will manage all the dependencies once you tell it what kind of file to expect nad give it that file. It'll start the server and lauch the file itself. 
+We need to inject our enrivonment details into the EBS so the application can talk to teh RDS. Environment vars are already set in the app.yml file, we just have to tell EBS what they are.
+
+If it fails to connect to RDS, we have to restart. 
+
+We aren't going to connect to the EC2 directly at all. 
+
+
+Part of process is creating resources automatically so we first must set permissions using an IAM.
+
+To sent request to EBS we need to add OUR IP to its security group
+For EC2 to send request to RDS, it needs to have access on the RDS security group.
+We can provide a security group TO A security group so that EC2 will have permission to access RDS. 
+
+- EBS can have an on-cloud RDS, but if the server goes down, so does all the data.
+
+--> CONSIDER CodeStar.
+		-> Pretty easy to do.
+		-> Probably shouldn't use it 'cuz it overly
+			abstracts the process.
+=========================
+
+==> IAM >> 
+	Roles > Create role
+	>> Click code deploy service 
+	>> Click 1st(the regular) Code deploy policy at the botom
+	Permission -- are fine  >> next >> 
+	Tags -- fine >> next 
+	Review > give it a name >> 
+	Create Role
+
+
+==> Configure EBS:
+	Create Application (button in the top corner) 
+		-> give a name
+	New environment > web server environment. 
+		Platform : Java
+		Start with sample application.
+		Configure more options
+			Software > Modify
+				Add envirnment variables.
+				Save
+		Create Environment
+Once it starts, you get something like :
+10:19am Created security group named:
+awseb-e-mc3fm9gggv-stack-AWSEBSecurityGroup-87DOG9KNJKLA
+
+Add that ^ security group to the RDS by going to the inbound 
+security and typing "aws" and finding that one in the dropdown
+
+Go to EC2 click application EC2, click security group, and add 
+for inboud: 
+	custom TCP rule: Port 8888
+	Plus your(?) IP address
+(Basically we need to access app on the port 
+and RDS needs to allow access to the security group)
+
+
+
+
+
+==>Go to Code Pileline service 
+Create a pipeline >> 
+	- add name 
+	- (It can create the service role ect. itself)
+	- Leave the rest as default.
+>> next
+Source >>
+	- Add Github as the source.
+Add repository.
+GitHub Webhooks build upon pushing.
+AWS code pipeline can check periodically instead.
+
+Next >> Build : AWS code build
+		++ Create project
+		App project name
+		managed image is fine.
+		Ubunto Operating system
+		Java runtime
+		JDK 8
+		Use the latest image
+		new service role is fine.
+		build spec file is fine. 
+			-this tells it how to build.
+			- SEE EXAMPLE for this build spec.
+		
+You can build the project on eclipse as well, but it'll take a while and you don't really need to since AWS will do it!
+	- Google "how to configure code build with maven project"
+	if you want to learn how to do it yourself.
+	
+If you're using a jre instead of a jdk, it will fail to compile. 
+	To manage : properties > Java > Compiler... 
+	It's basicaly what you did to downgrade to 1.8.
+	Just browse thru your files for it. 
+	- The build file (buildspec.yml) also tells it the location of the final .jar.
+	** POINT : To build, you have to either do it yourself or provide the buildspec file.
+
+>> NExt >> Deploy setp.
+Use AWS Elastic Beanstalk for simplicity
+
+>> Create the pipeline.
+
+
+====================================================================
+====================================================================
+
+
+REST - Representational State Transfers
+REST runs on HTTP/HTTPS
+Design pattern/ protocol
+- Related to Resources :  Models are the resources.
+	|		Sending request is requesting resoruce info
+	|-> GET '.../movies/1'	
+	|-> POST '.../movies'
+	|-> PUT '.../movies'
+	|-> DELETE '.../movies/1'
+	|
+	|	[multiplicity]
+	|-> GET '.../movies/2/actors'
+
+Resource names should be plural: 'movieS' not 'movie'.
+Should follow a specific pattern.
+
+Benefits:
+- Scalability : (Esp in tersm of userbase size & requests/min)
+	-> Stateless Server (No sessions)
+		-> Every request must contain sufficient information
+		   to complete the request. 
+- JSON (typically)
+- HTTP for exceptions
+- HTTPS for security
+- Flexibility
+	-> Multiple representations of a resource
+- Filters & Pagination (part of a good/RESTful API design)
+
+
+HATEOS - HyperText As The Engine Of Application State
+Versioning - Important that you don't (really shouldn't) kill URLs
+	- Once things are set, they stay.
+	- Other people using your API will be displeased.
+	- Instead, add a version number.
+		'.../v2/movies'
+ch
+
+
+
+*****************************
+download that example of the movie app that mitch has
+****************************
+
+ ===================================================================
+			* Web Service
+ ===================================================================
+
+B2B Web Services
+
+-> One server needing resources from another.
+CORS requests can be solved if a SERVER sends the request. 
+Ultimately the client side is what "their server" presents.
+
+Follow the general standard of REST. ( See above )
+Servers send requests all over.
+
+FOR US:
+Spring sends a REST template. 
+
+SENDING A REQUEST FROM ONE SERVER OT ANOTHER SERVER:
+
+- Create simple maven project
+- Get POM dependencies
+<properties>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.1.BUILD-SNAPSHOT</version>
+	</parent>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-releasetrain</artifactId>
+				<version>Lovelace-SR2</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- Add typical dependencies for a web application -->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+	</dependencies>
+
+	<!-- Package as an executable jar -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Add Spring repositories -->
+	<!-- (you don't need this if you are using a .RELEASE version) -->
+	<repositories>
+		<repository>
+			<id>spring-snapshots</id>
+			<url>https://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<url>https://repo.spring.io/milestone</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<url>https://repo.spring.io/snapshot</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<url>https://repo.spring.io/milestone</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+
+- Create your model (No need to add hibernate access for this example. We just created movie and actor class w/ getters and setters)
+- If you are using local servers, in yoru application.yml file, 
+change the port number on the new one to 8887.
+You will be making the reuqest to hte local host at port 8888
+
+
+--In the services class, you need to make this RestTemplate object
+This is a class that comes from Spring, so it won't work outside of spring applications:
+
+	RestTemplate restTempalte = new RestTamplate();
+
+================================================================
+
+
+Angular review : 
+
+He's going over movie and movie service and Depenedency injection.
+
+IN MOVIE COMPONENET: 
+
+
+
+
+=========================
+Spring MVC Architecture:
+
+
+
+
+Handler adapter - issue response from dispatcher to the controller.
+
+Controller - the classes that we write with the XXXMapping.
+
+Controller will get the view name for the resource.
+	 IE THE VIEW is typically returned (XML, HTML, JSP, w/e)
+	but for US we're returning JSON.
+
+Back to handler adapter
+to dispatcher service
+to view resolver
+	- resolves to actual HTML representation
+	- Server-side rendering
+	Injects components where tags are.
+View then sent back with response.
+
+
+
+
+Request sent to front controller
+checks angular mappign to figure out how it can be sent oto handlign method
+it returns that to front controller
+ti sneds reuqest to handler adapter
+that converts reuqest to necessicary info
+which is sent to the actual controller and thru our written stuff
+
+when returned, it checks for the view name. This is processed in the handler adapter. This goe sback to the dispatcher service which sends it to the view resolver to resolve the view - put different HTML tags in it and do any server0side rendering - then sends it to the view. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
