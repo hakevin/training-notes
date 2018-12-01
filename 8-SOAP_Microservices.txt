@@ -270,8 +270,17 @@ definitions
 
 
 ~~~~~~~~~~~~~~~~~~~~~ * Contract First ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- There is a section that goes in the POM file that reads the 
-  external wsdl file location:
+POM file:
+Dependencies:
+- Spring boot
+- spring-boot-starter
+- spring-boot-ws-core
+Plug-ins:
+- org.springframework.boot (spring boot maven plugin)
+- morg.jvnet.jaxb2.maven2 (maven-jaxb2-plugin)
+	-
+
+- Within the definition of the jaxb2 plugin, the configuration:
 <configuration>
  <schemaLanguage>WSDL</schemaLanguage>
   <generatePackage>com.revature.models.generated</generatePackage>
@@ -285,12 +294,46 @@ definitions
   </schemas>
 <configuration>
 
+Locates the wsdl and is set (via <execution>) to generate classes
 The URL could be online or local.
 The wsdl is converted to objects and methods automatically!
 
 
--> Someting about a marshaller, bu you really just need that dependency and configuration in the POM to get it to convert the contract to object. The generated classes will be in the com.revature.models.generated package.
+~~~~~~~~~~~~ Making requests to SOAP server From Java ~~~~~~~~~~~~~~
+- Now you can also consume an external XML file
+- You needed to take the wsdl and transform it to objects so you know
+  how the dever from which you desire information is set up, but you
+  don't have their data! Once you have the classes set up above, you
+  now need to get information from the other server.
 
+
+First, set up a ResourceClient class of its own. 
+ --- THIS class extends WebServiceGatewaySupport
+ --- Here, define the methods you'll be calling on the other server
+   - Example:
+  public GetHeroResponse getHerp(String name) {
+	GetHeroRequest request = new GetHeroRequest();
+	request.setName(name);
+      GetHeroResponse response=(GetHeroResponse)getWebServiceTemplate
+		.marshalSendAndRecieve("URL-FOR-ENDPOINT", request,
+			new SoapActionCallback("targetnamespace"));
+  	return response;
+  }
+
+
+Next, set up config bean to marshall (transform) the data.
+	- The marshaller has a setContextPath for local files.
+	- This tells the application what the requests and responses
+	should look like and how they shall be set up.
+- the Client shall have a setDefautltUri to the endpoint
+  of the other sever, as well as setting the marshaller and an
+  unmarshaller.
+
+
+- In the class example, we set up the application in such a way that 
+  the Spring Boot client application runs, but does not actually 
+  start up the Tomcat server. It just runs and has a bean which 
+  calls the other application via SOAP(Simple Object Access Protocol)
 
 
 
@@ -299,7 +342,7 @@ The wsdl is converted to objects and methods automatically!
 
 ------------vv unprocessed notes below here ----------------------
 Root tag: Envelope
-Header
+Heade
 	- has info relating to the meta swhatever nad hte requresdzt
 Soad Body
 	- SOAP fualt tag used for errors
