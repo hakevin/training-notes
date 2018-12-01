@@ -1,0 +1,1016 @@
+===================================================================
+			* SOAP
+===================================================================
+
+SOAP - Another way systems can communicate. 
+	- Not REST. 
+	- Simple object access protocol
+	- Strictly XML based.
+	- Older protocol than REST.
+
+REST was HTTP and HTTPS only. Based in HTTP
+SOAP can is usable on many protocols(Not limited to HTTP/HTTPS)
+	- Can't rely on GET/POST/PUT verbs!
+	- Must be built into system.
+	- Exceptions must be built in via MESSAGES not error codes
+	-> SOAP has to be XML
+	- SSH doesnt use HTTP. SOAP can be used for this.
+	- Many legacy systems use SOAP, so you must know it.
+	- SOAP is good if you need mutiple protocols to access it
+
+==> Contract-based:
+	- Application has a contract: wsdl 
+	(web service definition language)
+	  -- Catalog that stipulates exactly how to operate with
+	      the applicatoin.
+	  -- XML document
+	  -- REST's contract has, wadl but it isn't mandatory
+	-- Can be generated via tools.
+==> Tools:
+	- Single language is old, there are many tools, for example
+	 we can generate from object to wsdl or the other way:
+		Object --> wsdl
+		wsdl --> Objects
+	- Dev would probably want to do Object -> wsdl
+	- Client would want to use wsdl -> objects
+
+Spring boot has SOAP tools.
+Neumonic device to remember SOAP features: TECMAPS
+
+	      	       SOAP			 REST
+Tools 			Yes		|	Minimal
+		(Like apache CFX)	|	
+Exception Handling	Built-in	|    HTTP status codes
+Contract		Yes, wsdl	|	minimal, wadl
+Message 	    Yes, structure3d	|       Not really
+Atomicity      Built-in transactions.	|      No guarentee
+Protocol	Hadles many diff kinds	|	Only HTTP/HTTPS
+Security	Built-in		| 	use HTTPS
+
+
+Greatest benefits / consideration: 	
+	- multiple protocols and built-in security.
+
+ ~~~~~~~~~~~~~~~~~~ * Creating a SOAP Server ~~~~~~~~~~~~~~~~~~~~~~
+The following example will build object from an XML Schema and then
+use tools to build a wsdl to represent the project.
+
+First, get get POM files & update.
+
+- Create file SuperHero.xsd in source/main/resources
+	-- It starts up looking like an empty table
+	-- Click source tab to get to actual code.
+Paste this:
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.example.org/SuperHero"
+    xmlns:tns="http://www.example.org/SuperHero"
+    elementFormDefault="qualified">
+
+
+
+</xs:schema>
+
+- The tns, of course, is fake.
+- Start by defining our types inside xs:schema tag.
+---- xs:schema is the root tag for the Xml Schema documents
+- xs means we're using that labelled namespace as seen in the 
+	code above.
+== Creating an object:
+  - Complex type is an object, and objects contain elements
+
+<xs:complexType name="SuperHero">
+  <xs:sequence>
+     <xs:element name="name" type="tns:string" />
+  </xs:sequence>
+</complexType>
+
+== Creating an Enum
+  - xs:simpleType is the definition of what it /is/ 
+  - base type restriction says what type the literal value can be.
+	(in this case, an enum)
+<xs:simpleType name="superPower>
+   <xs:restriction base="tns:string">
+      <xs:enumeration value="Flight">
+   </xs:restriction>
+</xs:simpleType>
+
+== Defining request and response (getters and setters, basically)
+- Define what the request sh'd look like when someone asks for hero
+<xs:element name="GetHeroRequest">
+   <xs:complexType>
+     <xs:sequence>
+	<xs:element name="id" type="tns:int">
+     </xs:sequence>
+   </xs:complexType>
+</xs:element>
+
+- Define what the response should look like when a hero is returned
+<xs:element name="GetHeroResponse">
+   <xs:complexType>
+     <xs:sequence>
+	<xs:element name="SuperHero" type="tns:SuperHero">
+     </xs:sequence>
+   </xs:complexType>
+</xs:element>
+
+== Now add that one other section into the POM and update:
+-- The schema directory points to the xsd schema file and tells the 
+   program where to put the resulting file.
+
+<build>
+
+   <plugins>
+
+      <plugin>
+ 
+         <groupId>org.springframework.boot</groupId>
+			            <artifactId>spring-boot-maven-plugin</artifactId>
+
+      </plugin>
+
+      <plugin>
+
+	  <groupId>org.codehaus.mojo</groupId>
+				
+            <artifactId>jaxb2-maven-plugin</artifactId>
+
+            <version>1.6</version>
+	</plugin>
+<executions>
+   <execution>
+	<id>xjc</id>
+	<goals>
+	
+	  <goal>xjc</goal>
+
+	</goals>
+
+	<configuration>
+		
+	  <schemaDirectory>
+		${project.basedir}/src/main/resources/
+	  </schemaDirectory>
+
+	<outputDirectory>
+		${project.basedir}/src/main/java\
+	</outputDirectory>
+			
+
+	<packageName>com.revature.models</packageName>
+
+	<clearOutputDir>false</clearOutputDir>
+		
+	<schemaFiles>SuperHero.xsd</schemaFiles>
+
+	</configuration>
+</execution>
+</executions>
+			
+</plugin>
+
+</plugins>
+</build>
+
+
+-- Once it builds successfully, we will have an model for hte object
+-- Create repository (in this example, just stores the information in memory)
+@PostConstruct is the first method that runs after the bean is constructed.
+
+-> Create WebServiceConfig class
+@EnableWs annotation at the top. for WebService
+    - This config files gets the mapping and whatnot
+    - Defines the beans
+    - wsdl related objectlocation URI
+    - Port handler 
+    - and application 
+
+--> Create class ENDPOINT in com.revature.endpoints
+	- superhero endpoint
+	- Works like a controller, but for SOAP
+	- Maps request to actual functionality
+	- @Endpoint annotation
+
+	- Needs a NAMESPACE URL for hte mapping
+	Autowire superhero repo
+
+/**
+ * @PayloadRoot - similar to @RequestMapping
+ * @RequestPayload - similar to @RequestBody
+ * @ResponsePayload - similar to @ResponseBody
+ * @return
+*/
+
+@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getHeroRequest")
+@ResponsePayload
+public GetHeroResponse getSuperHero(@RequestPayload GetHeroRequest request) {
+	GetHeroResponse response = new GetHeroResponse();
+	response.setSuperHero(superHeroRepo.getSuperHero(request.getName()));
+	
+	return response;
+}
+
+
+************* PANEL WILL ASK ABOUT THIS ***********
+
+
+IN THAT xsd file, you defined TYPES for gethero request and response, not methods.
+Anyone who wnats to comminicate with the api can find thoswe type difinition directly in the wsdl file
+==>
+	
+
+Now we can test the server and get request back by using the 
+request format and an HTTP POST.
+Root tag: Envelope.
+==> Structure:
+ 	 Envelope
+ 	     |--Header	[meta data]
+ 	     |--Body
+		   |-- Request Name
+		 	   | -- Parameters
+
+==> POST Body:
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:tns="http://www.example.org/SuperHero">
+
+    <!-- Send request to: localhost:8080/ws/  -->
+
+   <soapenv:Header/>
+
+   <soapenv:Body>
+
+      <tns:getHeroRequest>
+
+         <tns:name>humanTorch</tns:name>
+
+      </tns:getHeroRequest>
+
+   </soapenv:Body>
+
+</soapenv:Envelope>
+
+
+-- The tns stuff is actually important too. 
+   If you change it you wont get anything back!
+
+-- Namespace maps out the handler for the endpoint config.
+-- If the target namespace doesn't match, it cannot handle it. 
+
+==> TO RETRIEVE the wsdl
+  -- Use the bean name as the mapping.
+	http://localhost:8080/ws/superheroes.wsdl
+
+WSDL: Tag Structure: (All are prefixed with wsdl:)
+definitions
+   |-- types
+	|-- schema
+	     |-- [other schema tags. element -> complextype
+		  ---> 
+
+
+~~~~~~~~~~~~~~~~~~~~~ * Contract First ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- There is a section that goes in the POM file that reads the 
+  external wsdl file location:
+<configuration>
+ <schemaLanguage>WSDL</schemaLanguage>
+  <generatePackage>com.revature.models.generated</generatePackage>
+  <generateDirectory>
+    ${project.build.sourceDirectory}
+  </generateDirectory>
+  <schemas>
+    <schema>
+	<url>http://localhost:8080/ws/superheroes.wsdl</url>
+    </schema>
+  </schemas>
+<configuration>
+
+The URL could be online or local.
+The wsdl is converted to objects and methods automatically!
+
+
+-> Someting about a marshaller, bu you really just need that dependency and configuration in the POM to get it to convert the contract to object. The generated classes will be in the com.revature.models.generated package.
+
+
+
+
+
+
+
+------------vv unprocessed notes below here ----------------------
+Root tag: Envelope
+Header
+	- has info relating to the meta swhatever nad hte requresdzt
+Soad Body
+	- SOAP fualt tag used for errors
+
+look at IBM.com.support./knowledgecenter/... Whaetver
+LOOK AT IBM SOAP DOCUMENTATION 
+\
+Google IBM soap message
+
+Click the link at the bottom for soap fault
+
+SOAP <Fault> element carries error and status info in messages
+
+ ==================================================================
+			* Microservices
+ ==================================================================
+
+Services may or may not have a front end.
+
+Monolithic server:
+ - A server that connects to a DB with no front end.
+ - SPF: Single Point of Failure - Any place in application structure
+	where failure would cause a cascading effect and crash the
+	entire application
+ - If something is wrong in monolithic server, it'll put down the 
+   entire application.
+
+	.---------.	    __
+	| Server  | --->  ( DB )
+	|	  | <---  ( __ )
+	'---------'
+
+Microservies: 
+ - Instead microservices many small services with their own DBs. 
+ - One main server connects to those smaller ones.
+	- If a small server fails, the whole system wont go down
+
+		     .--> [Service A] <--> (DB A)
+	.---------.<-'	    
+	| Main    | <---> [Service B] <--> (DB B)
+	| Server  |  
+	'---------' <---> [Service C] <--> (DB C)
+
+ - Goal : Eliminate all single points of failure.
+ - Also allows for load balancing as a developer.
+ - Issue: If A has many-to-many relationship with B,
+	 how do we enfirce referential integrity when our
+	 databases are separate?
+ - Move from ACID system to BASE.
+	--> Basically Available 
+	--> Soft state
+	--> Eventual consistency
+
+Tools:
+1. Discovery Service --> Eureka (Netflix's open source tech)
+  - When server comes online, it sends message to Discovery server
+  - Occassionally Discovery Service sends "heartbeat"
+	- Checks if other servers are online.
+	- Server wants to catch it BEFORE the user do (~20 seconds)
+
+2. Gateway Service --> Zuul (Netflix's open source tech)
+  - Single point of entry for requests into the system.
+  - Doesn't matter where other servers are because USERS never go 
+    directly to them.
+  - Requests from outside go to gateway service to be handledd. It must figure out which service to delegate it to. It has an idea, but doens't know where the serivce is located to it sends the request to the discovery service to figure out where it should go. Discovery serice tells gateway serivice where teh desired service is, and then the gateway sends it off to the irght location.
+	This is basically a front controller pattern.
+
+
+1. Creating discovery Service
+- add pom dependencies
+- Create application.yml 
+
+By default Eureka itself will try to register with Eureka. Thiw will cuase constant errors in our starter project because there is no other Eureka instance to register with, so we will disable that funcionality
+- Application.java
+	@Spring boot...
+	@EnableEurekaServer annotation
+
+Create Gateway service with Zuul dependency.
+.yml:
+spring:
+  application:
+    name: Zuul
+
+- Application.java
+	@Spring...
+	@EnableZuulProxy annotation
+
+Create your service. 
+	does not need eureka core...
+	in application.yml, port:0 should give it a random port #.
+
+	@SpringBootApplication
+	//@EnableEurekaClient
+	@EnableDiscoveryClient 
+	// More generic way to register with a discovery server
+
+
+=======================
+JSR 303
+=======================
+Related to Bean Validation.
+Hibernate and Spring can use JSR303 annotations to validate beans.
+
+Involve us setting basically constraints which can be validated against.
+
+EX:
+Above an object property:
+
+// Length is for lists and strings. this is treated as a string..
+@Length(min=10, max=10, message="ISBN values mst be exactly 10 characters")
+private int isbn;
+
+@Min(1)
+private int pageCount;
+
+@NotNull
+private String title;
+
+---> owasp.org has really good docs about this stuff. 
+https://www.owasp.org/index.php/Bean_Validation_Cheat_Sheet#Pre-defined_Constraints
+
+https://beanvalidation.org/1.0/spec/#constraintdeclarationvalidationprocess
+
+- Show education globally?
+- Education logo?
+- Add the techs you are most interested in for you equivalency.
+- About Me;:
+	Leader, life-long learner....
+	.... Java is my core technology and I AM AN end-to-end 
+*Full Stack* developer
+I am a full-stack Java developer with (____) .
+Im addition, I lead teams in tech projects, following Agile methodology, delegating tacks based on group capabilities, and taught (---) technologies for teammates as needed.
+
+
+
+
+I am a full-stack Java developer (-----). 
+
+
+Experience with HTML, CSS, Bootstrap, Material Design, Angular, 
+Deployed application with AWS CodePipeline and Elastic Beanstalk, and RDS.
+HTML5, CSS, and vanilla Javascript
+Hibernate 
+pgcrypto hashed passwords
+Github
+external REST API RxNav with workflow 4 different calls
+JUnit and Mockito
+
+
+I am a Java full-stack developer with experience building multi-tiered applications that include responsive UIs, scaleable server-side implementation, and data persistence. Designed dynamic front-end applications with HTML, CSS, Angular, JavaScript, and Material Design. Implemented server funtionality with Java with technologies such as Spring, Hibernate, JDBC, and PostgreSQL.
+Further, I lead teams by delegating tasks, teaching lectures to increase group productivity, setting up project structure, and following Agile methodology.
+
+-> Experience with HTML, CSS, Bootstrap, Angular, Node, Material Design, Java, Hibernate, Spring, PostgreSql
+
+-> Structured webpages with HTML and aria sematics, styled with CSS, and incorperated with dynamic JavaScript elements.
+-> Utilizes Node and Angular to create Single Page Applications (SPA) with dynamic content.
+-> Implemented Bootstrap and Material Design frameworks and grid systems to build responsive web pages, both with and without their associated Angular packages.
+-> Employed various APIs with HTTP protocol via Typescript in Angular and fetch with JavaScript to read and share data.
+-> Leveraged REST services to create a custom workflow in Angular by linking API calls and programatically using responses to generate new requests and retrieve the desired data.
+
+-> Developed custom REST APIs on server-side Java environments.
+-> Built Java applications using Spring Core and Spring Boot, with Spring AOP for cross-cutting concerns such as authentication and  logging.
+-> Created data layers using both JDBC and JPA, leveraging the Hibernate ORM.
+-> Managed data persistence via PostgreSQL, utilizing Pgcrypto for password hashing, stored functions, views, triggers, and transactions.
+-> Persisting Data JSON, Serialization, XML, Database with JDBC API.
+
+-> Wrote unit tests in JUnit with mocking using Mockito  
+-> Deployed server-side implementations to AWS EC2 servers via Linux commands and the AWS Code Pipeline leveraging Elastic Beanstalk.
+-> Knowledgeable of DevOps piplelines beginning with Git, and deployment through AWS CodePipeline with Elastic Beanstalk environment configurations and EC2 setup for server-side, and AWS S3 for static files, and RDS for database management.
+
+
+=============================
+I am a Java full-stack developer with experience building applications that include responsive UIs, scalable server-side implementation, and data persistence. Designed dynamic front-end applications with HTML, CSS, Angular, JavaScript, and Material Design. Implemented server functionality with Java utilizing technologies such as Spring, Hibernate, and PostgreSQL. Further, I lead teams by delegating tasks, teaching lectures to increase group productivity, setting up project structure, and following Agile methodology.
+Experience with HTML, CSS, Bootstrap, Angular, Node, Material Design, Java, Hibernate, Spring, and PostgreSql.
+Structured webpages with HTML markup and aria semantics, styled with CSS, and incorporated with dynamic JavaScript elements.
+Utilized Node and Angular to create Single Page Applications (SPA) with dynamic content.
+Implemented Bootstrap and Material Design frameworks with grid systems to build responsive web pages, both with and without their associated Angular packages.
+Employed various APIs with HTTP protocol via Typescript in Angular and fetch with JavaScript to read and share data.
+Leveraged REST services to create a custom workflow in Angular by linking API calls and programmatically using responses to generate new requests and retrieve the desired data.
+Experience with Object-Oriented Programming in Java.
+Developed custom REST APIs on server-side Java environments.
+Built Java applications with and without Spring Core and Spring Boot, with Spring AOP for cross-cutting concerns such as authentication and  Log4j logging.
+Created data layers using both JDBC and JPA, leveraging the Hibernate ORM.
+Managed data persistence in PostgreSQL databases, utilizing pgcrypto for password hashing, stored functions, views, triggers, and transactions.
+Persisting data in JSON, XML, and plain text formatting.
+Wrote unit tests in JUnit with mocking using Mockito
+Deployed applications with Amazon Web Services using S3 for static files, and RDS for database management.
+Set up AWS EC2 cloud servers via Linux commands and the AWS Code Pipeline leveraging Elastic Beanstalk.
+Knowledgeable of DevOps pipelines beginning with Git
+===============================
+
+=> Java
+Object Oriented Programming
+Servlets
+Hibernate
+Maven
+Log4J
+JUnit
+
+=> Persistence
+PostgreSQL
+JDBC 
+ORM
+
+Hibernate
+JPA
+Serialization
+
+
+=> Front End
+JavaScript
+TypeScript
+Angular
+HTML5
+CSS
+Material Design & Angular Material
+Bootstrap
+
+=> Data Transfer/ Protocols
+HTTP
+REST
+SOAP
+Servlets
+SSH
+Microservices
+
+
+=> Client-Interactions
+Public Speaking
+Professional Communications
+Responsive Webpages
+UI/UX
+Handling User Input
+SPA
+
+
+
+
+
+-> Crafted accessible UI using Angular, HTML, and CSS.
+-> 
+-> Displayed tables using Material Design and Data Source.
+-> Utilized RxNav REST API by creating a chaining requests and responses through several endpoints before processing and displaying data for the user.
+-> Employed Bootstrap Modals for popup confirmation notices.
+-> Displayed data using Angular Material tables and data source.
+-> Configured Spring Core as a foundation for the Java back-end.
+-> Designed REST API with Spring MVC
+-> Build PostgreSQL table structures using Hibernate.
+-> Weaving code and crosscutting concerns with Spring AOP
+-> Created stateless API security by storing sessions in the PostgreSQL database and returning a cookie upon sucessful HTTP post request to login
+-> Integrated Spring AOP and custom annotations to handle authentication procedures 
+-> Deployed backend to EC2 server using AWS Code Pipeline and Elastic Beanstalk.
+-> Tested service layer using JUnit and Mockito.
+-> Empowered teammates by teaching Hibernate and Angular to get team on the same page with the technologies in the project.
+-> Managed user story assignments and took over additional assignments when nessecary. 
+
+
+Patient/Doctor Portal
+The Patient/Doctor Portal connects patients with their medical records and gives doctors tools to connect with their patients. Doctors search for patients and manage their patient's current and past prescriptions in order to track medications. Doctors can search from a database of medications and find potential drug interactions. Doctors can also make notes on visits with patients in order to track their progress, and for comfort and transparency, patients can also see the notes about their visits and add their own comments.
+Patients can also see their own current prescriptions, past prescriptions, and visit notes from the doctor. Patients may add their own notes to visits.  All users can log in, and the API data has security in place for privacy.
+
+
+
+
+Angular Routing
+HttpClient.
+
+-> Implemented fetch and ___ for HTTP protocol.
+
+
+
+
+
+-> Leveraged the REST API RXNorm by creating a custom workflow using 4 separate HTTP GET requests to retrieve
+
+
+Created Hibernate, ALL THE THINGS
+
+For projects say you used RXNorm -- 4+ different workflow of API calls
+
+- Education: 
+" Don't add your GPA"
+	-> I'm gonna do it anyway.
+	-> Look in to all your academic awards lol.
+
+
+
+
+Java
+Angular
+
+
+============================================
+Back to microservices
+============================================
+Cost/benefit relationship...
+	- Cost of losing UP time vs cost of maintaining.
+	- Most ot maintain is complexity. 
+
+- We are going to give the book entity the ID for another entity rather than using hibernate Many-to-one relationship
+
+-> Many to many needs some kind of raltionship, and we can use a collecftion of primitive types and it will map to a junction table. 
+@Collection annotation, not @ManyToMany.
+See Jboss @ElementCollection annotations.
+
+=======
+To send request from Java server to another server
+- You can use RestTemplate(find old notes) without Spring.
+
+With Spring, use Spring Cloud Stater Feign.
+
+Create Feigns package.
+
+Call book client
+.. .Feign client - to use add @EnableFeignClient to application.java
+Feign classes are interfaces that are mapped to the other interface you want to contact and have abstract methods with the same signate use mapping as the other controller it is trying to contact.
+
+
+
+
+This dependency introduced a single poitn a failure: If book service goes down, you can't use the part of author service.
+
+
+Hystrix is a latency and fault tolerance library design to isolate points of acess to remote systems, sergice, and 3rd party libraries, stop cascading faulters and example resillience in complex distriuted systems where failure is inevitable....
+->Basically this helps to avoid cascading failure.
+-> Prevent this from happening with Fault tolerance. 
+*********** Fault Tolerance is a HUGE concept in microservices ******
+In Netflix stack, Hysterix is the biggest took in fault tolerance. It proves a simple way to wrap code in fallback behavior, telling it what to do if exception is raised or a service is unavailable
+*******************************************************************
+
+
+Sometimes it doesn't matter adn you get just return partial information. But other times, thats not the case.
+=> Example: Amazon:
+	Order Service ---> X Shipping Service
+- Your order would go thru but it would never hit shipping service!! 
+- That would be bad. This is not a good thing.
+- We need to be sure everything /happens/
+- Hystrix is tool for EVENTUAL CONSISTENCY.
+
+	- Messaging Queue: Sits in the middle of services, and borkers messages between services. It stores them if one of the services is offline. 
+	- Once the service turns back on, the messaging serice can send the message back out to messeging service.
+	- Messaging service can confirm when the que has gone thru and stuff. 
+When service omes onlien, it sends it out but holds onto the message until the next service tells it that it's fully resolved before letting go of the message.
+- Messaging Queue is actually just another service. 
+
+^^ ^^ All about fault tolerance and single points of failure:
+FAULT TOLERANCE AND HYSTRIX
+
+
+Using Hystrix:
+- must have same method signature (arguments/return type)
+
+@HystrixCommand(vallback ="methodname")
+public void myMethod(arguments) {
+}
+
+public voic myMethodFallback(arguments) {
+}
+
+
+AND use in configuration:
+@EnableCircuitBreaker
+
+
+** Know circuit-breaker design pattern ** 
+
+
+
+==> Config Server:
+Config server tells application how to be configured
+Configuration lives on a Git repository
+When the config server states up, it is configured to look on git for configuration stuff. When new services come up, they register with the config server, adn the nthe other services can start up.
+
+They are confiugred to fail /fast/. If a service can't look at the config server, ti will just immediately stop. We don't want services to take up resources if htey aren't working. THey fail fast if configu isn't avialable to them. 
+
+First start the config server, hten the discovery server. Then the other components can come in. They're start with the config server, ect. THeres a bit of latency, but we're able to centralize the configuration. This is more secure. Those working on particular services dont' need to see/manage config. Actually it hides the config from developers of the other/new services. 
+
+This is one of the ways to supply *Centralized Configuration*
+
+-> Added Spring Cloud Config dependency
+
+-> Bootstrap happens way early in the lifecycle
+Config server is necessary to use bootstrap.yaml
+Bootstrap.yaml is the first hting that happens when the configuration starts up. Later after starting up more, it'll have a hook to look at application.yaml. It needs to connect ot the config server right away, and so if we try ot use application.yaml, it happens too late in the configuration... So we must offer conbfig in bootstrap.yaml in order for the config server to provide configuration that is needed.
+
+1. Add dependencies and create a bootstrap.yml file
+
+This should have the port 8888 and 
+spring.cloud.config.server.git.uri: Github Repo URL
+(But with the : and indentatiosn in yml form)
+
+
+2. Each application will have its properties changed.
+The application.yml file will be changed to bootstrap./yml and all it will have in it is the port nae. The other properites will be put in the ocnfigservice file. You might also need to declare some variables.,
+
+3. add a dependency in AUTHOR SERVICE and BOOK SERVICE on org.springframework.cloud the spring-cloud-starter-config dependency
+
+** Bootstrap repo needs application.yml instad of botstrap.yml ****
+
+-> Useful to conrol where the configuration details arre defined in one centralized location that we can manage. 
+
+
+===================================================================
+Containerization:
+===================================================================
+Messaging Queues
+=> Snowflake server : 
+- Maintainging application over time without records of patches... environment becomes more unique and harder to replicate. When things go wrong, you can't rollback anymore, and can't get help. 
+- Server maintenence doesn't take many people and typically information isn't shared to the "new server guy" much.
+- Should NOT design things like this.
+=> Phoenix Server 
+- HAS a PLAN for falling apart and stuff.
+
+
+- Containerization is a new take on what is virtual server.
+- Running virtual servers requires a lot of resources.
+- Instead all wil operate in teh same OS, buut the environment will be specialized for the application.
+- Container has the dependencies and environments and we interact with it through an interface.
+- Container contains everything the application needs to run, and can be over to another server as needed.
+- Pretty simple with Spring Boot - it creates jars.
+- You define what the language and setting is on the container so the server can run it fine.
+
+=> containerization is CENTRAL to microservices
+- You don't want ot configure 3-4 servers to run the project, you just want the environment to be defined and possible
+
+HOW TO:
+Just install Docker.
+Elastic beanstalk can do it with just the container and it can run it.
+- Image: build a package of what the container should look like to create an image that we can rn it from. Image is a configuration of files and a configuration of commands to start it up. It's a blueprint for starting up the server & running it in that environment.
+
+- TO DO THIS: Use the EC2. Run a container of the EC2.
+
+curl - command line cmd to send (generally) http requests.
+
+In docker:
+applications operate/talk to eachother from different ports. 
+
+First create a docker file by
+creating a folder and putting your jar in there.
+Create file named "Dockerfile" in that folder.
+
+Number of commands to specify RTE of java application.
+Java RTE is a JRE so we will run it in one.
+Use keywork FROM to specify the runtime environment
+
+#Set the environment in which the application will run with
+#Our java rungs on the JRE so we should supply some JRE or JRK version
+
+FROM openjdk:8-jdk-alpine
+
+#Specified teh directory it worksi n
+# Creates a directory structure within the containers environment
+WORKDIR app/
+
+#Copy or add file from our file structure into the containers file structure
+COPY HelloDocker.jar app/
+
+#Doesn't do anything but lets us know that we intend to expose port 80 on this image/container
+
+#At the end, include commands to run to begin the application
+ENTRYPOINT ["java", "-jar", "app/HelloDocker.jar"]
+
+
+Save
+Then start:
+#	dockerhub username-v   v-- name   v--search all in this dir
+docker build -t rclayandrews/hello-docker .
+#           v--port, maps the port 80 here to server 8080 port
+docker run -p 80:8080 rclayandrews/hello-docker
+
+#ctrl+c to get out of console... This will shut down the application
+# Run with -d instead to detach the view from the console.
+docker run -p 80:8080 -d rclayandrews/hello-docker
+
+
+# can login to docker with
+docker login
+
+#To stop the instance, just provide the first 3 keys in the hash identifier
+
+
+
+
+Port entry is default port for HTTP is 80. 
+so when you map 8080 to port 80 then all http requests will be forwarded to 8080.  req goes to container which sends it to 8080 and the app is listening for requests there.
+
+
+
+Benefit : Containers are really light weight! They don't require much memory.
+
+
+How to pass in environment variable when you run the application:
+
+
+docker run -p 80:8080 -d -e "EXTRA=two hundred" rclayandrews/hello-docker
+
+#List all running containers:
+docker container ls
+
+
+#remove image:
+docker image rm rclayandrews/hello-docker
+
+#And provide enrivonment variable in the configuration:
+(like between the copy and the expose)
+ENV EXTRA="some value"
+     ^----- variable name in the code
+
+# Additionally, we can override there ariables by passing varaibles during hte coker run command with the -e flag.
+
+
+****************************************
+QC will ask about the Docker files. 
+Docker has pretty god documentation.
+
+-> docker file says how the file should be set up. Docker build parses the file..
+
+# Docker files MUST START WITH A FROM INSTRUCTION.
+
+FROM <image> [alias]
+
+# Can be any valid image, especially each to start by pullin an image from the public repositories... This is what we did with the JDK.
+-> We can precees from with ARG, but its unnessecary....
+
+ARG CODE_VERSION=latest
+FROM openjdk:8 .......
+
+RUN <command> is a shell form commant that is run in a shall, which is by defualt /bin/sh -c on Linux or cmd /S /C on windows
+
+CMD can be used for starting the application up, siilat for the entry command.  Essentially this is what we do as the final step.
+ENTRYPOINT can be used the same way
+-> Main purpose is to provide defaults for an executing container. Defaults may or maynot include executables
+
+LABEL >> metadata on image
+
+EXPOSE --- informs docker that the container listens on the specified network ports at runtime. 
+EXPOSE does not actually public the port, it functions as documentation between the person who builds the image and the person running the container oabout which ports are intended to be published.
+
+Environment
+ENV <key> <val>
+ENV <ken>=<val>
+
+ADD is like copy. It copies new files/dir /remote URLS from source and adds them to the filesystem at hte path destination.
+
+COPY is slightly different from add in its rules, but works basically the same)
+
+ENTRYPOINT allows yo uto configure a container that runs as an executable.
+
+VOLUME instruction creats a mount point with the specified name and marks it as holding externally mounted volumnes form native hosts or other containers. The value can be a JSON array or play string with multiple arguments. 
+
+If you need to write info that is saved nad save, you need to use attached volume sto make sure there is stoage OUTSIDE the container to write changes to.
+
+USER - allows you to specify user or uid to allow permissions to run the image as.
+
+WORKDIR - sets the workign directory for any run and cmd and entrypoint and copy and add that follow it in the dockerfile.
+
+arg - for arguments. defines variables that the suer can pass at build-time to the builder with the docker build command using --build-arg <varname>=<value>
+
+
+* QC will ask questiosnabout the docker file.
+Panel will ask about command line stuff
+How to create an image.
+
+	docker built -t <tagname>/<entry-point> .
+
+
+
+==================================================================
+DockerHub
+==================================================================
+Pushing things to dockerhub.
+
+IN instance, efirst LOGIN to docker:
+	docker login
+then its just like git...
+	docker push rclayandrews/hello-docker
+
+also can go 
+	docker pull username/container
+
+
+Docker makes it must more simple to deploy things.
+Also can be used to start a stack.
+
+
+
+
+
+** KNOW WORKFLOW of getting image ** 
+** Know what docker swarm is **
+
+===================================================================
+Orchestration
+==========================================
+Dev ops side of mocroservice architecture
+
+--Dev (notes)--
+Discover S
+Gate S
+Book S
+Author S
+COnfig S
+
+This is about how our resources are acquired to run all our stuff.
+- Nodes start up and orchestration defines how these things hsould work.
+
+SHould there be 2 book services? 2 Auther survers? more? less?
+
+Docker Swarm allows us to say the machine the docker is run on is a machine in the swarm -- all of the service machines together.
+
+# docker swarm init to start the system on your machine.
+docker swarm init
+# Initializes. image a bunch of machine do this.
+
+# One machine says its the master and the others connect to it.
+It tells all the other machine sabout eachother, adn then it becomes decntralized. 
+
+- Then a service from each node can be deployed. IF one service goes down on a swarm node, we can let another swarm's service of that type run it instead.
+If the master goes down, select another node as a master.
+When a new master is selected , they can re delegate resources.
+
+Docker swarm mangages these things.
+
+We just tell it what the configuration and envronment is, and the swarm maintains itself. 
+
+This will keep the aplication up. This orchectration is thre real heard of microservices architecture.
+
+-> Kind of tricky with regular docker (without swarm)
+Programs that do it:
+ AWS Cloud Formation.
+docker swarm
+Kubernetes 
+
+-> Will be asked conceptually about this. 
+-> Benefit: MONEY! Orchestration supplies configuration and supplies resources and the software automatically manages hte application lifecycle as a while 
+Behaivire: auto deploy docker images
+config that allows them to talk to eachother even if we dont know hwere they are.
+Failsafe - master node can be reassigned if it goes down.
+Control environment
+contorls config
+prevents things from being lost
+If one server goes down, start new one to maintain load balancing.
+
+Can auto-increase size of conatiner/services
+
+we are just using default sizes right now.
+
+can do the same thing automaitcally when we configure orchestration - so it responds to the needs of users/application as a whole. 
+
+* ** The final step in microservice architecture ** 
+
+
+
+Zuul Filter
+=====================
+Filters the service
+
+Can do it before a response form the service or after the response
+
+usually used for headers na cookies.
+As message goes back out, it can add the extra behavior in one central location.
+
+Authentication/authorization often in pre-filter phase to filter as it comes in and reject/accept at that phase. 
+
+Can add filters for error states is service throws aj exception that bubbles back to zuul, it can handle it. 
+
+Got for HHTP errors so you don't ahve to duplication the logic
+
+Came behairo available in servlets and spring mvc and front controller level.
+
+This is an extnesion of htat behavior. the inplementaition in zuul.
+
+
+Inside of gatway service, there is a Test Filter....
+
+
+Make a bean (@Component or other config) and extend ZuulFilter
+It requiroes you to implement some methods.
+
+ShouldFilter() { predicate to return true/false if that filter should fun.
+
+run() actual filter behavior (can return an object, some arbirarty artifact, but it can be null)
+
+filterType() defines the type of the filter. FilterConstant.PRE_TYPE can defines that the filter happens at the pre-phase.
+
+filterOrder() if you need to set up precedence.
+
+-------------------
+Straightforward implementation. Can get request/.response objects in the run phase to be manipulated. They can be altered here. Exceptionscan be handled. ect. 
+
+--> nice doc in:
+https://github.com/Netflix/zuul/wiki/how-it-works
+
+routing filters applied during the process of routing to the filters.
+we dont need to create routing filters, but we can.
+origin server is where request actually goes.
+after it goes to the origin, we're not dealing with a response. If an error occurs, after an error filter runs, it is delegated to teh post filters. Then its back to the client. 
+
+Usually they can be useful for defining where behavious should happen. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

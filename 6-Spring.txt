@@ -48,7 +48,7 @@ Features :
 - Inversion of Control (IOC) - Concept of dependency injection
 	- Programmer DESCRIBES how objects are created
 - Aspect Oriented Programming (AOP) 
-	-- isolates secondary functions form main
+	-- isolates secondary functions from main
 - Container -> Lifecycle/ config of objects
 - MVC Framework for web paplications
 - JDBC Hibernate Handling
@@ -224,7 +224,7 @@ Lifecycle of beans
 
 public class MyBean implements BeanNameAware, BeanFactoryAware, ApplicationContextAware, 
 InitializingBean, DisposableBean, BeanPostProcessor {
-// Then generate all methods!
+	// Then generate all methods!
 }
 
 The order: 
@@ -711,5 +711,129 @@ Jaxb errors will have something to do with XML!
 Look thru XML things if that's a problem you're getting!
 
 ====================================================================
+	REVIEW
 ====================================================================
+What is Spring?
+Inversion of Control Framework for Java which manages dependency injection.
+Spring boot gives the entire application to Spring to manage.
+==> What is dpenedency injection - 
+	With object oriented programming, we have relations with other objects. These are described as dependencies. These dependencies cause different components of the application to be coupled together - you have to create a string of objects in order to instantiate the object. Dependency injection decouples the implementations - you just say what service you need rather than exactly how it needs to be created. 
+IE: We create an interface for the repository and call it. IWe don't knwo how the repo is instnatiated or implemented. Doesn't matter. We just need the methods. Without DI, you need to instantiate all the classes that the dependency needs... You can't instnatiate an interface... So this simplifies the process. You can more simply track down where the dependencies come from.
+Structured way to manage what classes/services need to be used by the application in its current configuration state. Can create dependencies on an abstract level.
+
+==> Managing, troubleshooting, testing is difficult when things are tightly coupled.
+
+==> Spring Beans are the objects that we are telling Spring to manage.
+ To get beans - we can Autowire them or ask to get them from the Bean Factor. It creates the bean we want with the arguments
+
+==> BOOT:
+Does the same thing as Spring Core, but they reqrote the configuration. The concept of DI is the same. Still using ApplicationContext. Same tool but written in a more modern fashion. 
+The applicatoin is fundamentally different because it handles much of the configuration by making assumtions
+Spring BOOT IS NOT A MODULE. It is a "reimagineing" of what Spring is and how it can be done.
+
+==> AOP - Aspect- oriented programming
+- Addresses cross-cutting concerns by weaving code across an application around predicates that match certain expressions.
+- AOP is used in all of the spring framework modules.
+- Principally: Spring AOP is a module of Spring that brings aspect oriented programming to Java - in a limited fashion - to meet the needs of Spring. Not a fully-functioned AOP, but goot enough for about 90% of user's needs.
+- More fully-featured Aspect- oriented feature is AspectJ
+==> Final answer to teh question (start with concepts!)
+- Spring AOP is a module of spring that is foundational to other module that breings aspect oriented features to sprign.
+AOP includes the calability to weave code across app to address cross cutting conerns
+Spring uses it to address plubbing issues - doing common tasks.
+IE Sessions, logging, directing requests from front controller to logical ones.
+- Nessecary to avoid boiler-plate code.
+
+==> Join point vs poitn cut
+Join point - any location in code that could be a target for advice (in spring, any public method execution.. In aspectJ, not limited to this)
+Point cut - predicate expression - applied to match a join point to the actual advice.
+EX:
+@PointCut("package("com.revature.* * *")
+
+==> MVC
+	- DONT ANSWER WITH ANNOTATIONS
+	- They want to know about HOW it works
+	- Know that chart. Talk ARCHITECTURE
+- Brings built-in architecture because more applications (servlet, anyway) have similar architecture. 
+Front controller pattern. Different controllers. A tool to figure out how reuqests get mapped to controllers.
+
+Request travels
+
+Front Controller -> Handler mapping -> Handler adapter -> Other controllers -> back to front controller -> To view resolver returns model(data) and a view (how to present the data) and injects data into the tempate to return to the user.
+
+
+1. Registers controlls with the handler mapping
+	- Handler mapping figure sort which URLS need to get sent where and where the requests will go.
+
+2. Handler adapter (like the switch statement) actually sends the request to the proper controller.
+
+3. To controller, service, db
+
+4. Back to front controller which sents it to view resolver
+
+5. Resolves view, injects data to template.
+
+To use the Handler Adapter -> 
+	- Use Filters.. Implement a specific class for filters (defined in servlets) and MVC has its own definition of that. Then you register it as a component. 
+	-- You have to implement an interface and add the component annotation, then Spring will wire it correctly to the place it needs.  (Just like JpaRepository)
+
+
+Spring ORM => 
+- Cleans up how ORM and session management/ DBs is handeled. 
+- Has a SessionFactory/EntityManager *somewhere* that must be referenced all over the place. 
+1. Deals with sessions
+2. Transaction management - propogation levels - so code bits can be reused.
+
+- Purpose: Remove a lot of pumbing associated with creating/ managing sessions/transactions.
+
+- Hibernate still have some boiler-plate IS getting the stuff with the session.. The context of the session is defined on the method. 
+Transactional annotation and propogation level can reuse code that connects to the DB. 
+
+==> Spring Data
+- Different from ORM, but it uses ORM.
+- Rethinking of how we should work with the database. 
+- Replace EntityManager with an interface that brings a more familiar way to talk to teh DB.  At hte core, it has the same Crud Functionality, just more in the WHAT/ HOW things. Hibernate alone can't quite handle that. Fluent language is "just icing on the cake". It's a replacement for SQL, essentially. Simlpe example: Pagination.
+----> IDeally contrast with typically OMR. Typical: designed to prodoce object for interacting with DB that isn't deeply connecting with your own entities. 
+----? With spring Data, you create an interface and pass the object directly to it. Hibernate's CRUD alone isn't enough. 
+HATEOS - HyperText (?) Something. 
+
+--> 
+
+
+
+
+
+- Spring stuff is a higher level framework so you need to know how the architecture works
+=> If you can fully talk about MVC, then it should you know about Servlets as well.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
