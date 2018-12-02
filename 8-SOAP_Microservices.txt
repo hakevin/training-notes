@@ -192,7 +192,7 @@ Paste this:
 	- Maps request to actual functionality
 	- @Endpoint annotation
 
-	- Needs a NAMESPACE URL for hte mapping
+	- Needs a NAMESPACE URL for the mapping
 	Autowire superhero repo
 
 /**
@@ -299,8 +299,8 @@ The URL could be online or local.
 The wsdl is converted to objects and methods automatically!
 
 
-~~~~~~~~~~~~ Making requests to SOAP server From Java ~~~~~~~~~~~~~~
-- Now you can also consume an external XML file
+ ~~~~~~~~~~ *  Making requests to SOAP server From Java ~~~~~~~~~~
+- Now you can also consume an external SOAP resources
 - You needed to take the wsdl and transform it to objects so you know
   how the dever from which you desire information is set up, but you
   don't have their data! Once you have the classes set up above, you
@@ -311,7 +311,7 @@ First, set up a ResourceClient class of its own.
  --- THIS class extends WebServiceGatewaySupport
  --- Here, define the methods you'll be calling on the other server
    - Example:
-  public GetHeroResponse getHerp(String name) {
+  public GetHeroResponse getHero(String name) {
 	GetHeroRequest request = new GetHeroRequest();
 	request.setName(name);
       GetHeroResponse response=(GetHeroResponse)getWebServiceTemplate
@@ -336,25 +336,23 @@ Next, set up config bean to marshall (transform) the data.
   calls the other application via SOAP(Simple Object Access Protocol)
 
 
+~~~~~~~~~~~~~~~~~~~ * the SOAP Fault ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://www.ibm.com/support/knowledgecenter/en/SSGMCP_5.3.0/com.ibm.cics.ts.webservices.doc/concepts/soap/dfhws_fault.html
 
-
-
-
-------------vv unprocessed notes below here ----------------------
-Root tag: Envelope
-Heade
-	- has info relating to the meta swhatever nad hte requresdzt
-Soad Body
-	- SOAP fualt tag used for errors
-
-look at IBM.com.support./knowledgecenter/... Whaetver
-LOOK AT IBM SOAP DOCUMENTATION 
-\
-Google IBM soap message
-
-Click the link at the bottom for soap fault
-
-SOAP <Fault> element carries error and status info in messages
+- SOAP <Fault> element carries error and status info in messages
+-
+<SOAP-ENV:Fault xmlns="">
+   <faultcode>SOAP-ENV:Server</faultcode>
+   <faultstring>Conversion to SOAP failed</faultstring>
+      <detail>
+         <CICSFault xmlns="http://www.ibm.com/software/htp/cics/WSFault">
+          DFHPI1008 25/01/2010 14:16:50 IYCWZCFU 00340 XML
+          generation failed because of incorrect input 
+          (CONTAINER_NOT_FOUND container name) for WEBSERVICE 
+          servicename. 
+          </CICSFault> 
+      </detail> 
+</SOAP-ENV:Fault>
 
  ==================================================================
 			* Microservices
@@ -407,21 +405,29 @@ Tools:
   - Single point of entry for requests into the system.
   - Doesn't matter where other servers are because USERS never go 
     directly to them.
-  - Requests from outside go to gateway service to be handledd. It must figure out which service to delegate it to. It has an idea, but doens't know where the serivce is located to it sends the request to the discovery service to figure out where it should go. Discovery serice tells gateway serivice where teh desired service is, and then the gateway sends it off to the irght location.
+  - Requests from outside go to gateway service to be handled. It
+ must figure out which service to delegate it to. It has an idea, but
+ doesn't know where the serivce is located, so it sends the request
+ to the discovery service to figure out where it should go. Discovery
+ service tells gateway serivice where the desired service is, and
+ then the gateway sends it off to the right location.
 	This is basically a front controller pattern.
 
 
 1. Creating discovery Service
-- add pom dependencies
-- Create application.yml 
+	- add pom dependencies
+	- Create application.yml 
 
-By default Eureka itself will try to register with Eureka. Thiw will cuase constant errors in our starter project because there is no other Eureka instance to register with, so we will disable that funcionality
+-By default Eureka itself will try to register with Eureka. This will
+ cause constant errors in our starter project because there is no
+ other Eureka instance to register with, so we will disable that
+ funcionality
 - Application.java
 	@Spring boot...
 	@EnableEurekaServer annotation
 
 Create Gateway service with Zuul dependency.
-.yml:
+--application .yml:
 spring:
   application:
     name: Zuul
@@ -431,8 +437,8 @@ spring:
 	@EnableZuulProxy annotation
 
 Create your service. 
-	does not need eureka core...
-	in application.yml, port:0 should give it a random port #.
+	- does not need eureka core...
+	- in application.yml, port:0 should give it a random port #
 
 	@SpringBootApplication
 	//@EnableEurekaClient
@@ -440,11 +446,11 @@ Create your service.
 	// More generic way to register with a discovery server
 
 
-=======================
-JSR 303
-=======================
-Related to Bean Validation.
-Hibernate and Spring can use JSR303 annotations to validate beans.
+====================================================================
+			* JSR 303
+====================================================================
+ - Related to Bean Validation.
+ - Hibernate and Spring can use JSR303 annotations to validate beans.
 
 Involve us setting basically constraints which can be validated against.
 
@@ -465,177 +471,7 @@ private String title;
 https://www.owasp.org/index.php/Bean_Validation_Cheat_Sheet#Pre-defined_Constraints
 
 https://beanvalidation.org/1.0/spec/#constraintdeclarationvalidationprocess
-
-- Show education globally?
-- Education logo?
-- Add the techs you are most interested in for you equivalency.
-- About Me;:
-	Leader, life-long learner....
-	.... Java is my core technology and I AM AN end-to-end 
-*Full Stack* developer
-I am a full-stack Java developer with (____) .
-Im addition, I lead teams in tech projects, following Agile methodology, delegating tacks based on group capabilities, and taught (---) technologies for teammates as needed.
-
-
-
-
-I am a full-stack Java developer (-----). 
-
-
-Experience with HTML, CSS, Bootstrap, Material Design, Angular, 
-Deployed application with AWS CodePipeline and Elastic Beanstalk, and RDS.
-HTML5, CSS, and vanilla Javascript
-Hibernate 
-pgcrypto hashed passwords
-Github
-external REST API RxNav with workflow 4 different calls
-JUnit and Mockito
-
-
-I am a Java full-stack developer with experience building multi-tiered applications that include responsive UIs, scaleable server-side implementation, and data persistence. Designed dynamic front-end applications with HTML, CSS, Angular, JavaScript, and Material Design. Implemented server funtionality with Java with technologies such as Spring, Hibernate, JDBC, and PostgreSQL.
-Further, I lead teams by delegating tasks, teaching lectures to increase group productivity, setting up project structure, and following Agile methodology.
-
--> Experience with HTML, CSS, Bootstrap, Angular, Node, Material Design, Java, Hibernate, Spring, PostgreSql
-
--> Structured webpages with HTML and aria sematics, styled with CSS, and incorperated with dynamic JavaScript elements.
--> Utilizes Node and Angular to create Single Page Applications (SPA) with dynamic content.
--> Implemented Bootstrap and Material Design frameworks and grid systems to build responsive web pages, both with and without their associated Angular packages.
--> Employed various APIs with HTTP protocol via Typescript in Angular and fetch with JavaScript to read and share data.
--> Leveraged REST services to create a custom workflow in Angular by linking API calls and programatically using responses to generate new requests and retrieve the desired data.
-
--> Developed custom REST APIs on server-side Java environments.
--> Built Java applications using Spring Core and Spring Boot, with Spring AOP for cross-cutting concerns such as authentication and  logging.
--> Created data layers using both JDBC and JPA, leveraging the Hibernate ORM.
--> Managed data persistence via PostgreSQL, utilizing Pgcrypto for password hashing, stored functions, views, triggers, and transactions.
--> Persisting Data JSON, Serialization, XML, Database with JDBC API.
-
--> Wrote unit tests in JUnit with mocking using Mockito  
--> Deployed server-side implementations to AWS EC2 servers via Linux commands and the AWS Code Pipeline leveraging Elastic Beanstalk.
--> Knowledgeable of DevOps piplelines beginning with Git, and deployment through AWS CodePipeline with Elastic Beanstalk environment configurations and EC2 setup for server-side, and AWS S3 for static files, and RDS for database management.
-
-
-=============================
-I am a Java full-stack developer with experience building applications that include responsive UIs, scalable server-side implementation, and data persistence. Designed dynamic front-end applications with HTML, CSS, Angular, JavaScript, and Material Design. Implemented server functionality with Java utilizing technologies such as Spring, Hibernate, and PostgreSQL. Further, I lead teams by delegating tasks, teaching lectures to increase group productivity, setting up project structure, and following Agile methodology.
-Experience with HTML, CSS, Bootstrap, Angular, Node, Material Design, Java, Hibernate, Spring, and PostgreSql.
-Structured webpages with HTML markup and aria semantics, styled with CSS, and incorporated with dynamic JavaScript elements.
-Utilized Node and Angular to create Single Page Applications (SPA) with dynamic content.
-Implemented Bootstrap and Material Design frameworks with grid systems to build responsive web pages, both with and without their associated Angular packages.
-Employed various APIs with HTTP protocol via Typescript in Angular and fetch with JavaScript to read and share data.
-Leveraged REST services to create a custom workflow in Angular by linking API calls and programmatically using responses to generate new requests and retrieve the desired data.
-Experience with Object-Oriented Programming in Java.
-Developed custom REST APIs on server-side Java environments.
-Built Java applications with and without Spring Core and Spring Boot, with Spring AOP for cross-cutting concerns such as authentication and  Log4j logging.
-Created data layers using both JDBC and JPA, leveraging the Hibernate ORM.
-Managed data persistence in PostgreSQL databases, utilizing pgcrypto for password hashing, stored functions, views, triggers, and transactions.
-Persisting data in JSON, XML, and plain text formatting.
-Wrote unit tests in JUnit with mocking using Mockito
-Deployed applications with Amazon Web Services using S3 for static files, and RDS for database management.
-Set up AWS EC2 cloud servers via Linux commands and the AWS Code Pipeline leveraging Elastic Beanstalk.
-Knowledgeable of DevOps pipelines beginning with Git
-===============================
-
-=> Java
-Object Oriented Programming
-Servlets
-Hibernate
-Maven
-Log4J
-JUnit
-
-=> Persistence
-PostgreSQL
-JDBC 
-ORM
-
-Hibernate
-JPA
-Serialization
-
-
-=> Front End
-JavaScript
-TypeScript
-Angular
-HTML5
-CSS
-Material Design & Angular Material
-Bootstrap
-
-=> Data Transfer/ Protocols
-HTTP
-REST
-SOAP
-Servlets
-SSH
-Microservices
-
-
-=> Client-Interactions
-Public Speaking
-Professional Communications
-Responsive Webpages
-UI/UX
-Handling User Input
-SPA
-
-
-
-
-
--> Crafted accessible UI using Angular, HTML, and CSS.
--> 
--> Displayed tables using Material Design and Data Source.
--> Utilized RxNav REST API by creating a chaining requests and responses through several endpoints before processing and displaying data for the user.
--> Employed Bootstrap Modals for popup confirmation notices.
--> Displayed data using Angular Material tables and data source.
--> Configured Spring Core as a foundation for the Java back-end.
--> Designed REST API with Spring MVC
--> Build PostgreSQL table structures using Hibernate.
--> Weaving code and crosscutting concerns with Spring AOP
--> Created stateless API security by storing sessions in the PostgreSQL database and returning a cookie upon sucessful HTTP post request to login
--> Integrated Spring AOP and custom annotations to handle authentication procedures 
--> Deployed backend to EC2 server using AWS Code Pipeline and Elastic Beanstalk.
--> Tested service layer using JUnit and Mockito.
--> Empowered teammates by teaching Hibernate and Angular to get team on the same page with the technologies in the project.
--> Managed user story assignments and took over additional assignments when nessecary. 
-
-
-Patient/Doctor Portal
-The Patient/Doctor Portal connects patients with their medical records and gives doctors tools to connect with their patients. Doctors search for patients and manage their patient's current and past prescriptions in order to track medications. Doctors can search from a database of medications and find potential drug interactions. Doctors can also make notes on visits with patients in order to track their progress, and for comfort and transparency, patients can also see the notes about their visits and add their own comments.
-Patients can also see their own current prescriptions, past prescriptions, and visit notes from the doctor. Patients may add their own notes to visits.  All users can log in, and the API data has security in place for privacy.
-
-
-
-
-Angular Routing
-HttpClient.
-
--> Implemented fetch and ___ for HTTP protocol.
-
-
-
-
-
--> Leveraged the REST API RXNorm by creating a custom workflow using 4 separate HTTP GET requests to retrieve
-
-
-Created Hibernate, ALL THE THINGS
-
-For projects say you used RXNorm -- 4+ different workflow of API calls
-
-- Education: 
-" Don't add your GPA"
-	-> I'm gonna do it anyway.
-	-> Look in to all your academic awards lol.
-
-
-
-
-Java
-Angular
-
-
-============================================
+===========================================
 Back to microservices
 ============================================
 Cost/benefit relationship...
