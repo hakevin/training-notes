@@ -1,3 +1,37 @@
+
+	   SOAP, Netflix Stack, Microservices, Docker
+Contents:
+* REST
+* SOAP
+	* Creating SOAP Server
+	* Contract First
+	* SOAP Requests from Java
+	* SOAP Fault
+* Microservices / Getting Started
+* Zuul Filters
+* Netflix Stack Overview
+	* Eureka
+	* Zuul
+	* Hystrix 
+* JSR 303 Validation
+* Feign
+* Hystrix
+	* Using Hystrix
+* Configuration Server
+Work in progress chapters:
+* Containerization
+* Docker
+	* Docker Swarm
+	* DockerHub
+* Orchestration
+
+
+===================================================================
+		  * REST (Other topics)
+===================================================================
+
+
+
 ===================================================================
 			* SOAP
 ===================================================================
@@ -299,7 +333,7 @@ The URL could be online or local.
 The wsdl is converted to objects and methods automatically!
 
 
- ~~~~~~~~~~ *  Making requests to SOAP server From Java ~~~~~~~~~~
+	 ~~~~~~~~~~ *  SOAP Requests from Java ~~~~~~~~~~
 - Now you can also consume an external SOAP resources
 - You needed to take the wsdl and transform it to objects so you know
   how the dever from which you desire information is set up, but you
@@ -336,7 +370,7 @@ Next, set up config bean to marshall (transform) the data.
   calls the other application via SOAP(Simple Object Access Protocol)
 
 
-~~~~~~~~~~~~~~~~~~~ * the SOAP Fault ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~~~~~~~~~~~~~~~~~~~ * SOAP Fault ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 https://www.ibm.com/support/knowledgecenter/en/SSGMCP_5.3.0/com.ibm.cics.ts.webservices.doc/concepts/soap/dfhws_fault.html
 
 - SOAP <Fault> element carries error and status info in messages
@@ -355,7 +389,7 @@ https://www.ibm.com/support/knowledgecenter/en/SSGMCP_5.3.0/com.ibm.cics.ts.webs
 </SOAP-ENV:Fault>
 
  ==================================================================
-			* Microservices
+		* Microservices / Getting Started
  ==================================================================
 
 Services may or may not have a front end.
@@ -393,6 +427,14 @@ Microservies:
 	--> Basically Available 
 	--> Soft state
 	--> Eventual consistency
+
+ --> Eventual Concistency:
+  -- Guaruntees liveness:
+    Concurrency systems need to make progress, despite multiple 
+    parts of the program are out of sync.
+	- Parts of the program may have to "take turns"
+  -- Says that eventually -- after the final update - all pieces 	    of information will be consistent. Data may be overriten -
+    typically with a "last-writer-wins" approach. 
 
 Tools:
 1. Discovery Service --> Eureka (Netflix's open source tech)
@@ -445,72 +487,243 @@ Create your service.
 	@EnableDiscoveryClient 
 	// More generic way to register with a discovery server
 
+===================================================================
+			* Zuul Filter
+===================================================================
+
+- Filters: Capable of performing range of actions during routing of
+	HTTP requests and responses.
+- Key Characteristics of a filter:
+  -- Type : Defines stage during routing what applied
+  -- Execution Order : Order of execution across filters
+  -- Criteria : Condition to which the filter is applied
+  -- Action : What the filter does upon execution
+
+==> Filter Types:
+  - PRE  : Filters execute before routing to origin
+	- Authentication, choose server origin, log debug info
+	- Can accept/request request right away here.
+  - ROUTING : Handle routing request to origin. 
+	- This is where HTTP request is built & sent with Ribbon 
+  - POST : Filter to execute AFTER request routed to origin.
+	- EX: Add standard HTTP headers, gather statistics
+  - ERROR : Executes when errors occur during other phase. 
+	- Centralizes error-handling logic
+  - Custom filters are supported as well.
+
+==> Behavior
+- The same behavior (filtering) is available in servlets and spring 
+  MVC at the front controller level. 
+- Zuul filters are an extension of that behavior; 
+  Behavior is implemented with Zuul.
+- application.yml file can be configured to filter routes as well
+  + Zuul can manage routes & forwarding via configuration
+https://cloud.spring.io/spring-cloud-netflix/multi/multi__router_and_filter_zuul.html
+
+
+==> To use, extend the ZuulFilter abstract class.
+ -- Make a bean (@Component or other config) and extend ZuulFilter
+	It requires overrides of some methods.
+
+* You can get the HttpRequest/Response in zuul filters
+==> Methods:
+- public boolean shouldFilter() { } 
+   - Predicate to return true/false if that filter should run.
+   - Example (Will only filter request if it has no cookies)
+   @Override
+   public boolean shouldFilter() {
+	RequestContext context = RequestContext.getCurrentContext();
+	HttpServletRequest request = context.getRequest();
+	if (request.getCookies().length == 0) {
+		return true;
+	}
+	return false;
+   }
+
+- public Object run() throws ZuulException{ } 
+  - actual filter behavior (can return an object, some 
+    arbirarty artifact, or it can be null)
+  - Example (Adds a cookie)
+  public Object run() throws ZuulException {
+      RequestContext context = RequestContext.getCurrentContext();
+      HttpServletResponse response = context.getResponse();
+      Cookie cookie = new Cookie("Filter-cookie", "true");
+      response.addCookie(cookie);
+      return null;
+  }
+
+- public String filterType() { }
+  - defines the type of the filter. 
+  - Return a string with one of the filters as listed above.
+ 
+- public int filterOrder() { }
+  - Returns integer, for if you need to set up precedence (order)
+
+==> Overall: 
+- Straightforward implementation. 
+- Can get request/response objects in run phase to be manipulated
+  They can be altered here.
+- Exceptions can be handled. ect. 
+
+==> See :
+https://github.com/Netflix/zuul/wiki/how-it-works
+
+==> Routing Filters :
+Routing filters may be applied during the process of routing to the 
+filters. For this applicaiton, we dont need to create routing
+filters, but it's possible. Routing filters are configured in
+ application.yml (or config server)
+Origin server is where request actually goes.
+After request goes to the origin, we're not dealing with a response.
+If an error occurs, after an error filter runs, it is delegated to
+ the post filters. Then its sent back to the client. 
+
+- May be useful for defining where behavious should happen. 
+
 
 ====================================================================
-			* JSR 303
+		* Netflix Stack overview
+====================================================================
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~ * Eureka ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- @EnableEurekaServer / @EnableDiscoveryServer
+	- @EnableEurekaClient
+- Discovery service - keeps track of servers locations and status
+- Port 8761
+- Analogout to an INTERNAL DNS (domain name service)
+- Primary purpose: load balancing within a single region.
+- Used for server traffic that is not to be exposed to the public
+
+- Non-java clients run a "side car" (java-embedded eureka server) 
+  to handle service registration & heartbeats, then use REST 
+  endpoints supported by Eureka client
+- Resilinency: Can handle failure of one or all Eureka servers due to
+  registry caching information in services.
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~ * Zuul ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- @EnableZuulProxy
+- Recieves request and forwards it to location of an avaiable server
+- Manages server-side load balancing on instance/server/host level
+- Uses Netflix Ribbon to look up instances of the service
+	- Ribbon: internal process, provides load-balance algorithms
+- Stateless service, provides resilliency to load-balancing outages 
+	- You don't have to rely on external load balancer
+- Port 8888
+
+~~~~~~~~~~~~~~~~~~~~~~ * Hystrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- Latency & fault tolerance library -> to isolate points of failure
+- Stop cascading falure, enable resillience in complex systems
+- Latency: The state of existing, but not yet being developed or 
+	manifested... The delay before a trasfer of data begins
+	following an instruction for its transfer.
+	- Delay between stimulus and response.
+Main selling points:
+   1. Latency & Fault Tolerance
+	-- Stop cascading failures
+	-- Fallbacks and graceful degredation
+	-- Fail fast, rapid recovery
+   2. Realtime Operations
+	-- Monitors & configures changes
+	-- Alerts/makes decisions/affects change/ fast results
+   3. Concurrency
+	-- Parallel execution (Thread safe)
+	-- Concurrency-aware request caching
+	-- Automated batching through request collapsing
+
+
+====================================================================
+		  * JSR 303 Validation
 ====================================================================
  - Related to Bean Validation.
  - Hibernate and Spring can use JSR303 annotations to validate beans.
 
-Involve us setting basically constraints which can be validated against.
+ - Involves constraints which can be validated against.
 
-EX:
-Above an object property:
+Example - Set annotations above an object property:
 
-// Length is for lists and strings. this is treated as a string..
-@Length(min=10, max=10, message="ISBN values mst be exactly 10 characters")
-private int isbn;
+ // Length is for lists and strings. this is treated as a string..
+ @Length(min=10, max=10, message="ISBN values must be exactly 10  characters")
+ private int isbn;
 
-@Min(1)
-private int pageCount;
+ @Min(1)
+ private int pageCount;
 
-@NotNull
-private String title;
+ @NotNull
+ private String title;
 
----> owasp.org has really good docs about this stuff. 
+==> owasp.org has really good docs about this stuff. 
 https://www.owasp.org/index.php/Bean_Validation_Cheat_Sheet#Pre-defined_Constraints
 
 https://beanvalidation.org/1.0/spec/#constraintdeclarationvalidationprocess
-===========================================
-Back to microservices
-============================================
-Cost/benefit relationship...
+====================================================================
+		    * Feign
+====================================================================
+- Feign part of Spring Framework
+==> Conceptual: 
+- Cost/benefit relationship...
 	- Cost of losing UP time vs cost of maintaining.
 	- Most ot maintain is complexity. 
 
-- We are going to give the book entity the ID for another entity rather than using hibernate Many-to-one relationship
+- We are going to give the book entity the ID for another entity
+  rather than using hibernate Many-to-one relationship
 
--> Many to many needs some kind of raltionship, and we can use a collecftion of primitive types and it will map to a junction table. 
-@Collection annotation, not @ManyToMany.
-See Jboss @ElementCollection annotations.
+-> Many to many needs some kind of relationship, and we can use a
+ collection of primitive types and it will map to a junction table. 
+     --> @Collection annotation, not @ManyToMany. <--
+ ((See Jboss @ElementCollection annotations.))
 
-=======
+==> Either way, we'll need information from other servers!
 To send request from Java server to another server
 - You can use RestTemplate(find old notes) without Spring.
+- With Spring, use Spring Cloud Stater Feign.
 
-With Spring, use Spring Cloud Stater Feign.
+-> Getting started:
+	1. Add maven Feigns package to pom.
+	2. Add @EnableFeignClients annotation to Application.java
+	3. Create Client interface
 
-Create Feigns package.
+- Client interface holds method /declarations/ with the desired
+  mapping in the other server as required foreign Repository.
+   -- When you call those methods, Spring translates the method
+      declarations into requests, and sends them to the other server.
+	-- The mapping and parameters need to be the same, but
+	  you could get away with not knowing what the other server's
+	  methods are actually named.
 
-Call book client
-.. .Feign client - to use add @EnableFeignClient to application.java
-Feign classes are interfaces that are mapped to the other interface you want to contact and have abstract methods with the same signate use mapping as the other controller it is trying to contact.
+[Class Definition]
+-Feign client - to use add @EnableFeignClient to application.java
+-Feign classes are interfaces that are mapped to the other interface
+ you want to contact and have abstract methods with the same signate
+ use mapping as the other controller it is trying to contact.
 
+-> This dependency introduced a single poitn a failure: 
+If book service goes down, you can't use the part of author service.
+-> Solution: Use latency/Fualt Tolerance library!
 
+====================================================================
+			* Hystrix
+====================================================================
+- Hystrix is a latency and fault tolerance library design to:
+   -- isolate points of acess to remote systems, service, 
+	and 3rd	party libraries
+   -- Stop cascading failures
 
+Hystrix is an example resillience in complex distriuted systems.
+Failure is inevitable, but Hystrix is used to recover quickly and
+make the failure seem less detrimental
 
-This dependency introduced a single poitn a failure: If book service goes down, you can't use the part of author service.
-
-
-Hystrix is a latency and fault tolerance library design to isolate points of acess to remote systems, sergice, and 3rd party libraries, stop cascading faulters and example resillience in complex distriuted systems where failure is inevitable....
-->Basically this helps to avoid cascading failure.
+-> Basically this helps to avoid cascading failure.
 -> Prevent this from happening with Fault tolerance. 
-*********** Fault Tolerance is a HUGE concept in microservices ******
-In Netflix stack, Hysterix is the biggest took in fault tolerance. It proves a simple way to wrap code in fallback behavior, telling it what to do if exception is raised or a service is unavailable
-*******************************************************************
+
+   ***** Fault Tolerance is a HUGE concept in microservices *****
+  In Netflix stack, Hysterix is the biggest took in fault tolerance.
+ It provides a simple way to wrap code in fallback behavior, telling
+  it what to do if exception is raised or a service is unavailable
+ ******************************************************************
 
 
-Sometimes it doesn't matter adn you get just return partial information. But other times, thats not the case.
+- If request isn't critical partial, partial info may be returned
+- But other times, thats not the case.
 => Example: Amazon:
 	Order Service ---> X Shipping Service
 - Your order would go thru but it would never hit shipping service!! 
@@ -518,71 +731,110 @@ Sometimes it doesn't matter adn you get just return partial information. But oth
 - We need to be sure everything /happens/
 - Hystrix is tool for EVENTUAL CONSISTENCY.
 
-	- Messaging Queue: Sits in the middle of services, and borkers messages between services. It stores them if one of the services is offline. 
-	- Once the service turns back on, the messaging serice can send the message back out to messeging service.
-	- Messaging service can confirm when the que has gone thru and stuff. 
-When service omes onlien, it sends it out but holds onto the message until the next service tells it that it's fully resolved before letting go of the message.
+- Messaging Queue: 
+  -- Sits between services, and brokers their messages
+  -- Stores message if one of the services is offline. 
+	- Once the service turns back on, the messaging serice can 
+	  send the message back out to messeging service.
+	- Messaging service can confirm when the que has gone thru
+
+  -- When service comes online, it sends it message, keeping a copy,
+     until the next service tells it that it's fully resolved before
+     letting go of the message.
 - Messaging Queue is actually just another service. 
 
-^^ ^^ All about fault tolerance and single points of failure:
-FAULT TOLERANCE AND HYSTRIX
+ ~~~~~~~~~~~~~~~~~~~~~~ * Using Hystrix ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- The Feign client above is analogous to a foreign CONTROLLER.
+- A Command class with Hystrix is analogous to a SERVICE class
+
+1. Add @EnableCircuitBreaker annotation to Application.java
+2. Create MyObjectCommand class in .commands package
+3. Create 2 methods, one for attempting to use the Client, and 
+   the other as a fallback incase the foreign server fails.
+  --- Methods must have the same signature (arguments/return type)
+4. Add @HystrixCommand annotation & properties:
+
+  @HystrixCommand(vallback ="methodname")
+  public void myMethod(arguments) {
+	// Use Feign Client Here.
+  } 
+
+  public voic myMethodFallback(arguments) {
+  }
 
 
-Using Hystrix:
-- must have same method signature (arguments/return type)
+ ~~~~~~~~~~~~~~~ * Circuit Breaker Design Pattern ~~~~~~~~~~~~~~~~~
+- Hystrix uses the circuit breaker design pattern
+- This is a pattern in qhich calls to remote software are wrapped in
+  a protected function call in a circuit breaker object. 
+- Protected function monitors for failure in the other server.
+- If/when failure occurs, fallback fuction is triggered in place of 
+  the other call.
+	- The call to the supplier server *is never made* if the 
+	  circuit breaker detects it is offline.
 
-@HystrixCommand(vallback ="methodname")
-public void myMethod(arguments) {
-}
+===================================================================
+		     * Configuration Server
+===================================================================
+- Part of Spring Boot Cloud
+- Config server tells application how to be configured
+- Provides a centralized location for configurations for simplicity
 
-public voic myMethodFallback(arguments) {
-}
+- Configuration lives on a Git repository
+- When the config server starts up, it is configured to look on git
+  for configuration info. When new services come up, they register
+  with the config server, and then the other services can start up.
 
+- They are confiugred to fail /fast/. If a service can't look at the
+ config server, it will just immediately stop. We don't want services
+ to take up resources if they aren't working. They fail fast if
+ config isn't avialable to them. 
 
-AND use in configuration:
-@EnableCircuitBreaker
+- First start the config server, hten the discovery server. Then the
+ other components can come in. They're start with the config server,
+ ect. THeres a bit of latency, but we're able to centralize the
+ configuration. This is more secure. Those working on particular
+ services dont' need to see/manage config. Actually it hides the
+ config from developers of the other/new services. 
 
+		This is one of the ways to supply 
+		   *Centralized Configuration*
 
-** Know circuit-breaker design pattern ** 
-
-
-
-==> Config Server:
-Config server tells application how to be configured
-Configuration lives on a Git repository
-When the config server states up, it is configured to look on git for configuration stuff. When new services come up, they register with the config server, adn the nthe other services can start up.
-
-They are confiugred to fail /fast/. If a service can't look at the config server, ti will just immediately stop. We don't want services to take up resources if htey aren't working. THey fail fast if configu isn't avialable to them. 
-
-First start the config server, hten the discovery server. Then the other components can come in. They're start with the config server, ect. THeres a bit of latency, but we're able to centralize the configuration. This is more secure. Those working on particular services dont' need to see/manage config. Actually it hides the config from developers of the other/new services. 
-
-This is one of the ways to supply *Centralized Configuration*
-
--> Added Spring Cloud Config dependency
-
--> Bootstrap happens way early in the lifecycle
-Config server is necessary to use bootstrap.yaml
-Bootstrap.yaml is the first hting that happens when the configuration starts up. Later after starting up more, it'll have a hook to look at application.yaml. It needs to connect ot the config server right away, and so if we try ot use application.yaml, it happens too late in the configuration... So we must offer conbfig in bootstrap.yaml in order for the config server to provide configuration that is needed.
-
-1. Add dependencies and create a bootstrap.yml file
-
-This should have the port 8888 and 
-spring.cloud.config.server.git.uri: Github Repo URL
-(But with the : and indentatiosn in yml form)
+1. Added Spring Cloud Config dependency
 
 
-2. Each application will have its properties changed.
-The application.yml file will be changed to bootstrap./yml and all it will have in it is the port nae. The other properites will be put in the ocnfigservice file. You might also need to declare some variables.,
+2. Create bootstrap.yml
+- Config server should have the port 8888 and 
+  spring.cloud.config.server.git.uri: Github Repo URL
+	(But with the : and indentatiosn in yml form)
 
-3. add a dependency in AUTHOR SERVICE and BOOK SERVICE on org.springframework.cloud the spring-cloud-starter-config dependency
+3. Change existing application's properties.yml file to bootstrap.yml
+	(Each app's config only needs it's name)
+-> Bootstrap happens way early in the lifecycle. Applications should
+  have a bootstrap.yml file rather than an application.yml file.
+Bootstrap.yaml is the first thing that happens when an application's configuration starts up. Later after starting up more, it'll have a 
+hook to look at application.yaml. Apps needs to connect to the config 
+server right away, and so if we try ot use application.yaml, it
+happens too late in the configuration... So we must offer config in
+bootstrap.yaml in order for the config server to provide
+configuration that is needed.
 
-** Bootstrap repo needs application.yml instad of botstrap.yml ****
+4. The git repo shall contain a .yml file for each application, and
+  the name of the .yml corresponds to the application's name it it's
+  bootstrap.yml file. The other properties for each application will
+  go in their yml in this folder.
+
+4. Global configurations go in an application.yml file in the git
+
+5. Services need a dependency (ex AUTHOR SERVICE and BOOK SERVICE) to
+   org.springframework.cloud the spring-cloud-starter-config
+   dependency. This'll tell it to look to 8888 for configurations.
 
 -> Useful to conrol where the configuration details arre defined in one centralized location that we can manage. 
 
 
 ===================================================================
-Containerization:
+ 			* Containerization
 ===================================================================
 Messaging Queues
 => Snowflake server : 
@@ -829,56 +1081,6 @@ we are just using default sizes right now.
 can do the same thing automaitcally when we configure orchestration - so it responds to the needs of users/application as a whole. 
 
 * ** The final step in microservice architecture ** 
-
-
-
-Zuul Filter
-=====================
-Filters the service
-
-Can do it before a response form the service or after the response
-
-usually used for headers na cookies.
-As message goes back out, it can add the extra behavior in one central location.
-
-Authentication/authorization often in pre-filter phase to filter as it comes in and reject/accept at that phase. 
-
-Can add filters for error states is service throws aj exception that bubbles back to zuul, it can handle it. 
-
-Got for HHTP errors so you don't ahve to duplication the logic
-
-Came behairo available in servlets and spring mvc and front controller level.
-
-This is an extnesion of htat behavior. the inplementaition in zuul.
-
-
-Inside of gatway service, there is a Test Filter....
-
-
-Make a bean (@Component or other config) and extend ZuulFilter
-It requiroes you to implement some methods.
-
-ShouldFilter() { predicate to return true/false if that filter should fun.
-
-run() actual filter behavior (can return an object, some arbirarty artifact, but it can be null)
-
-filterType() defines the type of the filter. FilterConstant.PRE_TYPE can defines that the filter happens at the pre-phase.
-
-filterOrder() if you need to set up precedence.
-
--------------------
-Straightforward implementation. Can get request/.response objects in the run phase to be manipulated. They can be altered here. Exceptionscan be handled. ect. 
-
---> nice doc in:
-https://github.com/Netflix/zuul/wiki/how-it-works
-
-routing filters applied during the process of routing to the filters.
-we dont need to create routing filters, but we can.
-origin server is where request actually goes.
-after it goes to the origin, we're not dealing with a response. If an error occurs, after an error filter runs, it is delegated to teh post filters. Then its back to the client. 
-
-Usually they can be useful for defining where behavious should happen. 
-
 
 
 
