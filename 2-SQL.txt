@@ -486,6 +486,15 @@ INSERT INTO posts()
 	- SQL scalar, for example, may return a username associated with
 	  a specific user ID
 	- DEFAULT EXAMPLES:
+	
+    UCASE()
+    LCASE()
+    MID()
+    LEN()
+    ROUND()
+    NOW()
+    FORMAT()
+
 		- CURRENT_TIMESTAMP
 		- Numberic functions * / + -
 		- Concatentation
@@ -497,10 +506,15 @@ INSERT INTO posts()
 ==> Agregate functions - aggregate: to put things together.
 	- Aggregate functions return tables or multiple values.
 	- DEFAULE EXAMPLES:
-		-COUNT (see below)
-		-MAX - returns data item with highest value for column
-		-MIN
-		-SUM
+		
+    AVG()
+    COUNT()
+    FIRST()
+    LAST()
+    MAX()
+    MIN()
+    SUM()
+
 
 ==Aggregate COUNT function
 	-- Counts ALL rows in posts table and returns one bigint number.
