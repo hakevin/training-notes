@@ -124,7 +124,14 @@ Use AWS Elastic Beanstalk for simplicity
 
 ====================================================================
 ====================================================================
-
+Annotations of REST-
+@Controller
+@RestController
+@ResponseBody
+@RequestBody
+@Path
+@Produces
+@Consumes
 
 REST - Representational State Transfers
 REST runs on HTTP/HTTPS
